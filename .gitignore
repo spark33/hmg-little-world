@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.gradle/
+build/
+local.properties
+/android/app/src/main/assets/web/
+playwright-report/
+test-results/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+*.keystore
+*.jks

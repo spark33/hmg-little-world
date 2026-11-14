@@ -1,0 +1,21 @@
+
+> little-world@0.1.0 test:e2e
+> playwright test
+
+
+Running 5 tests using 1 worker
+
+(node:8741) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 e2e/demo.spec.ts:2:1 › complete Detroit → Chicago flow, explicit consent, seven-second reveal, reload and reset (43.0s)
+  ✓  2 e2e/demo.spec.ts:72:1 › driving and unknown vehicle state remove all interactive content (445ms)
+  ✓  3 e2e/demo.spec.ts:95:1 › safety interruption cancels collection animation (10.4s)
+  ✓  4 e2e/demo.spec.ts:114:1 › automotive display sizes keep large touch targets and the primary action clear (42.2s)
+  ✓  5 e2e/demo.spec.ts:170:1 › a building can be selected directly on the 3D canvas (3.5s)
+
+  5 passed (1.7m)
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

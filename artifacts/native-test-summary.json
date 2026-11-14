@@ -1,0 +1,12 @@
+{
+  "testVehicleDebugUnitTest": {
+    "tests": "4",
+    "failures": "0",
+    "errors": "0"
+  },
+  "testPreviewDebugUnitTest": {
+    "tests": "4",
+    "failures": "0",
+    "errors": "0"
+  }
+}
