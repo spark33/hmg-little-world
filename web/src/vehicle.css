@@ -1115,3 +1115,24 @@ dd {
   font-size: 14px;
   line-height: 1.5;
 }
+/* Counts are descriptive labels, not the old single-digit badge. */
+.nav-button .count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: auto;
+  min-width: 28px;
+  height: auto;
+  min-height: 28px;
+  padding: 4px 8px;
+  border-radius: 14px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+@media (max-width: 700px) {
+  .nav-button .illustration-count,
+  .nav-button .count-separator {
+    display: none;
+  }
+}
