@@ -1054,3 +1054,53 @@ dd {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Keep confirmed demonstrations distinct from the illustrative starter stories. */
+.collection-group {
+  margin-block: 24px;
+}
+.panel .collection-group h3 {
+  margin: 0 0 8px;
+  color: #435f40;
+  font-size: 20px;
+  line-height: 1.35;
+}
+.collection-group .album {
+  margin-top: 12px;
+}
+.panel .collection-summary {
+  color: #52674a;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.curated-next {
+  margin-block: 16px 20px;
+  padding: 16px;
+  border: 1px solid #c4d0b6;
+  border-radius: 14px;
+  background: #edf0df;
+  color: #435f40;
+}
+.panel .curated-next .eyebrow {
+  margin: 0 0 8px;
+  color: #435f40;
+  font-size: 11px;
+}
+.panel .curated-next h3 {
+  margin: 0 0 8px;
+  color: #435f40;
+  font-family: Georgia, serif;
+  font-size: 22px;
+  line-height: 1.35;
+}
+.panel .curated-next p {
+  margin: 0;
+  color: #435f40;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.panel .memory-quote:focus {
+  outline: 3px solid #85552f;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
