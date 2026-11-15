@@ -165,6 +165,7 @@ nav {
   min-height: 56px;
   font-size: 14px;
   gap: 4px;
+  color: #52674a;
 }
 .panel .eyebrow {
   font-size: 11px;
@@ -197,13 +198,14 @@ nav {
 .panel .memory-quote {
   font-size: 23px;
   line-height: 1.4;
+  color: #55664b;
 }
 .postmark {
   font-size: 10px;
 }
 .keepsake-title > span {
   font-size: 13px;
-  color: #6a7d56;
+  color: #52674a;
 }
 .panel .shop-preview {
   height: 205px;
@@ -246,7 +248,7 @@ nav {
 }
 dt {
   font-size: 11px;
-  color: #71815f;
+  color: #52674a;
   letter-spacing: 1px;
   margin-bottom: 7px;
 }
@@ -259,7 +261,7 @@ dd {
   font-size: 13px;
   line-height: 1.6;
   letter-spacing: 0.5px;
-  color: #7d6b3d;
+  color: #66522c;
   padding: 14px;
 }
 .demo-notice span {
@@ -310,7 +312,7 @@ dd {
 }
 .album small {
   font-size: 14px;
-  color: #6b7d57;
+  color: #52674a;
   line-height: 1.5;
 }
 .album-icon {
@@ -367,7 +369,16 @@ dd {
   white-space: normal;
 }
 .night .greeting h1 {
-  color: #e1e7c9;
+  display: inline-block;
+  max-width: 100%;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: #334c57;
+  color: #fcf9ee;
+}
+.night .topbar {
+  background: #334c57;
+  border-bottom: 1px solid #e1e7c933;
 }
 .night .world-name small {
   color: #d5dec7;
@@ -384,7 +395,10 @@ dd {
   outline-color: #ffe0a5;
 }
 .night .bottom-bar {
-  background: linear-gradient(0deg, #657b85 65%, #657b8500);
+  background: #334c57;
+}
+.night .explore-button {
+  border: 1px solid #cad6bc;
 }
 @media (min-width: 1600px) {
   .app {
@@ -719,6 +733,10 @@ dd {
   .panel.wide {
     top: 112px;
   }
+  .night .topbar {
+    min-height: 104px;
+    padding-bottom: 36px;
+  }
 }
 @media (max-width: 420px) {
   .panel-open:has(> .save-warning) .panel {
@@ -739,6 +757,15 @@ dd {
 .memory-illustration > .keepsake-icon {
   width: 112px;
   height: 112px;
+}
+.memory-illustration > span:has(> .keepsake-icon) {
+  display: block;
+  width: 112px;
+  height: 112px;
+  font-size: inherit;
+  transform: none;
+  filter: none;
+  text-shadow: none;
 }
 .catalog-filters {
   display: flex;
@@ -908,7 +935,7 @@ dd {
   background: #edf0df;
   overflow-wrap: anywhere;
 }
-.backup-feedback {
+.panel .backup-feedback {
   margin-block: 14px;
   padding: 14px;
   border-radius: 12px;
@@ -918,7 +945,7 @@ dd {
   line-height: 1.6;
   overflow-wrap: anywhere;
 }
-.backup-feedback[role="alert"] {
+.panel .backup-feedback[role="alert"] {
   color: #6a3c29;
   background: #f4e6d6;
   border: 1px solid #a66e4e;
@@ -956,6 +983,9 @@ dd {
 .navigation-status [role="status"] strong {
   display: block;
   margin-bottom: 8px;
+}
+.navigation-status [role="status"] p {
+  color: inherit;
 }
 .safe-screen p,
 .safe-screen .mode-tag,
