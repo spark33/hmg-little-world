@@ -1,5 +1,7 @@
 package ai.littleworld
 
+import java.net.URI
+
 /** A vetted provider owns coordinates. JavaScript can only select a registry ID. */
 data class VerifiedDestination(
     val id: String,
@@ -16,10 +18,20 @@ data class VerifiedDestination(
         latitude in -90.0..90.0 && longitude in -180.0..180.0 &&
         name.isNotBlank() && name.length <= 120 && address.isNotBlank() && address.length <= 300 &&
         poiId.isNotBlank() && poiId.length <= 120 &&
-        sourceUrl.matches(Regex("https://[a-zA-Z0-9.-]+(?:/[^\\s]*)?")) && sourceUrl.length <= 500 &&
+        validSourceUrl(sourceUrl) &&
         validDate(verifiedOn)
 
     fun asDestination() = Destination(id, latitude, longitude, name, address, poiId, sample = false)
+
+    private fun validSourceUrl(value: String): Boolean {
+        if (value.length !in 1..500 || value.any { it.isWhitespace() || it.isISOControl() }) return false
+        return try {
+            val uri = URI(value)
+            uri.scheme.equals("https", ignoreCase = true) && !uri.isOpaque &&
+                !uri.host.isNullOrBlank() && uri.rawUserInfo == null && uri.rawFragment == null &&
+                (uri.port == -1 || uri.port == 443)
+        } catch (_: Exception) { false }
+    }
 
     private fun validDate(value: String): Boolean = try {
         java.time.LocalDate.parse(value).toString() == value

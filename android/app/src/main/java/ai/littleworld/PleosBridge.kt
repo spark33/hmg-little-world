@@ -47,17 +47,32 @@ class PleosBridge(
                             .put("reason", "trusted-parked-signal-required").toString()
                     val submitted = vehicle.requestNavigation(destination.asDestination())
                     output.put("available", submitted)
-                    if (provider == null) return output.put("navigationStatus", if (submitted) "submitted" else "unavailable")
-                        .put("reason", if (submitted) "route-submission-accepted" else "navigation-unavailable").toString()
+                    if (!submitted) return refused(output, provider?.navigationSnapshot(), "route-submission-not-accepted")
+                    if (provider == null) return output.put("navigationStatus", "submitted")
+                        .put("reason", "route-submission-accepted").toString()
                 }
                 "navigation-retry" -> output.put("available", provider?.retryNavigationConnection() ?: false)
-                "navigation-cancel" -> output.put("available", vehicle.safety.value == SafetyState.PARKED && (provider?.cancelNavigation() ?: false))
+                "navigation-cancel" -> {
+                    if (vehicle.safety.value != SafetyState.PARKED) return output.put("available", false)
+                        .put("navigationStatus", "unavailable").put("reason", "trusted-parked-signal-required").toString()
+                    val accepted = provider?.cancelNavigation() ?: false
+                    output.put("available", accepted)
+                    if (!accepted) return refused(output, provider?.navigationSnapshot(), "route-cancellation-not-accepted")
+                }
             }
             appendSnapshot(output, provider?.navigationSnapshot())
         } catch (_: Exception) {
             output.put("available", false).put("navigationStatus", "error")
                 .put("reason", "navigation-service-error").put("canRetry", true).toString()
         }
+    }
+
+    /** A refused command must not borrow a previous route's successful state. */
+    private fun refused(output: JSONObject, snapshot: NavigationSnapshot?, reason: String): String {
+        val failureStates = setOf(NavigationStatus.UNAVAILABLE, NavigationStatus.DISCONNECTED,
+            NavigationStatus.DENIED, NavigationStatus.ERROR, NavigationStatus.CLOSED)
+        if (snapshot != null && snapshot.status in failureStates) return appendSnapshot(output, snapshot)
+        return output.put("navigationStatus", "unavailable").put("reason", reason).put("canRetry", false).toString()
     }
 
     private fun appendSnapshot(output: JSONObject, snapshot: NavigationSnapshot?): String {

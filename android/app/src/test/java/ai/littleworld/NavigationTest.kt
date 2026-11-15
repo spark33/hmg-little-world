@@ -10,9 +10,10 @@ class NavigationTest {
         override val safety = MutableStateFlow(state)
         override val location = MutableStateFlow<VehicleLocation?>(null)
         var routeCalls = 0
+        var acceptRoutes = true
         var routed: Destination? = null
         override fun navigationAvailable() = true
-        override fun requestNavigation(destination: Destination): Boolean { routeCalls++; routed = destination; return true }
+        override fun requestNavigation(destination: Destination): Boolean { routeCalls++; routed = destination; return acceptRoutes }
         override fun lightingCapability() = LightingCapability(false, false, false)
         override fun applyTemporaryLighting(deliberateUserAction: Boolean) = false
         override fun restoreLighting() {}
@@ -22,9 +23,11 @@ class NavigationTest {
     private fun route(id: String) = """{"v":1,"id":"test","type":"navigate","destinationId":"$id"}"""
     private class ProviderAdapter(val base: Adapter): VehicleIntegration by base, NavigationSessionProvider {
         var cancellations = 0
-        override fun navigationSnapshot() = NavigationSnapshot(NavigationStatus.SUBMITTED, "route-submission-accepted", "approved-test-id")
+        var acceptCancellation = true
+        var reportedStatus = NavigationStatus.SUBMITTED
+        override fun navigationSnapshot() = NavigationSnapshot(reportedStatus, "previous-route-state", "approved-test-id")
         override fun retryNavigationConnection() = false
-        override fun cancelNavigation(): Boolean { cancellations++; return true }
+        override fun cancelNavigation(): Boolean { cancellations++; return acceptCancellation }
     }
 
     @Test fun samplesNeverReachAnyAdapter() {
@@ -62,6 +65,14 @@ class NavigationTest {
             valid.copy(id = "chicago"), valid.copy(poiId = ""), valid.copy(sourceUrl = "https://user:secret@example.com/"))
         invalid.forEach { assertFalse(it.isValid()) }
         try { DestinationRegistry(listOf(valid, valid)); fail("duplicate registry ID") } catch (_: IllegalArgumentException) {}
+    }
+    @Test fun provenanceUrlsAcceptSeoulPathsAndRejectWhitespaceCredentialsAndFragments() {
+        assertTrue(fixture().copy(sourceUrl = "https://example.com/seoul/sights").isValid())
+        assertTrue(fixture().copy(sourceUrl = "https://example.com:443/seoul?category=sights").isValid())
+        for (url in listOf("https://example.com/a b", "https://example.com/a\tb", "https://example.com/a\u00a0b",
+            "https://user:password@example.com/seoul", "https:///seoul", "https://example.com/seoul#part",
+            "https://example.com:0/seoul", "https://example.com:444/seoul"))
+            assertFalse(url, fixture().copy(sourceUrl = url).isValid())
     }
     @Test fun strictProtocolDoesNotAcceptArbitraryNativeRequestsOrCoordinateFields() {
         for (action in listOf("capabilities", "navigation-status", "navigation-retry", "navigation-cancel")) {
@@ -102,11 +113,27 @@ class NavigationTest {
         val bridge = PleosBridge(adapter)
         val request = """{"v":1,"id":"cancel","type":"navigation-cancel"}"""
         assertFalse(JSONObject(bridge.reply(request)).getBoolean("available"))
+        assertEquals("unavailable", JSONObject(bridge.reply(request)).getString("navigationStatus"))
         adapter.base.safety.value = SafetyState.DRIVING
         assertFalse(JSONObject(bridge.reply(request)).getBoolean("available"))
         assertEquals(0, adapter.cancellations)
         adapter.base.safety.value = SafetyState.PARKED
         assertTrue(JSONObject(bridge.reply(request)).getBoolean("available"))
         assertEquals(1, adapter.cancellations)
+    }
+    @Test fun refusedCommandsDoNotClaimThePreviousRouteWasNewlySubmittedOrCancelled() {
+        val adapter = ProviderAdapter(Adapter(SafetyState.PARKED))
+        val bridge = PleosBridge(adapter, DestinationRegistry(listOf(fixture())))
+        adapter.base.acceptRoutes = false
+        val submission = JSONObject(bridge.reply(route("approved-test-id")))
+        assertFalse(submission.getBoolean("available"))
+        assertEquals("unavailable", submission.getString("navigationStatus"))
+        assertEquals("route-submission-not-accepted", submission.getString("reason"))
+        adapter.reportedStatus = NavigationStatus.CANCEL_REQUESTED
+        adapter.acceptCancellation = false
+        val cancellation = JSONObject(bridge.reply("""{"v":1,"id":"cancel","type":"navigation-cancel"}"""))
+        assertFalse(cancellation.getBoolean("available"))
+        assertEquals("unavailable", cancellation.getString("navigationStatus"))
+        assertEquals("route-cancellation-not-accepted", cancellation.getString("reason"))
     }
 }
