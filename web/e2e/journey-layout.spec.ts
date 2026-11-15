@@ -33,6 +33,47 @@ for (const viewport of [
     await page.setViewportSize(viewport);
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/");
+    const headerGeometry = await page.locator(".topbar").evaluate((header) => {
+      const collection = header
+        .querySelector(".nav-button")!
+        .getBoundingClientRect();
+      const settings = header
+        .querySelector('[aria-label="Demo settings"]')!
+        .getBoundingClientRect();
+      const count = header.querySelector(".count")!.getBoundingClientRect();
+      const labels = [...header.querySelectorAll(".count span")]
+        .filter((el) => el.getClientRects().length)
+        .map((el) => el.getBoundingClientRect())
+        .map((rect) => ({
+          left: rect.left,
+          right: rect.right,
+          top: rect.top,
+          bottom: rect.bottom,
+        }));
+      return {
+        collectionLeft: collection.left,
+        collectionRight: collection.right,
+        settingsLeft: settings.left,
+        settingsRight: settings.right,
+        countLeft: count.left,
+        countRight: count.right,
+        countTop: count.top,
+        countBottom: count.bottom,
+        labels,
+      };
+    });
+    expect(headerGeometry.collectionLeft).toBeGreaterThanOrEqual(0);
+    expect(headerGeometry.collectionRight).toBeLessThanOrEqual(
+      headerGeometry.settingsLeft,
+    );
+    expect(headerGeometry.settingsRight).toBeLessThanOrEqual(viewport.width);
+    expect(headerGeometry.labels.length).toBeGreaterThan(0);
+    for (const label of headerGeometry.labels) {
+      expect(label.left).toBeGreaterThanOrEqual(headerGeometry.countLeft);
+      expect(label.right).toBeLessThanOrEqual(headerGeometry.countRight);
+      expect(label.top).toBeGreaterThanOrEqual(headerGeometry.countTop);
+      expect(label.bottom).toBeLessThanOrEqual(headerGeometry.countBottom);
+    }
     await page.getByRole("button", { name: /My collection/ }).click();
     const confirmed = page.getByRole("region", {
       name: "Confirmed demo keepsakes",
