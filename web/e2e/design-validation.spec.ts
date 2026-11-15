@@ -248,3 +248,215 @@ test("the real reveal caption and progress indicators have readable contrast", a
     3,
   );
 });
+
+const newKeepsakes = [
+  ["Mangwon Market picnic", "Find a Mangwon picnic"],
+  ["Gyeongbokgung palace walk", "Find a palace walk"],
+  ["Bukhansan trail morning", "Find a Bukhansan trail"],
+  ["Seoul museum afternoon", "Find a Seoul art adventure"],
+] as const;
+async function confirmNext(page: Page, action: string) {
+  await page
+    .getByRole("button", { name: "Find a little adventure", exact: true })
+    .click();
+  await page.getByRole("button", { name: action, exact: true }).click();
+  await page.getByRole("button", { name: "Let’s go", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Simulate journey", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Add to my world", exact: true })
+    .click();
+  await expect(
+    page.getByText("Your little world just got bigger!", { exact: false }),
+  ).toBeVisible();
+}
+
+test("all eight UI-collected keepsakes expose the right details and an uncropped illustration", async ({
+  page,
+}) => {
+  test.setTimeout(120000);
+  await page.goto("/");
+  for (const [, action] of newKeepsakes) await confirmNext(page, action);
+  const records = await page.evaluate(
+    () => JSON.parse(localStorage.getItem("little-world:v1")!).collected,
+  );
+  expect(Object.keys(records)).toHaveLength(8);
+  const titles = [
+    "Gwangjang Market flavors",
+    "Namsan evening lights",
+    "Seokchon Lake blossoms",
+    "Seongsu slow morning",
+    ...newKeepsakes.map(([title]) => title),
+  ];
+  for (const [index, title] of titles.entries()) {
+    await page.getByRole("button", { name: /My collection/ }).click();
+    await page.getByRole("button", { name: new RegExp(title) }).click();
+    await expect(
+      page.getByRole("heading", { name: title, exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByText(
+        index < 4 ? /ILLUSTRATIVE MEMORY/ : /CONFIRMED DEMO KEEPSAKE/,
+      ),
+    ).toBeVisible();
+    const geometry = await page
+      .locator(".memory-illustration")
+      .evaluate((el) => {
+        const frame = el.getBoundingClientRect(),
+          icon = el.querySelector(".keepsake-icon")!.getBoundingClientRect();
+        return {
+          fits:
+            icon.left >= frame.left - 1 &&
+            icon.top >= frame.top - 1 &&
+            icon.right <= frame.right + 1 &&
+            icon.bottom <= frame.bottom + 1,
+          shapes: el.querySelectorAll(
+            ".keepsake-icon path,.keepsake-icon circle,.keepsake-icon ellipse",
+          ).length,
+        };
+      });
+    expect(geometry.fits, title).toBe(true);
+    expect(geometry.shapes, title).toBeGreaterThan(0);
+    await page
+      .getByRole("button", { name: "Close panel", exact: true })
+      .click();
+  }
+  await page.reload();
+  await expect(
+    page.getByText("8 memories made. Your demo collection is complete.", {
+      exact: true,
+    }),
+  ).toBeVisible();
+});
+
+test("confirmed memory editing enforces the typed 500-character limit without changing visit provenance", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await confirmNext(page, "Find a Mangwon picnic");
+  const previous = await page.evaluate(
+    () =>
+      JSON.parse(localStorage.getItem("little-world:v1")!).collected.mangwon,
+  );
+  await page.getByRole("button", { name: /My collection/ }).click();
+  await page.getByRole("button", { name: /Mangwon Market picnic/ }).click();
+  await page
+    .getByRole("button", { name: "Edit memory note", exact: true })
+    .click();
+  const note = page.getByRole("textbox", { name: "Memory note", exact: true });
+  await note.fill("서울의 오후 🌿\n" + "m".repeat(480));
+  await note.pressSequentially(
+    " A longer ending that must stop at the boundary.",
+  );
+  const expected = await note.inputValue();
+  expect(expected.length).toBe(500);
+  expect(expected).toContain("서울의 오후 🌿");
+  await page.getByRole("button", { name: "Save memory", exact: true }).click();
+  await page.reload();
+  const actual = await page.evaluate(
+    () =>
+      JSON.parse(localStorage.getItem("little-world:v1")!).collected.mangwon,
+  );
+  expect(actual).toEqual({ ...previous, memory: expected });
+  expect(actual.provenance).toBe("confirmed-demo");
+});
+
+test("manual clipboard fallback selects the complete backup and invalid input leaves the world unchanged", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const original = await page.evaluate(() =>
+    localStorage.getItem("little-world:v1"),
+  );
+  await page
+    .getByRole("button", { name: "Demo settings", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Prepare world backup", exact: true })
+    .click();
+  const exported = page.getByRole("textbox", { name: "Exported world backup" });
+  const backup = await exported.inputValue();
+  await page.evaluate(() =>
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: undefined,
+    }),
+  );
+  await page
+    .getByRole("button", { name: "Copy complete backup", exact: true })
+    .click();
+  await expect(
+    page.getByText("The complete backup is selected", { exact: false }),
+  ).toBeVisible();
+  const selection = await exported.evaluate((el: HTMLTextAreaElement) => ({
+    start: el.selectionStart,
+    end: el.selectionEnd,
+    focused: document.activeElement === el,
+  }));
+  expect(selection).toEqual({ start: 0, end: backup.length, focused: true });
+  await page
+    .getByRole("textbox", { name: "Paste a world backup", exact: true })
+    .fill("not a backup");
+  await page
+    .getByRole("button", { name: "Review imported world", exact: true })
+    .click();
+  await expect(page.locator(".backup-feedback[role=alert]")).toBeVisible();
+  expect(
+    await page.evaluate(() => localStorage.getItem("little-world:v1")),
+  ).toBe(original);
+});
+
+test("a browser driving event dismisses an unconfirmed backup replacement without writing it", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const original = await page.evaluate(() =>
+    localStorage.getItem("little-world:v1"),
+  );
+  await page
+    .getByRole("button", { name: "Demo settings", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Prepare world backup", exact: true })
+    .click();
+  const backup = await page
+    .getByRole("textbox", { name: "Exported world backup" })
+    .inputValue();
+  await page
+    .getByRole("textbox", { name: "Paste a world backup", exact: true })
+    .fill(backup);
+  await page
+    .getByRole("button", { name: "Review imported world", exact: true })
+    .click();
+  await expect(
+    page.getByRole("group", { name: "Confirm world replacement" }),
+  ).toBeVisible();
+  await page.evaluate(() =>
+    window.dispatchEvent(
+      new CustomEvent("vehicle-safety", {
+        detail: { state: "driving", preview: false },
+      }),
+    ),
+  );
+  await expect(page.locator("canvas")).toHaveCount(0);
+  await expect(page.getByRole("button")).toHaveCount(0);
+  expect(
+    await page.evaluate(() => localStorage.getItem("little-world:v1")),
+  ).toBe(original);
+  // This restores only the explicitly non-vehicle browser preview, never PARKED.
+  await page.evaluate(() =>
+    window.dispatchEvent(
+      new CustomEvent("vehicle-safety", {
+        detail: { state: "unknown", preview: true },
+      }),
+    ),
+  );
+  await expect(page.getByRole("complementary")).toHaveCount(0);
+  await page
+    .getByRole("button", { name: "Demo settings", exact: true })
+    .click();
+  await expect(
+    page.getByRole("group", { name: "Confirm world replacement" }),
+  ).toHaveCount(0);
+});
