@@ -186,3 +186,29 @@ test("short landscape collection exposes a keepsake without an empty footer gap"
   expect(geometry.bottom).toBeLessThanOrEqual(480);
   expect(geometry.reachable).toBe(true);
 });
+
+test("memory editing keeps Save and Cancel clear of discovery actions", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 360, height: 480 });
+  await page.goto("/");
+  await page.getByRole("button", { name: /My collection/ }).click();
+  await page.locator(".panel .album button").first().click();
+  await page
+    .getByRole("button", { name: "Edit memory note", exact: true })
+    .click();
+  await expect(
+    page.getByRole("textbox", { name: "Memory note", exact: true }),
+  ).toBeVisible();
+  await expect(page.locator(".panel > .primary")).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "Save memory", exact: true }),
+  ).toBeEnabled();
+  await page
+    .getByRole("button", { name: "Cancel editing", exact: true })
+    .click();
+  await expect(
+    page.getByRole("textbox", { name: "Memory note", exact: true }),
+  ).toHaveCount(0);
+  await expect(page.locator(".panel > .primary")).toHaveCount(1);
+});
