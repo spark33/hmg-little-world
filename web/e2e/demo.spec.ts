@@ -17,7 +17,9 @@ test("complete Gwangjang → Mangwon flow, explicit consent, seven-second reveal
   await expect(
     page.getByText("Illustrative Gwangjang Market memory"),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Meet your next keepsake" }).click();
+  await page
+    .getByRole("button", { name: "Discover Mangwon Market picnic" })
+    .click();
   await page.screenshot({ path: `${evidence}/recommendation.png` });
   await page.getByRole("button", { name: "Find a Mangwon picnic" }).click();
   await expect(
@@ -62,7 +64,7 @@ test("complete Gwangjang → Mangwon flow, explicit consent, seven-second reveal
   await page.screenshot({ path: `${evidence}/world-collected.png` });
   await page.reload();
   await expect(
-    page.getByText("5 memories made. So many more to come."),
+    page.getByText("1 confirmed demo · 4 illustrations. More chapters await."),
   ).toBeVisible();
   await page.getByRole("button", { name: "Demo settings" }).click();
   await page.getByRole("button", { name: "Reset demo world" }).click();
@@ -71,7 +73,7 @@ test("complete Gwangjang → Mangwon flow, explicit consent, seven-second reveal
     .click();
   await page.reload();
   await expect(
-    page.getByText("4 memories made. So many more to come."),
+    page.getByText("0 confirmed demos · 4 illustrations. More chapters await."),
   ).toBeVisible();
   expect(errors).toEqual([]);
 });
@@ -118,7 +120,7 @@ test("safety interruption cancels collection animation", async ({ page }) => {
   ).toHaveCount(0);
   await page.reload();
   await expect(
-    page.getByText("5 memories made. So many more to come."),
+    page.getByText("1 confirmed demo · 4 illustrations. More chapters await."),
   ).toBeVisible();
   await expect(
     page.getByText("A little memory is finding its home…"),
@@ -189,4 +191,9 @@ test("a building can be selected directly on the 3D canvas", async ({
   await expect(
     page.getByText("Illustrative Gwangjang Market memory"),
   ).toBeVisible();
+  await page
+    .locator(".back-button")
+    .filter({ hasText: "Your little world" })
+    .click();
+  await expect(page.getByRole("complementary")).toHaveCount(0);
 });

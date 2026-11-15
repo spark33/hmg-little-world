@@ -325,9 +325,12 @@ test("all eight UI-collected keepsakes expose the right details and an uncropped
   }
   await page.reload();
   await expect(
-    page.getByText("8 memories made. Your demo collection is complete.", {
-      exact: true,
-    }),
+    page.getByText(
+      "4 confirmed demos · 4 illustrations. Your demo collection is complete.",
+      {
+        exact: true,
+      },
+    ),
   ).toBeVisible();
 });
 

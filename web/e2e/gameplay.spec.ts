@@ -39,7 +39,7 @@ test("all four new keepsakes are playable, persistent, and reach a complete coll
     await page.reload();
     await expect(
       page.getByText(
-        `${index + 5} memories made. ${index === 3 ? "Your demo collection is complete." : "So many more to come."}`,
+        `${index + 1} confirmed demo${index === 0 ? "" : "s"} · 4 illustrations. ${index === 3 ? "Your demo collection is complete." : "More chapters await."}`,
         { exact: true },
       ),
     ).toBeVisible();
@@ -170,7 +170,7 @@ test("an earlier Chicago confirmation stays in the archive and never becomes a S
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   await expect(
-    page.getByText("4 memories made. So many more to come."),
+    page.getByText("0 confirmed demos · 4 illustrations. More chapters await."),
   ).toBeVisible();
   expect(
     await page.evaluate(() => localStorage.getItem("little-world:v1")),
@@ -203,7 +203,7 @@ test("an earlier Chicago confirmation stays in the archive and never becomes a S
   await page.getByRole("button", { name: "Add to my world" }).click();
   await page.reload();
   await expect(
-    page.getByText("5 memories made. So many more to come."),
+    page.getByText("1 confirmed demo · 4 illustrations. More chapters await."),
   ).toBeVisible();
   const records = await page.evaluate(
     () => JSON.parse(localStorage.getItem("little-world:v1")!).collected,
@@ -372,7 +372,9 @@ test("a successful explicit reset resolves an unreadable startup before the next
   ).toBe("confirmed-demo");
   await page.reload();
   await expect(
-    page.getByText("5 memories made. So many more to come.", { exact: true }),
+    page.getByText("1 confirmed demo · 4 illustrations. More chapters await.", {
+      exact: true,
+    }),
   ).toBeVisible();
   await expect(page.getByRole("alert")).toHaveCount(0);
 });

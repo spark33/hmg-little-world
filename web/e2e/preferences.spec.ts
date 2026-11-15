@@ -51,7 +51,7 @@ test("system reduced motion skips reveal and saves a confirmed memory immediatel
   ).toBeTruthy();
   await page.reload();
   await expect(
-    page.getByText("5 memories made. So many more to come."),
+    page.getByText("1 confirmed demo · 4 illustrations. More chapters await."),
   ).toBeVisible();
 });
 
@@ -64,6 +64,8 @@ test("narrow screens retain preview disclosure and the collection accessible nam
     page.getByText("Browser development preview", { exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "My collection · 4 memories" }),
+    page.getByRole("button", {
+      name: "My collection · 0 confirmed demos · 4 illustrations",
+    }),
   ).toBeVisible();
 });

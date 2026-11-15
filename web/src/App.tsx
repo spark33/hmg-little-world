@@ -21,6 +21,7 @@ import {
   X,
 } from "lucide-react";
 import World, { ShopPreview } from "./World";
+import { collectionGroups, curatedReason } from "./journeys";
 import { KeepsakeIcon } from "./KeepsakeIcon";
 import { NavigationPanel } from "./NavigationPanel";
 import BackupPanel from "./BackupPanel";
@@ -120,6 +121,12 @@ export default function App() {
   const [zoom, setZoom] = useState(0);
   const [adventureId, setAdventureId] = useState("mangwon");
   const [category, setCategory] = useState<CategoryFilter>("All keepsakes");
+  const [memoryReturn, setMemoryReturn] = useState<"album" | "browse" | null>(
+    null,
+  );
+  const [recommendedFrom, setRecommendedFrom] = useState<string | null>(null);
+  const [noteUpdated, setNoteUpdated] = useState(false);
+  const memoryQuote = useRef<HTMLParagraphElement | null>(null);
   const [editingMemory, setEditingMemory] = useState(false);
   const [memoryDraft, setMemoryDraft] = useState("");
   const [collectingId, setCollectingId] = useState<string | null>(null);
@@ -161,7 +168,20 @@ export default function App() {
     .filter((item) => world.collected[item.id])
     .map((item) => item.id);
   const archived = legacyCatalog.filter((item) => world.collected[item.id]);
-  const count = currentCollectedIds.length;
+  const { confirmed, illustrations } = collectionGroups(world);
+  const collectionSummary = `${confirmed.length} confirmed demo${confirmed.length === 1 ? "" : "s"} · ${illustrations.length} illustrations`;
+  const chosenStop = world.collected[experience.id]?.demoDestinationId;
+  const chosenDestination = chosenStop
+    ? destinationsFor(experience.id).find((item) => item.id === chosenStop)
+    : undefined;
+  useEffect(() => {
+    if (!noteUpdated || editingMemory || panel !== "memory") return;
+    memoryQuote.current?.focus({ preventScroll: true });
+    memoryQuote.current?.scrollIntoView({
+      block: "start",
+      behavior: "instant",
+    });
+  }, [noteUpdated, editingMemory, panel]);
   useEffect(() => {
     if (loaded.status === "empty") setSaved(saveWorld(storage, loaded.state));
   }, [loaded]);
@@ -241,7 +261,7 @@ export default function App() {
     },
     [],
   );
-  function select(id: string) {
+  function select(id: string, returnTo: "album" | "browse" | null = null) {
     if (!permitted || collecting) return;
     if (!id) {
       setSelected(null);
@@ -257,17 +277,24 @@ export default function App() {
       return;
     }
     setSelected(id);
+    setMemoryReturn(returnTo);
+    setNoteUpdated(false);
     setEditingMemory(false);
     setPanel("memory");
     if (!muted) unlockSound();
   }
-  function openExperience(id: string, revisit = false) {
+  function openExperience(
+    id: string,
+    revisit = false,
+    sourceMemory: string | null = null,
+  ) {
     if (!permitted || collecting) return;
     const target = catalog.find((x) => x.id === id && x.status === "available");
     if (!target || (world.collected[id] && !revisit)) {
       setPanel("browse");
       return;
     }
+    setRecommendedFrom(sourceMemory);
     setAdventureId(id);
     setSelected(`plot:${id}`);
     setDestination(destinationsFor(id)[0]);
@@ -287,7 +314,8 @@ export default function App() {
     if (!permitted || !world.collected[experience.id]) return;
     commitWorld(updateMemory(world, experience.id, memoryDraft));
     setEditingMemory(false);
-    setToast("Your memory note is updated.");
+    setToast("");
+    setNoteUpdated(true);
   }
   function add() {
     if (
@@ -298,7 +326,13 @@ export default function App() {
     )
       return;
     if (!muted) unlockSound();
-    const next = collect(world, adventure.id, localVisitDate(), details.memory);
+    const next = collect(
+      world,
+      adventure.id,
+      localVisitDate(),
+      details.memory,
+      destination.id,
+    );
     // Save in the confirmation handler, before any reveal or lifecycle interruption.
     commitWorld(next);
     setLastCollectedId(adventure.id);
@@ -461,7 +495,7 @@ export default function App() {
                 ? selected
                 : null
             }
-            onSelect={select}
+            onSelect={(id) => select(id)}
             resetToken={resetToken}
             zoom={zoom}
             reducedMotion={reducedMotion}
@@ -496,11 +530,13 @@ export default function App() {
           </span>
           <button
             className={`nav-button ${panel === "album" ? "active" : ""}`}
-            aria-label={`My collection · ${count} memories`}
+            aria-label={`My collection · ${collectionSummary}`}
             onClick={() => setPanel(panel === "album" ? null : "album")}
           >
             <BookOpen size={18} /> My collection{" "}
-            <span className="count">{count}</span>
+            <span className="count">
+              {confirmed.length} demos · {illustrations.length} illustrations
+            </span>
           </button>
           <button
             className="icon-button"
@@ -549,9 +585,10 @@ export default function App() {
           <span>
             Our little corner of Seoul
             <small>
+              {collectionSummary}
               {complete
-                ? `${count} memories made. Your demo collection is complete.`
-                : `${count} memories made. So many more to come.`}
+                ? ". Your demo collection is complete."
+                : ". More chapters await."}
             </small>
           </span>
           <span className="saved">
@@ -600,20 +637,33 @@ export default function App() {
           <div className="panel-top">
             <button
               className="back-button"
-              onClick={() =>
+              onClick={() => {
+                if (panel === "discover" && recommendedFrom) {
+                  select(recommendedFrom, memoryReturn);
+                  setRecommendedFrom(null);
+                  return;
+                }
                 setPanel(
                   panel === "destinations"
                     ? "discover"
                     : panel === "journey"
                       ? "destinations"
-                      : null,
-                )
-              }
+                      : panel === "memory"
+                        ? memoryReturn
+                        : null,
+                );
+              }}
             >
               <ChevronLeft size={17} />
               {panel === "destinations"
                 ? "The next keepsake"
-                : "Your little world"}
+                : panel === "discover" && recommendedFrom
+                  ? "Source memory"
+                  : panel === "memory" && memoryReturn === "album"
+                    ? "My collection"
+                    : panel === "memory" && memoryReturn === "browse"
+                      ? "All keepsakes"
+                      : "Your little world"}
             </button>
             <button
               className="icon-button"
@@ -643,10 +693,53 @@ export default function App() {
                   : "CONFIRMED DEMO KEEPSAKE"}
               </div>
               <h2>{experience.displayName}</h2>
-              <p className="memory-quote">
+              {recommendation && !editingMemory && (
+                <section
+                  className="curated-next"
+                  aria-label="Curated next chapter"
+                >
+                  <div className="eyebrow">CURATED NEXT CHAPTER</div>
+                  <h3>{recommendation.displayName}</h3>
+                  <p>{curatedReason(experience.id)}</p>
+                </section>
+              )}
+              <p
+                className="memory-quote"
+                ref={memoryQuote}
+                tabIndex={-1}
+                aria-label="Memory note"
+              >
                 “{world.collected[experience.id]?.memory ?? experience.memory}”
               </p>
+              {noteUpdated && (
+                <p role="status" className="note-updated">
+                  Memory note updated
+                  {saved
+                    ? " and saved on this device."
+                    : " for this session only."}
+                </p>
+              )}
               <dl>
+                {world.collected[experience.id]?.provenance ===
+                  "confirmed-demo" &&
+                  !legacyCatalog.some((item) => item.id === experience.id) && (
+                    <>
+                      <dt>CHOSEN ILLUSTRATIVE STOP</dt>
+                      <dd className="chosen-stop">
+                        {chosenDestination ? (
+                          <>
+                            {chosenDestination.name}
+                            <small>
+                              {chosenDestination.location} · demo choice, not a
+                              verified visit
+                            </small>
+                          </>
+                        ) : (
+                          "Not recorded in this earlier demo memory. No stop is inferred."
+                        )}
+                      </dd>
+                    </>
+                  )}
                 <dt>PLACE</dt>
                 <dd>{experience.venue ?? "Illustrative sample experience"}</dd>
                 <dt>LOCATION</dt>
@@ -697,6 +790,7 @@ export default function App() {
                         experience.memory ??
                         "",
                     );
+                    setNoteUpdated(false);
                     setEditingMemory(true);
                   }}
                 >
@@ -705,21 +799,13 @@ export default function App() {
               )}
               {recommendation && !editingMemory && (
                 <>
-                  <div className="next-note">
-                    <Sparkles size={18} />
-                    <p>
-                      {experience.id === "gwangjang"
-                        ? "You’ve explored Gwangjang flavors. Shall we imagine a Mangwon Market picnic next?"
-                        : `Your world is dreaming of ${recommendation.displayName.toLowerCase()}.`}
-                    </p>
-                  </div>
                   <button
                     className="primary"
-                    onClick={() => openExperience(recommendation.id)}
+                    onClick={() =>
+                      openExperience(recommendation.id, false, experience.id)
+                    }
                   >
-                    {experience.id === "gwangjang"
-                      ? "Meet your next keepsake"
-                      : `Discover ${recommendation.displayName}`}
+                    {`Discover ${recommendation.displayName}`}
                     <ArrowRight size={18} />
                   </button>
                 </>
@@ -772,7 +858,7 @@ export default function App() {
                 <Heart size={18} />
                 <p>
                   {adventure.id === "mangwon"
-                    ? "You’ve explored Gwangjang flavors. Shall we imagine a Mangwon Market picnic next?"
+                    ? "Inspired by the Gwangjang market illustration: imagine a Mangwon Market picnic next. No real visit is verified."
                     : "A new place in your world, only after you confirm the memory."}
                 </p>
               </div>
@@ -851,7 +937,9 @@ export default function App() {
                         key={item.id}
                         className="keepsake-card"
                         onClick={() =>
-                          record ? select(item.id) : openExperience(item.id)
+                          record
+                            ? select(item.id, "browse")
+                            : openExperience(item.id)
                         }
                       >
                         <span
@@ -1033,28 +1121,63 @@ export default function App() {
                 <br />
                 little memories.
               </h2>
-              <p>Every Seoul keepsake has a story. Here are yours.</p>
-              <div className="album">
-                {catalog
-                  .filter((x) => world.collected[x.id])
-                  .map((x) => (
-                    <button key={x.id} onClick={() => select(x.id)}>
-                      <span className={`album-icon asset-${x.asset}`}>
-                        <KeepsakeIcon asset={x.asset} />
-                      </span>
-                      <span>
-                        <strong>{x.displayName}</strong>
-                        <small>
-                          {world.collected[x.id].visitDate} ·{" "}
-                          {world.collected[x.id].provenance === "illustration"
-                            ? "illustration"
-                            : "confirmed demo"}
-                        </small>
-                      </span>
-                      <ArrowUpRight size={18} />
-                    </button>
-                  ))}
-              </div>
+              <p>
+                Your confirmed demo chapters and the illustrations that started
+                this world, kept clearly separate.
+              </p>
+              {[
+                {
+                  title: "Confirmed demo keepsakes",
+                  items: confirmed,
+                  empty:
+                    "No demo confirmations yet. Choose an illustrative adventure to start your own demo chapter.",
+                },
+                {
+                  title: "Seeded illustrations",
+                  items: illustrations,
+                  empty: "No seeded illustrations in this world.",
+                },
+              ].map((group) => (
+                <section
+                  className="collection-group"
+                  key={group.title}
+                  aria-label={group.title}
+                >
+                  <h3>{group.title}</h3>
+                  <p>
+                    {group.title === "Confirmed demo keepsakes"
+                      ? "Newest confirmation dates first. Demo confirmations are not verified visits."
+                      : "Examples supplied with the world, not places you have visited."}
+                  </p>
+                  {group.items.length === 0 ? (
+                    <p>{group.empty}</p>
+                  ) : (
+                    <div className="album">
+                      {group.items.map((item) => (
+                        <button
+                          key={item.id}
+                          onClick={() => select(item.id, "album")}
+                        >
+                          <span className={`album-icon asset-${item.asset}`}>
+                            <KeepsakeIcon asset={item.asset} />
+                          </span>
+                          <span>
+                            <strong>{item.displayName}</strong>
+                            <small>
+                              {world.collected[item.id].visitDate} ·{" "}
+                              {world.collected[item.id].provenance ===
+                              "illustration"
+                                ? "illustration"
+                                : "confirmed demo"}
+                            </small>
+                          </span>
+                          <ArrowUpRight size={18} />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </section>
+              ))}
               {archived.length > 0 && (
                 <section
                   className="legacy-collection"
@@ -1067,7 +1190,10 @@ export default function App() {
                   </p>
                   <div className="album">
                     {archived.map((item) => (
-                      <button key={item.id} onClick={() => select(item.id)}>
+                      <button
+                        key={item.id}
+                        onClick={() => select(item.id, "album")}
+                      >
                         <span
                           className={`album-icon asset-${item.asset}`}
                           aria-hidden="true"
