@@ -383,7 +383,12 @@ export default function App() {
   function reset() {
     timers.current.forEach(clearTimeout);
     const next = initialState();
-    setSaved(saveWorld(storage, next, { replaceProtected: true }));
+    const success = saveWorld(storage, next, { replaceProtected: true });
+    setSaved(success);
+    if (success) {
+      setUnresolvedRead(false);
+      setSaveConflict(null);
+    }
     setProtectedSave(false);
     setConfirmReset(false);
     setWorld(next);

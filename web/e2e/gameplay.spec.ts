@@ -294,3 +294,85 @@ test("a collected Seoul adventure can be replayed without duplicating or rewriti
     await page.evaluate(() => localStorage.getItem("little-world:v1")),
   ).toBe(original);
 });
+
+test("a successful explicit reset resolves an unreadable startup before the next confirmed save", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    const read = Storage.prototype.getItem;
+    const write = Storage.prototype.setItem;
+    if (!read.call(sessionStorage, "reset-read-fixture")) {
+      write.call(
+        localStorage,
+        "little-world:v1",
+        JSON.stringify({
+          version: 2,
+          collected: {
+            chicago: {
+              visitDate: "2026-08-01",
+              memory: "Archived Chicago note",
+              provenance: "confirmed-demo",
+            },
+          },
+        }),
+      );
+      write.call(sessionStorage, "reset-read-fixture", "true");
+    }
+    Storage.prototype.getItem = function (key) {
+      if (
+        this === localStorage &&
+        key === "little-world:v1" &&
+        !read.call(sessionStorage, "world-reads-ready")
+      )
+        throw new DOMException("Temporarily unreadable", "SecurityError");
+      return read.call(this, key);
+    };
+    window.addEventListener("restore-world-reads", () =>
+      write.call(sessionStorage, "world-reads-ready", "true"),
+    );
+  });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await expect(page.getByRole("alert")).toContainText(
+    "Saved world could not be read",
+  );
+  await page.evaluate(() =>
+    window.dispatchEvent(new Event("restore-world-reads")),
+  );
+  await page
+    .getByRole("button", { name: "Demo settings", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Reset demo world", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Confirm reset", exact: true })
+    .click();
+  await expect(page.getByRole("alert")).toHaveCount(0);
+  await page
+    .getByRole("button", { name: "Find a little adventure", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Find a Mangwon picnic", exact: true })
+    .click();
+  await page.getByRole("button", { name: "Let’s go", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Simulate journey", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Add to my world", exact: true })
+    .click();
+  await expect(page.getByRole("alert")).toHaveCount(0);
+  expect(
+    await page.evaluate(
+      () =>
+        JSON.parse(localStorage.getItem("little-world:v1")!).collected.mangwon
+          .provenance,
+    ),
+  ).toBe("confirmed-demo");
+  await page.reload();
+  await expect(
+    page.getByText("5 memories made. So many more to come.", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByRole("alert")).toHaveCount(0);
+});
