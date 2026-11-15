@@ -111,7 +111,7 @@ nav {
 }
 .world-name small {
   font-size: 14px;
-  color: #627752;
+  color: #52674a;
   margin-top: 2px;
 }
 .world-avatar {
@@ -212,8 +212,16 @@ nav {
   margin-top: 20px;
 }
 .preview-caption {
-  font-size: 10px;
-  color: #657653;
+  left: 50%;
+  right: auto;
+  width: max-content;
+  max-width: calc(100% - 16px);
+  padding: 4px 8px;
+  transform: translateX(-50%);
+  border-radius: 8px;
+  background: #eef0df;
+  font-size: 12px;
+  color: #435f40;
   letter-spacing: 1px;
 }
 .primary,
@@ -275,7 +283,7 @@ dd {
 }
 .destination-number {
   font-size: 20px;
-  color: #6c8258;
+  color: #52674a;
 }
 .destination-body {
   gap: 6px;
@@ -283,15 +291,16 @@ dd {
 .destination-body small {
   font-size: 11px;
   letter-spacing: 0.6px;
-  color: #657e50;
+  color: #435f40;
 }
 .destination-body strong {
   font-size: 23px;
+  color: #435f40;
 }
 .destination-body > span,
 .destination-body em {
   font-size: 14px;
-  color: #657653;
+  color: #52674a;
   line-height: 1.5;
 }
 .distance {
@@ -300,7 +309,7 @@ dd {
 }
 .distance small {
   font-size: 11px;
-  color: #70835c;
+  color: #52674a;
 }
 .album button {
   min-height: 88px;
@@ -309,6 +318,7 @@ dd {
 }
 .album strong {
   font-size: 21px;
+  color: #435f40;
 }
 .album small {
   font-size: 14px;
@@ -323,7 +333,7 @@ dd {
 .settings-row {
   font-size: 14px;
   padding: 18px 0;
-  color: #667a53;
+  color: #52674a;
   gap: 16px;
 }
 .settings-row span:last-child {
@@ -359,7 +369,7 @@ dd {
 .toast small {
   font-size: 14px;
   line-height: 1.5;
-  color: #637752;
+  color: #52674a;
 }
 .collection-caption {
   bottom: 104px;
@@ -367,6 +377,13 @@ dd {
   padding: 20px 28px 23px;
   max-width: calc(100% - 150px);
   white-space: normal;
+  color: #435f40;
+}
+.collection-progress {
+  background: #61784f;
+}
+.journey-art > span {
+  color: #435f40;
 }
 .night .greeting h1 {
   display: inline-block;
@@ -864,6 +881,24 @@ dd {
   height: 12px;
   margin-top: 12px;
   accent-color: #486d56;
+  appearance: none;
+  border: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #d1d9c3;
+}
+.collection-progress-summary progress::-webkit-progress-bar {
+  background: #d1d9c3;
+}
+.collection-progress-summary progress::-webkit-progress-value {
+  background: #486d56;
+}
+.collection-progress-summary progress::-moz-progress-bar {
+  background: #486d56;
+}
+.collection-progress-summary p,
+.completion-card p {
+  color: inherit;
 }
 .memory-editor,
 .backup-panel,
@@ -994,6 +1029,10 @@ dd {
 }
 .safe-screen small {
   font-size: 13px;
+}
+.safe-screen .eyebrow {
+  color: #52674a;
+  font-size: 12px;
 }
 .graphics-failure {
   inset: 12px;
