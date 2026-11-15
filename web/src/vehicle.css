@@ -1104,3 +1104,14 @@ dd {
   outline-offset: 4px;
   border-radius: 4px;
 }
+.panel .chosen-stop {
+  display: block;
+  overflow-wrap: anywhere;
+}
+.panel .chosen-stop small {
+  display: block;
+  margin-top: 6px;
+  color: #52674a;
+  font-size: 14px;
+  line-height: 1.5;
+}
