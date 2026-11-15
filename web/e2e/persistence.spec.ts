@@ -239,3 +239,48 @@ test("clearing recovery copies is deliberate and retains the active world", asyn
   ).toBeNull();
   expect(await currentSave(page)).toBe(original);
 });
+
+test("a delayed file read cannot overwrite newer pasted backup text", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await settings(page);
+  await page
+    .getByRole("button", { name: "Prepare world backup", exact: true })
+    .click();
+  const exported = await page
+    .getByRole("textbox", { name: "Exported world backup" })
+    .inputValue();
+  await page.evaluate(() => {
+    File.prototype.text = () =>
+      new Promise<string>((resolve) => {
+        window.addEventListener(
+          "release-test-file",
+          () => resolve("outdated file contents"),
+          { once: true },
+        );
+      });
+  });
+  await page
+    .getByLabel("Or choose a backup file in a supported browser")
+    .setInputFiles({
+      name: "older.json",
+      mimeType: "application/json",
+      buffer: Buffer.from("{}"),
+    });
+  await page
+    .getByRole("textbox", { name: "Paste a world backup", exact: true })
+    .fill(exported);
+  await page.evaluate(() =>
+    window.dispatchEvent(new Event("release-test-file")),
+  );
+  await expect(
+    page.getByRole("textbox", { name: "Paste a world backup", exact: true }),
+  ).toHaveValue(exported);
+  await page
+    .getByRole("button", { name: "Review imported world", exact: true })
+    .click();
+  await expect(
+    page.getByRole("group", { name: "Confirm world replacement" }),
+  ).toBeVisible();
+});

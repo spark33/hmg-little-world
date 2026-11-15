@@ -34,6 +34,7 @@ export default function BackupPanel({
   const fileId = useId();
   const exportArea = useRef<HTMLTextAreaElement | null>(null);
   const confirmation = useRef<HTMLDivElement | null>(null);
+  const fileRead = useRef(0);
   const [text, setText] = useState("");
   const [exported, setExported] = useState("");
   const [pending, setPending] = useState<Pending>(null);
@@ -106,6 +107,7 @@ export default function BackupPanel({
   }
   async function readFile(file?: File) {
     if (!file) return;
+    const sequence = ++fileRead.current;
     if (file.size > MAX_BACKUP_BYTES) {
       feedback(
         "The backup exceeds the 64 KiB limit. Your saved data has not been changed.",
@@ -114,7 +116,9 @@ export default function BackupPanel({
       return;
     }
     try {
-      setText(await file.text());
+      const contents = await file.text();
+      if (fileRead.current !== sequence) return;
+      setText(contents);
       setPending(null);
       feedback("File loaded for review. Your saved world has not changed.");
     } catch {
@@ -126,6 +130,7 @@ export default function BackupPanel({
   }
   function confirm() {
     if (!pending) return;
+    fileRead.current += 1;
     if (pending.kind === "clear") {
       if (!clearRecoveryData(storage)) {
         feedback(
@@ -232,6 +237,7 @@ export default function BackupPanel({
         spellCheck={false}
         placeholder="Paste the complete ROAMY backup here"
         onChange={(event) => {
+          fileRead.current += 1;
           setText(event.currentTarget.value);
           setPending(null);
           feedback("");

@@ -123,6 +123,75 @@ describe("versioned world persistence", () => {
       );
     }
   });
+  it("round trips all sixteen Seoul and legacy IDs without relabeling any record", () => {
+    const illustrated = [
+      "gwangjang",
+      "seongsu",
+      "seokchon",
+      "namsan",
+      "detroit",
+      "lighthouse",
+      "cherry",
+      "cafe",
+    ];
+    const confirmed = [
+      "mangwon",
+      "gyeongbokgung",
+      "bukhansan",
+      "seoul-museum",
+      "chicago",
+      "new-york",
+      "mountain",
+      "museum",
+    ];
+    const mixedConfig: PersistenceConfig = {
+      knownIds: [...illustrated, ...confirmed],
+      illustrationIds: illustrated,
+      initialState: () => ({
+        version: 2,
+        collected: Object.fromEntries(
+          illustrated.slice(0, 4).map((id) => [
+            id,
+            {
+              visitDate: "2026-11-15",
+              memory: `Illustration ${id}`,
+              provenance: "illustration" as const,
+            },
+          ]),
+        ),
+      }),
+    };
+    const mixed: WorldState = {
+      version: 2,
+      collected: Object.fromEntries(
+        mixedConfig.knownIds.map((id) => [
+          id,
+          {
+            visitDate: "2026-11-15",
+            memory: `Original note for ${id}`,
+            provenance: illustrated.includes(id)
+              ? ("illustration" as const)
+              : ("confirmed-demo" as const),
+          },
+        ]),
+      ),
+    };
+    const storage = memoryStorage();
+    expect(saveWorld(storage, mixed, mixedConfig)).toBe(true);
+    expect(readWorld(storage, mixedConfig).state).toEqual(mixed);
+    expect(
+      parseBackup(exportBackup(mixed, mixedConfig), mixedConfig),
+    ).toMatchObject({ status: "ready", state: mixed });
+    expect(
+      Object.keys(readWorld(storage, mixedConfig).state.collected),
+    ).toHaveLength(16);
+    expect(readWorld(storage, mixedConfig).state.collected.chicago.memory).toBe(
+      "Original note for chicago",
+    );
+    expect(readWorld(storage, mixedConfig).state.collected.mangwon.memory).toBe(
+      "Original note for mangwon",
+    );
+  });
   it("round trips the full catalog and keeps one prior valid recovery copy", () => {
     const storage = memoryStorage();
     expect(saveWorld(storage, initialState(), config)).toBe(true);
