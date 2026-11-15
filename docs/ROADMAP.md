@@ -58,6 +58,12 @@ Acceptance: verify ADB connection and install/launch; startup UNKNOWN covered; a
 
 Persistence and the navigation contract are implemented; **live destination configuration and actual SDK behavior remain open**. Acceptance: current/legacy backups round-trip, unknown/oversized/malformed/future imports are rejected or preserved appropriately, replacement is explicit and recovery/deletion is deliberate. Only reviewed native-owned destinations reach NaviHelper; denied/unavailable/timeout/disconnect/retry/cancel outcomes are actionable; a submitted/search-finished route never means arrival. Configure an authorized accurate Seoul POI source, then test real service binding/permissions/callback order on official Pleos.
 
+### P2 — Memory and outing journeys beyond the demo
+
+The fixed keepsake game does not yet provide a repeat-visit journal or saved outing plans. [Product journey review](PRODUCT_JOURNEYS.md) separates the working loop from those missing product capabilities.
+
+Acceptance: user-confirmed demos and examples remain visibly distinct; the chosen illustrative destination survives confirmation/reload/backup; Back retains collection/category context and recommendations state their curated reason. Next, individual memory correction/undo and draft protection must preserve other records and never block safety covering. A later visit journal must retain multiple dated user-recorded visits per place without duplicating buildings; saved plans must survive restart while remaining distinct from completed visits. Real-place discovery must expose accurate authorized data and a useful explanation. No GPS verification or personalization claim follows from a manual record or static suggestion.
+
 ### P3 — Performance, privacy and release gate
 
 Build/signing preparation and cloud validation are implemented; **release acceptance remains open**. Acceptance: official runtime matrix passes, measured head-unit frame-time/draw-call/memory/long-session budgets are agreed and met, audio-focus/suspend/speaker behavior is verified, sensitive data is protected with approved encryption if handled, a valid owner-signed non-debuggable APK passes integrity checks, and accurate privacy/support/country/age-rating/permission materials pass Pleos review. Do not invent credentials, support contacts, legal ratings, certification or performance results.
@@ -65,9 +71,10 @@ Build/signing preparation and cloud validation are implemented; **release accept
 ## Next actions in priority order
 
 1. Complete integrated cloud regression checks, screenshots/videos, bundled license verification and APK integrity for this Seoul increment; review the feature PR. The mandatory initial contest form needs owner review/signing/submission by 2026-11-15 23:59 KST; optional release evidence must remain truthful.
-2. Provision the cloud KVM/GPU environment and execute the official runtime acceptance matrix before enabling vehicle entertainment.
-3. Supply/review a licensed accurate Seoul destination provider, validate native navigation on Pleos, and implement approved encrypted storage before advertising sensitive personal memories.
-4. Profile real hardware, resolve measured bottlenecks and perform accessibility/touch/localization review on the target display.
-5. Provide secure release signing and reviewed market materials; publish only after explicit approval and successful platform review.
+2. Improve the real-use memory loop: individual correction/draft protection, separate repeat-visit entries and deliberate saved outing plans, with the acceptance criteria above. These product tasks can progress independently of emulator infrastructure.
+3. Provision the cloud KVM/GPU environment and execute the official runtime acceptance matrix before enabling vehicle entertainment.
+4. Supply/review a licensed accurate Seoul destination provider, validate native navigation on Pleos, and implement approved encrypted storage before advertising sensitive personal memories.
+5. Profile real hardware, resolve measured bottlenecks and perform accessibility/touch/localization review on the target display.
+6. Provide secure release signing and reviewed market materials; publish only after explicit approval and successful platform review.
 
 Detailed evidence and implementation boundaries: [emulator feasibility](EMULATOR_FEASIBILITY.md), [native safety](VEHICLE_SAFETY.md), [navigation](NAVIGATION.md), [release/signing/privacy](RELEASE.md). Browser or JVM evidence must never be described as official Pleos validation.

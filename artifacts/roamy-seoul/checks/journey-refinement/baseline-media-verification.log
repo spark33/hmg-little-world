@@ -1,0 +1,43 @@
+{
+  "verification": "passed",
+  "manifestUnchanged": true,
+  "rawCompared": false,
+  "videos": [
+    {
+      "file": "main-walkthrough.mp4",
+      "bytes": 4883125,
+      "sha256": "5f394ebb6eea9bfc203991c42715feb28212c21282b9c0d13f680d2b85844ad9",
+      "codec": "h264",
+      "width": 1440,
+      "height": 900,
+      "frameRate": "15/1",
+      "durationSeconds": 382.133333,
+      "hasAudio": false,
+      "fullDecode": "passed"
+    },
+    {
+      "file": "short-walkthrough.mp4",
+      "bytes": 665040,
+      "sha256": "0688f4a4d968a05cd96bf0ea6c1e540a4df09ae126e5d1e0079f5d48842b5ebd",
+      "codec": "h264",
+      "width": 960,
+      "height": 480,
+      "frameRate": "15/1",
+      "durationSeconds": 150.266667,
+      "hasAudio": false,
+      "fullDecode": "passed"
+    },
+    {
+      "file": "narrow-walkthrough.mp4",
+      "bytes": 189111,
+      "sha256": "9af0b878cf55fd2e08547e2cc2b9aa3e0627cabbfe09958c3fd37fbb570a6805",
+      "codec": "h264",
+      "width": 360,
+      "height": 480,
+      "frameRate": "15/1",
+      "durationSeconds": 96.733333,
+      "hasAudio": false,
+      "fullDecode": "passed"
+    }
+  ]
+}

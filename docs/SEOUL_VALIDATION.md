@@ -10,14 +10,15 @@ Production vehicle entertainment remains disabled by the unvalidated-platform ga
 
 ## Checks
 
-- Web unit tests: **80 passed**.
-- Production browser E2E: **44 cases validated**. The initial combined run passed 42; the two rerun cases passed after serializing graphics work and correcting an assertion to respect the established whitespace-trimming contract. The original long-flow timeout and assertion failure remain in the saved logs; no product behavior was weakened.
+- Current web unit tests: **88 passed**.
+- The journey refinement passed focused browser flow, context-return, destination persistence and three-viewport layout/contrast/reading-order checks. Current-source checks and APK asset reports are in [journey refinement evidence](../artifacts/roamy-seoul/checks/journey-refinement/).
+- **50 production browser E2E cases** are included in [main CI](https://github.com/spark33/hmg-little-world/actions/workflows/cloud-validation.yml?query=branch%3Amain). The integration baseline separately passed all 44 prior cases in [clean CI run 43704719736](https://github.com/spark33/hmg-little-world/actions/runs/43704719736). Its initial contended local run and two successful reruns remain in the saved logs; no product behavior was weakened.
 - Native JVM tests: **41 per flavor**, 82 executions.
 - Attribution generator: **9 tests passed**; strict generated-material check passed for 13 emitted web packages and six native OSS groups.
-- Release staging: **11 policy tests passed**, including unauthorized signer, preview/debug, stale assets and overwrite protection.
+- Release staging and media tooling: **23 tests passed** (11 staging, 12 media verification), including unauthorized signer, stale assets, overwrite protection, missing raw files, tampering and read-only evidence preservation.
 - Android packaging and APK policy/asset verification passed for both debug flavors and the unsigned vehicle release.
 
-Final test results, exact artifact integrity reports and browser evidence are recorded under [the Seoul artifact directory](../artifacts/roamy-seoul/). The integration PR links its cloud CI run as an additional independent build/regression record. See the [design review](DESIGN_VALIDATION.md) for screenshots, actual UI videos, inspection notes and remaining visual limitations.
+The [design review](DESIGN_VALIDATION.md) distinguishes baseline videos from the current-source journey refinement. It links inspected screenshots, actual UI videos, decoded-frame checks and remaining limitations. The [product journey review](PRODUCT_JOURNEYS.md) evaluates the complete loop against the proposal and identifies missing real-use capabilities.
 
 The native checks produced 41 passing unit tests in each flavor (82 executions), zero failures/errors and zero lint errors. Four warnings remain in each lint variant: the documented target API baseline, dependency freshness, fixed landscape orientation and JavaScript enablement needed by the bundled application. These are not Pleos review approval. The unsigned release is an inspection artifact; debug APK signatures are development signatures.
 

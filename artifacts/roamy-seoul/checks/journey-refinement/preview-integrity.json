@@ -1,0 +1,10 @@
+{
+  "package": "ai.littleworld.preview",
+  "sha256": "598c7aee86f9a4e21fc989a4921603ff5732e5c251b680c93db786fc7ba216e2",
+  "signatureVerified": true,
+  "releaseCertificateRequired": false,
+  "unsignedInspectionOnly": false,
+  "webFilesMatched": 6,
+  "permissions": [],
+  "runtimeValidated": false
+}

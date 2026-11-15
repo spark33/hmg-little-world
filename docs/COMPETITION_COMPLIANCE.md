@@ -39,6 +39,8 @@ The terms require lawful use and open-source attribution. ROAMY's procedural geo
 
 The form separates operational identity from the anonymous project narrative and asks entrants to avoid identity leakage in shared materials. Its APK naming convention also uses the team/individual entrant label. Keep the authorized name in the required operational fields/file name, omit it from the product pitch, and have the owner confirm how these instructions apply to linked filenames and repository metadata. This audit did not contact the organizer or certify anonymity.
 
+Read-only GitHub metadata inspection on 2026-11-15 confirmed this repository is already **public**. No visibility setting was changed. Preserve access to the actual submitted immutable source cut and verify the final links before sending.
+
 ## Prepared materials and minimum owner actions
 
 - [Unsigned project narrative](submission/ROAMY_APPLICATION_DRAFT.md) follows official sections 1–8 and keeps implementation/plans distinct.

@@ -1,0 +1,13 @@
+{
+  "scope": "production-browser-and-APK-web-assets",
+  "sourceCommit": "9f389af",
+  "officialPleosRuntimeValidated": false,
+  "sha256": {
+    "assets/index-Cf8Zrivz.css": "7268484b543df964ccd262f8a7eb473dbcfc9d5a504d9e991f8b12ee1d2f765a",
+    "assets/index-DCyRyVFv.js": "d6cb37cf4d2a1cdcd793898169ce1c44b33d5b5418f483b0a5497bc5f5261fd3",
+    "bundle-dependencies.json": "73cd63477f96408b61761219d70c4a9fda8b0aed6071b7e77899411861f9efec",
+    "favicon.svg": "faa80203bbcbd97eaffb9ed7ed2f9d575d25b1a8bf3c4d68f0e821eee3fbc330",
+    "index.html": "8d8d1920e0c186dfa3ed1be4e010726037fe2e63bff13b079c6e5efdaf1ec9b9",
+    "third-party-notices.txt": "c022b59652eb7764c4e0535ed65cc6a85839d959b66d950c2fca782568aca37e"
+  }
+}

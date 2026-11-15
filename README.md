@@ -18,9 +18,9 @@ npm ci
 npm run dev
 ```
 
-Open the cloud preview URL. **My collection → Gwangjang Market flavors → Meet your next keepsake → Find a Mangwon picnic → choose an illustrative destination → Let’s go → Simulate journey → Add to my world** records a confirmed demo memory. The reveal lasts seven seconds; reduced motion adds the finished keepsake immediately. **Not yet** records nothing.
+Open the cloud preview URL. **My collection → Gwangjang Market flavors → Discover Mangwon Market picnic → Find a Mangwon picnic → choose an illustrative destination → Let’s go → Simulate journey → Add to my world** records a confirmed demo memory. The reveal lasts seven seconds; reduced motion adds the finished keepsake immediately. **Not yet** records nothing.
 
-Browse all keepsakes to choose a category or continue through Mangwon → Gyeongbokgung → Bukhansan → Seoul museum. Every advertised new keepsake has a complete discovery/confirmation flow. Collecting all four shows the completion state. Replaying an adventure never duplicates a keepsake. Edit a collected memory's note from its details; Save and Cancel are deliberate actions.
+Browse all keepsakes to choose a category or continue through Mangwon → Gyeongbokgung → Bukhansan → Seoul museum. My collection separates confirmed demo memories from seeded illustrations, with confirmed records first. Back returns to the collection or category used to open a memory. Recommendations name a curated next chapter; they are not live or personalized place rankings. Every advertised new keepsake has a complete discovery/confirmation flow. Collecting all four shows the completion state. Replaying an adventure never duplicates a keepsake. Edit a collected memory's note from its details; Save and Cancel are deliberate actions.
 
 Orbit/pan/zoom are bounded; the compass reframes the island. Settings stores day/evening, mute and reduced-motion preferences. Reduced motion defaults to the system setting and stops nonessential world/camera motion. Escape closes panels and returns keyboard focus. Reset requires confirmation. The island has eight reserved sites; collection fills them rather than automatically expanding terrain over time.
 
@@ -32,7 +32,7 @@ The version 2 save format keeps the stable `little-world:v1` key for migration. 
 
 Settings also includes a local **Open-source licenses** reader. [Dependency attribution and checks](docs/licenses/README.md) document the emitted production bundle and separate proprietary Pleos terms.
 
-Settings includes **Backup and recovery**: prepare/copy a backup (or select text manually), review an imported text/file, then explicitly confirm replacement. Backups are bounded to 64 KiB, validate known current/legacy IDs, real dates and note length, and reject unsupported versions. Previous valid saves and deliberately replaced unreadable saves are retained for recovery until explicitly cleared. Reset removes the current additions but keeps recovery data until its separate deletion control is used.
+Settings includes **Backup and recovery**: prepare/copy a backup (or select text manually), review an imported text/file, then explicitly confirm replacement. Confirmed memories retain the chosen illustrative destination when one was recorded; earlier records never infer a missing choice. Backups are bounded to 64 KiB, validate known current/legacy IDs, real dates and note length, and reject unsupported versions. Previous valid saves and deliberately replaced unreadable saves are retained for recovery until explicitly cleared. Reset removes the current additions but keeps recovery data until its separate deletion control is used.
 
 Browser saves, manual backups and clipboard exports are **plaintext**. Do not store sensitive personal information. Nothing is uploaded by ROAMY; uninstall/clear-data removes device data, and automatic Android cloud backup/device transfer is excluded. Sensitive production data requires approved encrypted native persistence before release; sandboxing is not encryption.
 
@@ -80,6 +80,7 @@ TEST_PRODUCTION=1 EVIDENCE_DIR=../artifacts/roamy-seoul npm run test:e2e
 
 Set `CHROMIUM_PATH` for a cloud browser when it differs from `/usr/bin/chromium`. Software WebGL flags are browser test settings; they do not emulate Pleos GPU performance. The separate `verify-rendering.mjs` checks production day/evening output, console/CSP errors and the WebGL failure screen on preview port 5174. CI also builds both APK flavors and unsigned vehicle release, runs native unit tests/lint and verifies APK policy/signatures/bundled assets.
 
+- [Product journeys and proposal fit](docs/PRODUCT_JOURNEYS.md)
 - [Current implementation roadmap and acceptance criteria](docs/ROADMAP.md)
 - [Official Pleos cloud feasibility](docs/EMULATOR_FEASIBILITY.md)
 - [Vehicle safety and lifecycle evidence](docs/VEHICLE_SAFETY.md)

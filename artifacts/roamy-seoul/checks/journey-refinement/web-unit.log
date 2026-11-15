@@ -1,0 +1,27 @@
+
+> roamy@0.2.0 test
+> vitest run src
+
+
+ RUN  v3.2.7 /workspace/hmg-little-world/web
+
+ ✓ src/persistence.test.ts (21 tests) 17ms
+ ✓ src/sound.test.ts (11 tests) 43ms
+ ✓ src/KeepsakeIcon.test.tsx (2 tests) 15ms
+ ✓ src/bridge.test.ts (12 tests) 20ms
+ ✓ src/domain.test.ts (30 tests) 18ms
+ ✓ src/journeys.test.ts (2 tests) 11ms
+ ✓ src/world-layout.test.ts (4 tests) 6ms
+ ✓ src/preferences.test.ts (3 tests) 4ms
+ ✓ src/navigation.test.ts (3 tests) 4ms
+
+ Test Files  9 passed (9)
+      Tests  88 passed (88)
+   Start at  20:03:16
+   Duration  1.21s (transform 369ms, setup 0ms, collect 596ms, tests 137ms, environment 1ms, prepare 567ms)
+
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

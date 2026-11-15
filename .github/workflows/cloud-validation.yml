@@ -52,6 +52,13 @@ jobs:
           python3 scripts/generate-notices.py --check --bundle-inventory web/dist/bundle-dependencies.json
           python3 -m unittest discover -s docs/licenses -p 'test_generate_notices.py' -v 2>&1 | tee artifacts/ci-cloud/notice-tests.log
           python3 -m unittest discover -s scripts/tests -v 2>&1 | tee artifacts/ci-cloud/staging-tests.log
+      - name: Verify recorded design media
+        run: |
+          if ! command -v ffmpeg > /dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
+          python3 web/verify-design-media.py 2>&1 | tee artifacts/ci-cloud/media-verification.log
       - name: Production browser E2E
         working-directory: web
         env:
