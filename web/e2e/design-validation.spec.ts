@@ -460,3 +460,38 @@ test("a browser driving event dismisses an unconfirmed backup replacement withou
     page.getByRole("group", { name: "Confirm world replacement" }),
   ).toHaveCount(0);
 });
+
+test("bundled licenses are keyboard-readable locally on short and narrow displays", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 960, height: 480 });
+  await page.goto("/");
+  const requests: string[] = [];
+  page.on("request", (request) => requests.push(request.url()));
+  await page
+    .getByRole("button", { name: "Demo settings", exact: true })
+    .click();
+  const summary = page.locator(".third-party-notices summary");
+  await summary.focus();
+  await expect(summary).toBeFocused();
+  await page.keyboard.press("Enter");
+  const licenses = page.getByLabel("Bundled open-source license text");
+  await expect(licenses).toContainText("License");
+  expect(requests).toContain(
+    new URL("third-party-notices.txt", page.url()).href,
+  );
+  expect(
+    requests.every((url) => new URL(url).origin === new URL(page.url()).origin),
+  ).toBe(true);
+  for (const width of [960, 360]) {
+    await page.setViewportSize({ width, height: 480 });
+    await licenses.focus();
+    await expect(licenses).toBeFocused();
+    const box = await licenses.evaluate((el) => ({
+      width: el.clientWidth,
+      content: el.scrollWidth,
+    }));
+    expect(box.content).toBeLessThanOrEqual(box.width);
+    expect(await textContrast(licenses)).toBeGreaterThanOrEqual(4.5);
+  }
+});
