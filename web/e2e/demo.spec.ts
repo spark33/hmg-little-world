@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+const evidence = process.env.EVIDENCE_DIR || "../artifacts";
 test("complete Detroit → Chicago flow, explicit consent, seven-second reveal, reload and reset", async ({
   page,
 }) => {
@@ -13,7 +14,7 @@ test("complete Detroit → Chicago flow, explicit consent, seven-second reveal, 
   ).toBeVisible();
   await expect(page.getByText("Demo Detroit pizza restaurant")).toBeVisible();
   await page.getByRole("button", { name: "Meet your next keepsake" }).click();
-  await page.screenshot({ path: "../artifacts/recommendation.png" });
+  await page.screenshot({ path: `${evidence}/recommendation.png` });
   await page.getByRole("button", { name: "Find deep-dish pizza" }).click();
   await expect(
     page.getByText("Illustrative venues. No live availability or route data."),
@@ -51,19 +52,21 @@ test("complete Detroit → Chicago flow, explicit consent, seven-second reveal, 
     page.getByText("A little memory is finding its home…"),
   ).toBeVisible();
   await page.waitForTimeout(2800);
-  await page.screenshot({ path: "../artifacts/collection-midway.png" });
+  await page.screenshot({ path: `${evidence}/collection-midway.png` });
   await expect(
     page.getByText("Your little world just got bigger!"),
   ).toBeVisible({ timeout: 15000 });
   expect(Date.now() - start).toBeGreaterThanOrEqual(6500);
-  await page.screenshot({ path: "../artifacts/world-collected.png" });
+  await page.screenshot({ path: `${evidence}/world-collected.png` });
   await page.reload();
   await expect(
     page.getByText("5 memories made. So many more to come."),
   ).toBeVisible();
   await page.getByRole("button", { name: "Demo settings" }).click();
   await page.getByRole("button", { name: "Reset demo world" }).click();
-  await page.getByRole("button", { name: "Confirm reset", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Confirm reset", exact: true })
+    .click();
   await page.reload();
   await expect(
     page.getByText("4 memories made. So many more to come."),
@@ -111,6 +114,13 @@ test("safety interruption cancels collection animation", async ({ page }) => {
   await expect(
     page.getByText("A little memory is finding its home…"),
   ).toHaveCount(0);
+  await page.reload();
+  await expect(
+    page.getByText("5 memories made. So many more to come."),
+  ).toBeVisible();
+  await expect(
+    page.getByText("A little memory is finding its home…"),
+  ).toHaveCount(0);
 });
 test("automotive display sizes keep large touch targets and the primary action clear", async ({
   browser,
@@ -148,7 +158,7 @@ test("automotive display sizes keep large touch targets and the primary action c
         .locator("canvas")
         .evaluate((el) => (el as HTMLCanvasElement).width / el.clientWidth),
     ).toBeLessThanOrEqual(1.26);
-    await page.screenshot({ path: `../artifacts/vehicle-world-${width}.png` });
+    await page.screenshot({ path: `${evidence}/vehicle-world-${width}.png` });
     await page.getByRole("button", { name: "Find a little adventure" }).tap();
     await expect(
       page.getByRole("button", { name: "Find deep-dish pizza" }),
@@ -162,7 +172,7 @@ test("automotive display sizes keep large touch targets and the primary action c
       })
       .toBeLessThanOrEqual(width);
     await page.screenshot({
-      path: `../artifacts/vehicle-discovery-${width}.png`,
+      path: `${evidence}/vehicle-discovery-${width}.png`,
     });
     await context.close();
   }

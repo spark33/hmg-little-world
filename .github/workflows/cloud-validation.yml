@@ -1,0 +1,82 @@
+name: ROAMY cloud validation
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: roamy-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+      - name: Install build SDK
+        run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - name: Install web dependencies and browser
+        working-directory: web
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+          node --input-type=module -e 'import {chromium} from "@playwright/test"; console.log(`CHROMIUM_PATH=${chromium.executablePath()}`)' >> "$GITHUB_ENV"
+      - name: Web unit tests and production build
+        working-directory: web
+        run: |
+          mkdir -p ../artifacts/ci-cloud
+          npm test 2>&1 | tee ../artifacts/ci-cloud/web-unit.log
+          npm run build 2>&1 | tee ../artifacts/ci-cloud/web-build.log
+      - name: Production browser E2E
+        working-directory: web
+        env:
+          TEST_PRODUCTION: "1"
+          EVIDENCE_DIR: ../artifacts/ci-cloud
+        run: npm run test:e2e 2>&1 | tee ../artifacts/ci-cloud/browser.log
+      - name: Build both APKs, native tests, Android lint
+        working-directory: android
+        run: ./gradlew --no-daemon :app:assemblePreviewDebug :app:assembleVehicleDebug :app:testPreviewDebugUnitTest :app:testVehicleDebugUnitTest :app:lintPreviewDebug :app:lintVehicleDebug 2>&1 | tee ../artifacts/ci-cloud/android.log
+      - name: Production rendering and WebGL fallback
+        working-directory: web
+        env:
+          EVIDENCE_DIR: ../artifacts/ci-cloud
+        run: |
+          npm exec vite preview -- --host 127.0.0.1 --port 5174 > ../artifacts/ci-cloud/preview-server.log 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid"' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://localhost:5174/ > /dev/null; then break; fi
+            sleep 1
+          done
+          node verify-rendering.mjs 2>&1 | tee ../artifacts/ci-cloud/rendering.log
+      - name: Upload cloud evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: roamy-cloud-validation
+          retention-days: 14
+          path: |
+            artifacts/ci-cloud/
+            web/test-results/
+            android/app/build/outputs/apk/*/debug/*.apk
+            android/app/build/test-results/
+            android/app/build/reports/
+
+# This validates browser behavior and native builds. It does not claim a Pleos
+# runtime test; that requires the official image, usable KVM, and a supported GPU.

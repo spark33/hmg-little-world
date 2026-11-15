@@ -1,10 +1,12 @@
-# LITTLE WORLD
+# ROAMY
 
 **Drive the real world. Build your own.**
 
 A local-first Pleos Connect proof of concept: an original procedural miniature town, a Detroit-to-Chicago pizza discovery loop, and a seven-second building reveal. No downloaded 3D assets, cloud accounts, API keys, live restaurant claims, or remote server at runtime.
 
-![The miniature world](artifacts/world-initial.png)
+ROAMY was previously named LITTLE WORLD. Package IDs and the `little-world:v1` save key remain stable for upgrade compatibility. The [implementation roadmap](docs/ROADMAP.md), [official emulator feasibility report](docs/EMULATOR_FEASIBILITY.md), and [fresh cloud validation record](docs/CLOUD_VALIDATION.md) distinguish completed work from remaining production gaps.
+
+![ROAMY in the cloud browser](artifacts/roamy-cloud/world-initial.png)
 
 ## Run in a browser
 
@@ -19,6 +21,8 @@ npm run dev
 Open the printed localhost URL. This mode is explicitly labeled **Browser development preview** and is for use outside a vehicle.
 
 To replay: **My collection → Detroit-style pizza → Meet your next keepsake → Find deep-dish pizza → choose a sample destination → Let’s go → Simulate journey → Add to my world**. Wait seven seconds for the reveal. **Not yet** leaves the collection unchanged. Use the sliders icon at the top right → **Reset demo world** to begin again. Buildings can also be tapped directly; the collection book is an accessible alternate way to inspect memories.
+
+Reset requires **Confirm reset**; **Keep my world** cancels. Day/evening, sound and reduced-motion preferences survive reload. Reduced motion defaults to the system preference, stops ambient motion and replaces the reveal with an immediate confirmed keepsake. Escape dismisses a panel and restores focus. Confirmed collections save before animation. Unreadable/newer saves are preserved until a deliberate reset; storage failures show a visible session-only warning and retry.
 
 Drag to orbit, use two fingers to pan, and pinch, scroll, or use +/− to zoom. Camera orbit, pan, and zoom are bounded. Settings contains evening/daytime and sound controls. The compass button reframes the whole island. A deliberate interaction unlocks browser audio. Ambient motion is intentionally quiet.
 
@@ -46,7 +50,7 @@ Every Android build runs the production Vite build and syncs `web/dist` into `ap
 | `preview` | `ai.littleworld.preview` | Explicit non-vehicle development preview; demo vehicle adapter; no vehicle permissions. Use on a development emulator only. |
 | `vehicle` | `ai.littleworld` | Official NaviHelper 3.0.5 adapter. **World remains locked** because no trusted parked-state integration is available. No user-facing override. |
 
-Outputs: `android/app/build/outputs/apk/{preview,vehicle}/debug/app-{preview,vehicle}-debug.apk`. Copies of the verified builds are in `artifacts/`.
+Outputs: `android/app/build/outputs/apk/{preview,vehicle}/debug/app-{preview,vehicle}-debug.apk`. The cloud CI workflow uploads current APKs and test evidence. APKs directly under `artifacts/` are historical LITTLE WORLD proof-of-concept builds; use the current build outputs for ROAMY.
 
 ```sh
 adb install -r artifacts/little-world-preview-debug.apk
@@ -100,7 +104,7 @@ The development guide specifies min API 28+, Gradle 8+, and a Pleos 2.1.0 emulat
 
 NaviHelper uses the official Maven repository and `ai.pleos.playground:NaviHelper:3.0.5`. Actual class packages and signatures were additionally inspected in the published AAR before compiling. The vehicle manifest declares only the documented `pleos.car.permission.NAVI_ROUTE_SEARCH`; declaring it does not imply it is granted. A successful submission is not treated as a completed route or arrival.
 
-The project-access guide lists Vehicle Control and FusedLocation as not available yet. Neither dependency nor permission is invented here. NaviHelper's route/driving events do not establish transmission gear or a reliable parked state. A separately validated parked-state integration is required before enabling the vehicle world.
+The current project-access guide lists **Vehicle State and NaviHelper as ready to use**, while Vehicle Control and FusedLocation are not available yet. The current Vehicle guide documents SDK 2.3.2; state access must be investigated separately from control access. No state API, permission or parked signal is invented here. NaviHelper's route/driving events do not establish transmission gear or a reliable parked state. A separately validated parked-state integration is required before enabling the vehicle world.
 
 ## Tests and evidence
 

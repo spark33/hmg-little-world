@@ -1,0 +1,163 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.10.2/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+Unable to initialize metrics, ensure /home/agent/.android is writable, details: /home/agent/.android/analytics.settings (No such file or directory)
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+
+> Task :app:buildWeb
+
+> little-world@0.1.0 build
+> tsc -b && vite build
+
+vite v7.3.8 building client environment for production...
+transforming...
+✓ 2146 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                     0.90 kB │ gzip:   0.47 kB
+dist/assets/index-DZsmkPkV.css     24.72 kB │ gzip:   6.17 kB
+dist/assets/index-CAqQjlEZ.js   1,174.24 kB │ gzip: 329.70 kB
+✓ built in 6.05s
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice
+
+> Task :app:bundleWeb
+> Task :app:preBuild
+> Task :app:prePreviewDebugBuild
+> Task :app:mergePreviewDebugNativeDebugMetadata NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generatePreviewDebugBuildConfig UP-TO-DATE
+> Task :app:checkPreviewDebugAarMetadata UP-TO-DATE
+> Task :app:generatePreviewDebugResValues
+> Task :app:mapPreviewDebugSourceSetPaths
+> Task :app:generatePreviewDebugResources
+> Task :app:packagePreviewDebugResources
+> Task :app:createPreviewDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksPreviewDebug UP-TO-DATE
+> Task :app:mergePreviewDebugResources
+> Task :app:processPreviewDebugMainManifest UP-TO-DATE
+> Task :app:processPreviewDebugManifest UP-TO-DATE
+> Task :app:processPreviewDebugManifestForPackage UP-TO-DATE
+> Task :app:javaPreCompilePreviewDebug UP-TO-DATE
+> Task :app:mergePreviewDebugShaders UP-TO-DATE
+> Task :app:parsePreviewDebugLocalResources
+> Task :app:compilePreviewDebugShaders NO-SOURCE
+> Task :app:generatePreviewDebugAssets UP-TO-DATE
+> Task :app:mergePreviewDebugAssets
+> Task :app:compressPreviewDebugAssets
+> Task :app:checkPreviewDebugDuplicateClasses UP-TO-DATE
+> Task :app:desugarPreviewDebugFileDependencies UP-TO-DATE
+> Task :app:mergeExtDexPreviewDebug UP-TO-DATE
+> Task :app:mergeLibDexPreviewDebug UP-TO-DATE
+> Task :app:mergePreviewDebugJniLibFolders UP-TO-DATE
+> Task :app:mergePreviewDebugNativeLibs NO-SOURCE
+> Task :app:stripPreviewDebugDebugSymbols NO-SOURCE
+> Task :app:validateSigningPreviewDebug UP-TO-DATE
+> Task :app:writePreviewDebugAppMetadata UP-TO-DATE
+> Task :app:writePreviewDebugSigningConfigVersions UP-TO-DATE
+> Task :app:preVehicleDebugBuild
+> Task :app:mergeVehicleDebugNativeDebugMetadata NO-SOURCE
+> Task :app:generateVehicleDebugBuildConfig UP-TO-DATE
+> Task :app:checkVehicleDebugAarMetadata UP-TO-DATE
+> Task :app:generateVehicleDebugResValues
+> Task :app:mapVehicleDebugSourceSetPaths
+> Task :app:generateVehicleDebugResources
+> Task :app:processPreviewDebugResources
+> Task :app:mergeVehicleDebugResources
+> Task :app:compilePreviewDebugKotlin UP-TO-DATE
+> Task :app:compilePreviewDebugJavaWithJavac UP-TO-DATE
+> Task :app:dexBuilderPreviewDebug UP-TO-DATE
+> Task :app:mergePreviewDebugGlobalSynthetics UP-TO-DATE
+> Task :app:processPreviewDebugJavaRes UP-TO-DATE
+> Task :app:mergePreviewDebugJavaResource UP-TO-DATE
+> Task :app:mergeProjectDexPreviewDebug UP-TO-DATE
+> Task :app:packageVehicleDebugResources
+> Task :app:createVehicleDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksVehicleDebug UP-TO-DATE
+> Task :app:parseVehicleDebugLocalResources
+> Task :app:processVehicleDebugMainManifest UP-TO-DATE
+> Task :app:processVehicleDebugManifest UP-TO-DATE
+> Task :app:processVehicleDebugManifestForPackage UP-TO-DATE
+> Task :app:javaPreCompileVehicleDebug UP-TO-DATE
+> Task :app:mergeVehicleDebugShaders UP-TO-DATE
+> Task :app:compileVehicleDebugShaders NO-SOURCE
+> Task :app:generateVehicleDebugAssets UP-TO-DATE
+> Task :app:mergeVehicleDebugAssets
+> Task :app:compressVehicleDebugAssets
+> Task :app:checkVehicleDebugDuplicateClasses UP-TO-DATE
+> Task :app:desugarVehicleDebugFileDependencies UP-TO-DATE
+> Task :app:processVehicleDebugResources
+> Task :app:mergeExtDexVehicleDebug UP-TO-DATE
+> Task :app:compileVehicleDebugKotlin UP-TO-DATE
+> Task :app:compileVehicleDebugJavaWithJavac UP-TO-DATE
+> Task :app:mergeLibDexVehicleDebug UP-TO-DATE
+> Task :app:dexBuilderVehicleDebug UP-TO-DATE
+> Task :app:mergeProjectDexVehicleDebug UP-TO-DATE
+> Task :app:mergeVehicleDebugGlobalSynthetics UP-TO-DATE
+> Task :app:processVehicleDebugJavaRes UP-TO-DATE
+> Task :app:mergeVehicleDebugJavaResource UP-TO-DATE
+> Task :app:packagePreviewDebug
+> Task :app:createPreviewDebugApkListingFileRedirect UP-TO-DATE
+> Task :app:assemblePreviewDebug
+> Task :app:mergeVehicleDebugJniLibFolders UP-TO-DATE
+> Task :app:mergeVehicleDebugNativeLibs NO-SOURCE
+> Task :app:stripVehicleDebugDebugSymbols NO-SOURCE
+> Task :app:validateSigningVehicleDebug UP-TO-DATE
+> Task :app:writeVehicleDebugAppMetadata UP-TO-DATE
+> Task :app:writeVehicleDebugSigningConfigVersions UP-TO-DATE
+> Task :app:bundlePreviewDebugClassesToRuntimeJar UP-TO-DATE
+> Task :app:bundlePreviewDebugClassesToCompileJar UP-TO-DATE
+> Task :app:compilePreviewDebugUnitTestKotlin UP-TO-DATE
+> Task :app:prePreviewDebugUnitTestBuild
+> Task :app:javaPreCompilePreviewDebugUnitTest UP-TO-DATE
+> Task :app:compilePreviewDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processPreviewDebugUnitTestJavaRes UP-TO-DATE
+> Task :app:testPreviewDebugUnitTest UP-TO-DATE
+> Task :app:bundleVehicleDebugClassesToRuntimeJar UP-TO-DATE
+> Task :app:bundleVehicleDebugClassesToCompileJar UP-TO-DATE
+> Task :app:compileVehicleDebugUnitTestKotlin UP-TO-DATE
+> Task :app:preVehicleDebugUnitTestBuild
+> Task :app:javaPreCompileVehicleDebugUnitTest UP-TO-DATE
+> Task :app:compileVehicleDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processVehicleDebugUnitTestJavaRes UP-TO-DATE
+> Task :app:testVehicleDebugUnitTest UP-TO-DATE
+> Task :app:prePreviewDebugAndroidTestBuild SKIPPED
+> Task :app:generatePreviewDebugAndroidTestResValues
+> Task :app:generatePreviewDebugAndroidTestLintModel
+> Task :app:extractProguardFiles UP-TO-DATE
+> Task :app:generatePreviewDebugLintReportModel
+> Task :app:generatePreviewDebugUnitTestLintModel
+> Task :app:packageVehicleDebug
+> Task :app:createVehicleDebugApkListingFileRedirect UP-TO-DATE
+> Task :app:assembleVehicleDebug
+> Task :app:preVehicleDebugAndroidTestBuild SKIPPED
+> Task :app:generateVehicleDebugAndroidTestResValues
+> Task :app:generateVehicleDebugAndroidTestLintModel
+> Task :app:generateVehicleDebugLintReportModel
+> Task :app:generateVehicleDebugUnitTestLintModel
+
+> Task :app:lintAnalyzePreviewDebugAndroidTest
+Warning: Unable to initialize metrics, ensure /home/agent/.android is writable, details: /home/agent/.android/analytics.settings (No such file or directory)
+
+> Task :app:lintAnalyzePreviewDebugUnitTest
+> Task :app:lintAnalyzeVehicleDebugAndroidTest
+> Task :app:lintAnalyzeVehicleDebugUnitTest
+> Task :app:lintAnalyzePreviewDebug
+
+> Task :app:lintReportPreviewDebug
+Wrote HTML report to file:///workspace/hmg-little-world/android/app/build/reports/lint-results-previewDebug.html
+
+> Task :app:lintPreviewDebug
+> Task :app:lintAnalyzeVehicleDebug
+
+> Task :app:lintReportVehicleDebug
+Wrote HTML report to file:///workspace/hmg-little-world/android/app/build/reports/lint-results-vehicleDebug.html
+
+> Task :app:lintVehicleDebug
+
+BUILD SUCCESSFUL in 45s
+103 actionable tasks: 40 executed, 63 up-to-date

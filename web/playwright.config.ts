@@ -16,10 +16,14 @@ export default defineConfig({
       ],
     },
   },
-  webServer: process.env.TEST_BASE_URL ? undefined : {
-    command: "npm run dev",
-    url: "http://localhost:5173",
-    reuseExistingServer: true,
-  },
+  webServer: process.env.TEST_BASE_URL
+    ? undefined
+    : {
+        command: process.env.TEST_PRODUCTION
+          ? "npm exec vite preview -- --host 0.0.0.0 --port 5173"
+          : "npm run dev",
+        url: "http://localhost:5173",
+        reuseExistingServer: !process.env.CI,
+      },
   reporter: "list",
 });

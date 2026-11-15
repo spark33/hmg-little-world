@@ -1,6 +1,6 @@
 # ROAMY implementation roadmap
 
-Audit baseline: commit `4879837`, reviewed 2026-11-16 (Asia/Seoul). This is a source audit of the complete tracked web, Android, domain, test, build, documentation, and evidence inventory. Existing artifacts describe an earlier run; they are not fresh runtime evidence. ROAMY is currently branded LITTLE WORLD throughout the product. This roadmap describes the target, not a claim of completeness.
+Audit baseline: commit `4879837`, reviewed 2026-11-15 (Asia/Seoul). This is a source audit of the complete tracked web, Android, domain, test, build, documentation, and evidence inventory. Existing artifacts describe an earlier run; they are not fresh runtime evidence. At baseline, ROAMY was branded LITTLE WORLD throughout the product. This roadmap describes the target, not a claim of completeness; the final section records this branch's completed increment.
 
 ## Emulator feasibility
 
@@ -96,3 +96,14 @@ Acceptance: official Pleos runtime matrix completed with screenshots/logcat, zer
 ## Delivery policy
 
 Use small feature-branch commits and reviewed pull requests. Each PR lists exact checks, screenshot provenance, unmet acceptance criteria and remaining runtime limitations. Do not describe this proof of concept as feature-complete or Pleos-validated until the runtime and release gates pass.
+
+## First implementation increment
+
+The audit tables above retain the baseline to make the gaps reviewable. This branch addresses these items:
+
+- P0: correlated/cancelable bridge requests, transport error fallback, actual string validation for safety events, and regression coverage for delayed replies after safety, backgrounding and panel dismissal.
+- P0: synchronous confirmed saves, real calendar validation, bounded memories, preservation of corrupt/future saves, visible failed-save feedback/retry, and deliberate reset confirmation.
+- P1: ROAMY header/title/native launcher/safety/sign identity with stable package IDs and legacy save key; persistent day/evening, mute and motion preferences; system reduced-motion default, demand-rendered static world and instant confirmed keepsakes; panel keyboard focus/Escape return; narrow-screen preview disclosure and collection accessible name.
+- P3 foundation: a cloud CI workflow for production-browser E2E, unit tests, both APKs, native tests/lint and downloadable evidence. CI configuration is not itself proof of a successful hosted run.
+
+Gameplay expansion, live navigation, trusted parked integration, Pleos runtime and release certification remain open. See [CLOUD_VALIDATION.md](CLOUD_VALIDATION.md) for measured checks and limitations.

@@ -1,0 +1,30 @@
+
+> little-world@0.1.0 test:e2e
+> playwright test
+
+
+Running 14 tests using 1 worker
+
+(node:4204) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 e2e/demo.spec.ts:3:1 › complete Detroit → Chicago flow, explicit consent, seven-second reveal, reload and reset (36.9s)
+  ✓   2 e2e/demo.spec.ts:76:1 › driving and unknown vehicle state remove all interactive content (403ms)
+  ✓   3 e2e/demo.spec.ts:99:1 › safety interruption cancels collection animation (5.3s)
+  ✓   4 e2e/demo.spec.ts:125:1 › automotive display sizes keep large touch targets and the primary action clear (38.5s)
+  ✓   5 e2e/demo.spec.ts:181:1 › a building can be selected directly on the 3D canvas (3.6s)
+  ✓   6 e2e/preferences.spec.ts:3:1 › ROAMY preferences persist, panels take focus, Escape returns to the opener (14.5s)
+  ✓   7 e2e/preferences.spec.ts:29:1 › system reduced motion skips reveal and saves a confirmed memory immediately (4.2s)
+  ✓   8 e2e/preferences.spec.ts:58:1 › narrow screens retain preview disclosure and the collection accessible name (320ms)
+  ✓   9 e2e/reliability.spec.ts:4:3 › a delayed navigation response cannot reopen a journey after safety (16.4s)
+  ✓  10 e2e/reliability.spec.ts:4:3 › a delayed navigation response cannot reopen a journey after close (13.1s)
+  ✓  11 e2e/reliability.spec.ts:4:3 › a delayed navigation response cannot reopen a journey after background (10.8s)
+  ✓  12 e2e/reliability.spec.ts:70:3 › preserves an unreadable save (corrupt) until explicit reset (3.6s)
+  ✓  13 e2e/reliability.spec.ts:70:3 › preserves an unreadable save (future version) until explicit reset (4.2s)
+  ✓  14 e2e/reliability.spec.ts:103:1 › failed storage shows a visible warning and can be retried (1.2s)
+
+  14 passed (2.6m)
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice
