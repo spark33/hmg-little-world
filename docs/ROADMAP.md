@@ -42,7 +42,7 @@ Repeated road markings and shop roof ribs are batched. Software GL interception 
 
 ### P0 — Reliable cloud development and state handling
 
-Implementation complete; final combined checks are recorded with the integration PR. Acceptance: unit/build/browser/native/lint checks pass; delayed replies cannot reopen dismissed flows; confirmed saves survive interruption; failed reads/writes never silently replace the previous world; corrupt/future data stays recoverable. Production UNKNOWN/restricted states remain covered.
+Implementation complete; final combined checks are recorded in cloud CI and the versioned evidence. Acceptance: unit/build/browser/native/lint checks pass; delayed replies cannot reopen dismissed flows; confirmed saves survive interruption; failed reads/writes never silently replace the previous world; corrupt/future data stays recoverable. Production UNKNOWN/restricted states remain covered.
 
 ### P1 — Seoul gameplay and demonstration quality
 
@@ -70,7 +70,7 @@ Build/signing preparation and cloud validation are implemented; **release accept
 
 ## Next actions in priority order
 
-1. Complete integrated cloud regression checks, screenshots/videos, bundled license verification and APK integrity for this Seoul increment; review the feature PR. The mandatory initial contest form needs owner review/signing/submission by 2026-11-15 23:59 KST; optional release evidence must remain truthful.
+1. Complete integrated cloud regression checks, screenshots/videos, bundled license verification and APK integrity for this Seoul increment; check the current main-branch result. The mandatory initial contest form needs owner review/signing/submission by 2026-11-15 23:59 KST; optional release evidence must remain truthful.
 2. Improve the real-use memory loop: individual correction/draft protection, separate repeat-visit entries and deliberate saved outing plans, with the acceptance criteria above. These product tasks can progress independently of emulator infrastructure.
 3. Provision the cloud KVM/GPU environment and execute the official runtime acceptance matrix before enabling vehicle entertainment.
 4. Supply/review a licensed accurate Seoul destination provider, validate native navigation on Pleos, and implement approved encrypted storage before advertising sensitive personal memories.
