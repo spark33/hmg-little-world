@@ -22,6 +22,8 @@ export interface StorageLike {
 export interface PersistenceConfig {
   knownIds: readonly string[];
   initialState: () => WorldState;
+  /** Includes archived seed IDs when the current demonstration changes theme. */
+  illustrationIds?: readonly string[];
 }
 export type SaveStatus =
   "ready" | "empty" | "unavailable" | "corrupt" | "unsupported";
@@ -110,7 +112,8 @@ function parseValue(value: unknown, config: PersistenceConfig): ParsedWorld {
         `Memory text must be at most ${MAX_MEMORY_LENGTH} characters.`,
       );
     const provenance =
-      defaults.collected[id]?.provenance === "illustration"
+      defaults.collected[id]?.provenance === "illustration" ||
+      config.illustrationIds?.includes(id)
         ? "illustration"
         : "confirmed-demo";
     if (!legacy && record.provenance !== provenance)

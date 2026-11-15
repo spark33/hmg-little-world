@@ -37,16 +37,14 @@ const fullState = (): WorldState => ({
   collected: {
     ...initialState().collected,
     ...Object.fromEntries(
-      config.knownIds
-        .slice(1)
-        .map((id) => [
-          id,
-          {
-            visitDate: "2026-11-15",
-            memory: `Demo ${id}`,
-            provenance: "confirmed-demo" as const,
-          },
-        ]),
+      config.knownIds.slice(1).map((id) => [
+        id,
+        {
+          visitDate: "2026-11-15",
+          memory: `Demo ${id}`,
+          provenance: "confirmed-demo" as const,
+        },
+      ]),
     ),
   },
 });
@@ -86,6 +84,44 @@ describe("versioned world persistence", () => {
     });
     expect(loaded.state.collected.museum.provenance).toBe("confirmed-demo");
     expect(storage.writes).toEqual([]);
+  });
+  it("preserves original legacy records and provenance across a theme change", () => {
+    const seoulConfig: PersistenceConfig = {
+      knownIds: [...config.knownIds, "gwangjang"],
+      illustrationIds: ["detroit", "gwangjang"],
+      initialState: () => ({
+        version: 2,
+        collected: {
+          gwangjang: {
+            visitDate: "2026-11-15",
+            memory: "A Seoul illustration",
+            provenance: "illustration",
+          },
+        },
+      }),
+    };
+    for (const raw of [
+      JSON.stringify(fullState()),
+      JSON.stringify({
+        version: 1,
+        collected: {
+          detroit: { visitDate: "2026-06-14", memory: "Original Detroit note" },
+          chicago: { visitDate: "2026-11-14", memory: "Original Chicago note" },
+        },
+      }),
+    ]) {
+      const result = parseWorld(raw, seoulConfig);
+      expect(result.status).toBe("ready");
+      if (result.status !== "ready")
+        throw Error("Migration unexpectedly failed");
+      expect(result.state.collected.detroit.provenance).toBe("illustration");
+      expect(result.state.collected.chicago.provenance).toBe("confirmed-demo");
+      expect(result.state.collected.gwangjang.provenance).toBe("illustration");
+      expect(result.state.collected.chicago.memory).toMatch(/Chicago|chicago/);
+      expect(result.state.collected.gwangjang.memory).not.toBe(
+        result.state.collected.chicago.memory,
+      );
+    }
   });
   it("round trips the full catalog and keeps one prior valid recovery copy", () => {
     const storage = memoryStorage();
