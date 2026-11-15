@@ -765,6 +765,7 @@ dd {
   margin-block: 20px;
 }
 .keepsake-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -789,6 +790,7 @@ dd {
   height: 60px;
 }
 .keepsake-card strong {
+  display: block;
   font-family: Georgia, serif;
   font-size: 21px;
   font-weight: 400;
@@ -796,6 +798,7 @@ dd {
 }
 .keepsake-card small,
 .keepsake-state {
+  display: block;
   font-size: 13px;
   line-height: 1.5;
   color: #52674a;
@@ -803,6 +806,17 @@ dd {
 .keepsake-state {
   margin-top: auto;
   font-weight: 700;
+}
+.keepsake-card > svg:not(.keepsake-icon) {
+  position: absolute;
+  top: 16px;
+  right: 14px;
+  color: #52674a;
+}
+.legacy-collection {
+  margin-block: 24px;
+  padding-top: 24px;
+  border-top: 1px dashed #839574;
 }
 .collection-progress-summary,
 .completion-card {
