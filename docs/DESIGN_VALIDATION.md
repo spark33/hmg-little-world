@@ -1,10 +1,29 @@
 # ROAMY Seoul design validation
 
-Cloud production-browser audit, 2026-11-15. This reviews the actual Seoul application, not a mockup. The goal is to understand a seeded memory, discover a related experience, explicitly confirm a demonstration keepsake, and recover or edit local data safely.
+Cloud production-browser audits, 2026-11-15. This reviews the actual Seoul application, not a mockup. The current journey refinement and the earlier integration baseline are versioned separately below. The goal is to understand a seeded memory, discover a related experience, explicitly confirm a demonstration keepsake, and recover or edit local data safely.
 
 Final capture acceptance and media verification are recorded in the adjacent evidence manifests. Browser evidence does not establish Pleos runtime compatibility, native safety behavior, physical touch-target size, speaker/audio behavior, or full accessibility compliance.
 
-## Walkthroughs
+## Current journey refinement
+
+[Watch the current-source journey](../artifacts/roamy-seoul/design/journey-refinement/journey-refinement-walkthrough.mp4): **3m30s, 1440×900, 2.84 MB**, captured from frozen source `9f389af` at the root production preview. All **16 sequential screenshots plus two responsive screenshots** were individually inspected; seven decoded video frames were also inspected. The full MP4 decodes successfully. This silent continuous recording uses actual UI actions, a nondefault sample-stop choice, normal motion and a full timed reveal. No completed world, verified visit or parked state was injected. It retains inspection pauses and one recorder exact-toast lookup retry after the application had completed normally; there were no application page errors.
+
+| Journey | Verified result | Current evidence |
+| --- | --- | --- |
+| 1. Understand the collection | Starter illustrations and confirmations are separated; the new demo appears in the first group without implying a verified visit. | [Initial groups (0:23)](../artifacts/roamy-seoul/design/journey-refinement/journey-refinement-02-grouped-collection.png), [confirmed first (2:02)](../artifacts/roamy-seoul/design/journey-refinement/journey-refinement-09-confirmed-first-group.png) |
+| 2. Recollect, then discover | The selected quote precedes a concise named curated pairing. Discovery names its source and Back restores that memory. | [memory first (0:31)](../artifacts/roamy-seoul/design/journey-refinement/journey-refinement-03-memory-first-recommendation.png), [next chapter (0:41)](../artifacts/roamy-seoul/design/journey-refinement/journey-refinement-04-named-next-chapter.png), [source return (0:49)](../artifacts/roamy-seoul/design/journey-refinement/journey-refinement-05-source-memory-return.png) |
+| 3. Choose and explicitly confirm | The selected Han River sample stop carries into unavailable navigation; simulation and collection consent remain deliberate. | [nondefault choice (1:00)](../artifacts/roamy-seoul/design/journey-refinement/journey-refinement-06-chosen-sample-destination.png), [chosen journey (1:07)](../artifacts/roamy-seoul/design/journey-refinement/journey-refinement-07-chosen-simulated-journey.png), [confirmation (1:19)](../artifacts/roamy-seoul/design/journey-refinement/journey-refinement-08-explicit-demo-confirmation.png) |
+| 4. Reload and understand provenance | After reload the chosen sample stop persists; its qualifier and the separate demo confirmation date are explicit. | [reloaded stop (2:15)](../artifacts/roamy-seoul/design/journey-refinement/journey-refinement-10-reloaded-chosen-stop.png), [stop and date (2:32)](../artifacts/roamy-seoul/design/journey-refinement/journey-refinement-12-saved-stop-date-provenance.png) |
+| 5. Edit and verify | Save focuses the exact updated Unicode quote and persistent status. A second real reload preserves the note. | [saved quote (2:21)](../artifacts/roamy-seoul/design/journey-refinement/journey-refinement-11-saved-note-verification.png), [reloaded note (3:00)](../artifacts/roamy-seoul/design/journey-refinement/journey-refinement-14-reloaded-edited-note.png), [short saved quote](../artifacts/roamy-seoul/design/journey-refinement/responsive-01-short-saved-quote.png) |
+| 6. Return without losing context | Memory Back returns to its collection or all-keepsakes origin, with correct confirmed progress. | [collection return (2:42)](../artifacts/roamy-seoul/design/journey-refinement/journey-refinement-13-collection-return.png), [catalog detail (3:05)](../artifacts/roamy-seoul/design/journey-refinement/journey-refinement-15-browse-detail-context.png), [catalog return (3:24)](../artifacts/roamy-seoul/design/journey-refinement/journey-refinement-16-browse-return.png) |
+
+The dedicated [three-viewport regression run](../artifacts/roamy-seoul/design/journey-refinement/layout-tests.log) passed in 19.9s at 1440×900, 960×480 and 360×480. It checks header label containment and Settings separation, illustration/confirmation semantics, memory-first reading order, rationale bounds/contrast ≥4.5:1 and exact saved-quote focus/visibility below the sticky header. The [fresh narrow header](../artifacts/roamy-seoul/design/journey-refinement/responsive-02-narrow-header.png) confirms the corrected compact count. Narrow visual counts show demos; the full accessible label and collection retain illustration counts.
+
+[Current step manifest](../artifacts/roamy-seoul/design/journey-refinement/journey-refinement-manifest.json) · [current media verification](../artifacts/roamy-seoul/design/journey-refinement/media-validation.json). Current assets: `index-DCyRyVFv.js` and `index-Cf8Zrivz.css`; exact hashes are in those manifests. The baseline assets and media below remain unchanged. The baseline 55-state contrast scan is historical; the focused current viewport checks cover the newly introduced surfaces.
+
+**Remaining limits:** this remains a curated demonstration collection, not a verified visited-places history or personalized live recommendation service. Detailed facts, confirmations and recommendation text still require scrolling on short screens. Future real integrations must preserve the distinction between a demo choice, a user note and evidence of a real visit. Vehicle runtime, audio, physical scaling and accessibility limits below still apply.
+
+## Integration baseline walkthroughs
 
 [Main: real UI journey to all eight keepsakes](../artifacts/roamy-seoul/design/main-walkthrough.mp4) · [Short landscape: edit, export, reset, recovery and licenses](../artifacts/roamy-seoul/design/short-walkthrough.mp4) · [Narrow: evening, invalid import, cancel and restrictive safety test](../artifacts/roamy-seoul/design/narrow-walkthrough.mp4).
 
@@ -14,7 +33,7 @@ Recordings are silent, continuous Playwright screen captures. H.264 conversion d
 
 ## Numbered flows
 
-Each row groups related screens; the linked manifests retain every numbered capture, DOM state, inspection note and approximate video timestamp. All 28 screenshots below were inspected individually against the frozen production build; no page errors occurred in the three completed contexts. Health describes the captured browser flow, with remaining limitations stated explicitly.
+Each row groups related screens; the linked manifests retain every numbered capture, DOM state, inspection note and approximate video timestamp. The following 28 baseline screenshots were inspected individually against the frozen production build; no page errors occurred in the three completed contexts. Health describes the captured browser flow, with remaining limitations stated explicitly.
 
 | Flow | Review and health | Screenshot evidence |
 | --- | --- | --- |
@@ -34,9 +53,9 @@ Each row groups related screens; the linked manifests retain every numbered capt
 - **Muted status and secondary labels:** the scan found normal-sized labels around 3.5–4.45:1 in selected destination cards, collection titles, progress legends and settings. The reveal caption and progress stripe also needed stronger contrast. The selected functional text now targets 4.5:1; meaningful progress fills target 3:1 against their tracks. [Reveal before](../artifacts/roamy-seoul/design/before/main-08-seven-second-reveal.png).
 - **Retained panel scrolling:** moving from a scrolled album into browsing could leave its heading or completion summary hidden. The panel now returns to its top on a content change. [Before](../artifacts/roamy-seoul/design/before/main-14-complete-collection.png); final comparison is flow 5.
 
-## Journey refinements
+## Journey findings from the integration baseline
 
-These are follow-up product improvements, not claims of verified vehicle capability:
+The following findings describe the baseline above. The focused journey refinement is tracked separately below; these are not claims of verified vehicle capability:
 
 - **Visited places:** the current collection combines explicitly seeded illustrations and confirmed demo keepsakes. It is not a verified visited-places history. A future real-service journey should distinguish verified visits, personal notes and demonstration records before recommending places.
 - **Recommendation rationale:** the related Gwangjang → Mangwon story is coherent, but the sticky action can appear while its explanation is below the fold. Consider a short visible reason beside that action and a clear return to the originating memory.
@@ -53,7 +72,7 @@ Large browser controls and keyboard checks are useful evidence, but CSS pixels d
 
 The official Pleos runtime, GPU/thermal performance, native service binding and cabin audio still require the upgraded cloud worker described in [EMULATOR_FEASIBILITY.md](EMULATOR_FEASIBILITY.md).
 
-Production identity: `index-bs_eDp8G.js` / `index-CFNyFp_I.css`; exact SHA256 values are retained in every capture manifest. Bundled notices: 101,857 bytes, SHA256 `c022b59652eb7764c4e0535ed65cc6a85839d959b66d950c2fca782568aca37e`.
+Baseline production identity: `index-bs_eDp8G.js` / `index-CFNyFp_I.css`; exact SHA256 values are retained in every capture manifest. Bundled notices: 101,857 bytes, SHA256 `c022b59652eb7764c4e0535ed65cc6a85839d959b66d950c2fca782568aca37e`.
 
 ## Review and reproduction
 
@@ -63,4 +82,4 @@ The recordings are approximately 6m22s (1440×900), 2m30s (960×480), and 1m37s 
 
 ![Narrow browser safety-event test; not native vehicle validation](../artifacts/roamy-seoul/design/narrow-05-browser-safety-test.png)
 
-With a production preview already running, `cd web` and run `TEST_BASE_URL=http://localhost:5174 node record-design.mjs`. It accepts one JSON command per line: `{"action":"main-start"}`, then an explicit `{"action":"accept","health":"healthy","note":"Observed screenshot finding"}` after viewing the returned PNG. Follow the named actions in the recorder source; `finish` closes the active recording and `quit` closes Chromium. `short-start` and `narrow-start` open clean independent contexts. `TEST_BASE_URL=http://localhost:5174 node audit-design-contrast.mjs` repeats the computed state scan. `python3 verify-design-media.py` repeats full decoding and frame extraction while the raw WebMs are present, resetting frame inspection flags for a new manual review. Raw recordings remain cloud scratch evidence; accepted H.264 files are committed here.
+With a production preview already running, `cd web` and run `TEST_BASE_URL=http://localhost:5174 node record-design.mjs`. It accepts one JSON command per line: `{"action":"main-start"}`, then an explicit `{"action":"accept","health":"healthy","note":"Observed screenshot finding"}` after viewing the returned PNG. The recorder selectors track the current source; earlier baseline manifests retain the labels actually captured at that revision. Follow the named actions in the recorder source; `finish` closes the active recording and `quit` closes Chromium. `short-start` and `narrow-start` open clean independent contexts. `TEST_BASE_URL=http://localhost:5174 node audit-design-contrast.mjs` repeats the computed state scan. `python3 verify-design-media.py --help` documents verification options. The default verifies the committed manifest and MP4s without changing accepted evidence; raw-recording comparison is optional. Explicit frame extraction uses a new directory and preserves accepted inspection notes. Raw recordings remain cloud scratch evidence; accepted H.264 files are committed here.

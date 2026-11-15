@@ -1,0 +1,92 @@
+{
+  "sourceCommit": "9f389af",
+  "method": "Continuous real Playwright production-browser UI recording; silent H264 conversion at15fps; no speed alteration, trimming or injected collected state. Screenshot inspection pauses and a transient-toast recorder locator retry remain in the video.",
+  "videos": [
+    {
+      "file": "journey-refinement-walkthrough.mp4",
+      "bytes": 2835556,
+      "sha256": "7f6a57f8b7df555f7016f84047abe8626fff3ac46331a84d2b4e1f77ea65573e",
+      "codec": "h264",
+      "width": 1440,
+      "height": 900,
+      "frameRate": "15/1",
+      "durationSeconds": 209.733333,
+      "rawDurationSeconds": 209.76,
+      "hasAudio": false,
+      "fullDecode": "passed",
+      "productionAssets": [
+        {
+          "url": "http://localhost:5174/assets/index-DCyRyVFv.js",
+          "bytes": 1226128,
+          "sha256": "d6cb37cf4d2a1cdcd793898169ce1c44b33d5b5418f483b0a5497bc5f5261fd3"
+        },
+        {
+          "url": "http://localhost:5174/assets/index-Cf8Zrivz.css",
+          "bytes": 32692,
+          "sha256": "7268484b543df964ccd262f8a7eb473dbcfc9d5a504d9e991f8b12ee1d2f765a"
+        }
+      ],
+      "frames": [
+        {
+          "file": "verified-frames/journey-03-decoded.png",
+          "timestampSeconds": 31.636,
+          "sourceScreenshot": "journey-refinement-03-memory-first-recommendation.png",
+          "sha256": "95697f36ebc3cdd14254cfdc28382e15df7ab5d67949f20c49d3ca709f2cbf78",
+          "inspected": true,
+          "inspectionNote": "Memory quote precedes compact named curated pairing; CTA matches target."
+        },
+        {
+          "file": "verified-frames/journey-04-decoded.png",
+          "timestampSeconds": 41.588,
+          "sourceScreenshot": "journey-refinement-04-named-next-chapter.png",
+          "sha256": "bcf27bf5468bfda10fa76c8f56566fd7c1fbd0d3d553a740572f765a25402851",
+          "inspected": true,
+          "inspectionNote": "Named discovery retains Source memory return and honest illustrative rationale."
+        },
+        {
+          "file": "verified-frames/journey-09-decoded.png",
+          "timestampSeconds": 122.62100000000001,
+          "sourceScreenshot": "journey-refinement-09-confirmed-first-group.png",
+          "sha256": "84f3eac375ccdc25de9b1e67930b2df421fb5637daa54a8db097d390911dde8f",
+          "inspected": true,
+          "inspectionNote": "Confirmed demo appears first, separate from seeded illustrations."
+        },
+        {
+          "file": "verified-frames/journey-11-decoded.png",
+          "timestampSeconds": 141.157,
+          "sourceScreenshot": "journey-refinement-11-saved-note-verification.png",
+          "sha256": "bf8e38795d596fc0f6dcfdda2d16f30064ca4dde7476dd7f714bf64fd4b4ec89",
+          "inspected": true,
+          "inspectionNote": "Saved Unicode quote focused and readable, with persistent status and chosen-stop/date context."
+        },
+        {
+          "file": "verified-frames/journey-12-decoded.png",
+          "timestampSeconds": 153.112,
+          "sourceScreenshot": "journey-refinement-12-saved-stop-date-provenance.png",
+          "sha256": "32815f1acd75a0e8c52c4666af742e01f7f8cdb489b7620cd4c1ebe5ce45ff1e",
+          "inspected": true,
+          "inspectionNote": "Chosen sample stop, not-verified qualifier and demo confirmation date readable together."
+        },
+        {
+          "file": "verified-frames/journey-14-decoded.png",
+          "timestampSeconds": 180.984,
+          "sourceScreenshot": "journey-refinement-14-reloaded-edited-note.png",
+          "sha256": "1875e4d018892a61f411df3b6bef3b733c6ddfe316a08fcce2d79d468a935b8c",
+          "inspected": true,
+          "inspectionNote": "Edited quote and selected stop survive actual second reload."
+        },
+        {
+          "file": "verified-frames/journey-16-decoded.png",
+          "timestampSeconds": 204.822,
+          "sourceScreenshot": "journey-refinement-16-browse-return.png",
+          "sha256": "1d1c26fb482bbaa983374b9d0bce730cea3c9ba3324d4f02e72924944f776248",
+          "inspected": true,
+          "inspectionNote": "Contextual return exposes catalog heading and correct progress."
+        }
+      ],
+      "durationDifferenceSeconds": -0.026667
+    }
+  ],
+  "acceptedScreenCaptures": 18,
+  "functionalBrowserChecks": "Three targeted viewport tests passed against frozen current production (19.9s)."
+}

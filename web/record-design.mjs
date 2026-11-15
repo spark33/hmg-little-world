@@ -142,9 +142,6 @@ async function begin(name, width, height, reducedMotion) {
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto(base);
   await expect(page.locator("canvas")).toBeVisible();
-  await expect(
-    page.getByText("4 memories made. So many more to come.", { exact: true }),
-  ).toHaveText("4 memories made. So many more to come.");
   await expect(page.getByRole("button", { name: /My collection/ })).toContainText("4");
   await page.waitForTimeout(2000);
   const assets = await page.evaluate(() =>
@@ -234,6 +231,36 @@ async function command(input) {
   if (steps.at(-1)?.accepted === false)
     throw Error("Inspect and accept the latest screenshot before advancing.");
   switch (action) {
+    case "refinement-start":
+      await begin("journey-refinement", input.width || 1440, input.height || 900, "no-preference");
+      await screenshot("start", "Clean context for the current journey refinement; no saved state injected.");
+      break;
+    case "ui-step":
+      // Explicit accessible UI operations only. No arbitrary script or state injection.
+      for (const operation of input.operations || []) {
+        if (operation.type === "click") {
+          const name = operation.contains
+            ? new RegExp(operation.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+            : operation.name;
+          await click(name);
+        }
+        else if (operation.type === "fill") {
+          await observe(`before filling ${operation.name}`);
+          await page.getByRole("textbox", { name: operation.name, exact: true }).fill(operation.value);
+        } else if (operation.type === "reload") {
+          await observe("before reloading the actual saved world");
+          await page.reload();
+          await expect(page.locator("canvas")).toBeVisible();
+        } else if (operation.type === "wait-text") {
+          await expect(page.getByText(operation.text, { exact: !operation.contains })).toBeVisible({ timeout: 20000 });
+        } else if (operation.type === "focus") {
+          await page.getByRole(operation.role, { name: operation.name, exact: true }).focus();
+        } else if (operation.type === "scroll-text") {
+          await page.getByText(operation.text, { exact: true }).scrollIntoViewIfNeeded();
+        } else throw Error(`Unknown UI operation ${operation.type}`);
+      }
+      await screenshot(input.name, input.description);
+      break;
     case "main-start":
       await begin("main", 1440, 900, "no-preference");
       await screenshot(
@@ -256,7 +283,7 @@ async function command(input) {
       );
       break;
     case "discover-mangwon":
-      await click("Meet your next keepsake");
+      await click("Discover Mangwon Market picnic");
       await screenshot(
         "mangwon-discovery",
         "Mangwon picnic preview offers an explicit next adventure.",

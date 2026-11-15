@@ -1,0 +1,17 @@
+{
+  "file": "responsive-01-short-saved-quote.png",
+  "viewport": {
+    "width": 960,
+    "height": 480
+  },
+  "source": "Actual current production browser UI; no saved world injection",
+  "reducedMotion": "reduce",
+  "assets": [
+    "http://localhost:5174/assets/index-DCyRyVFv.js",
+    "http://localhost:5174/assets/index-Cf8Zrivz.css"
+  ],
+  "dom": "ROAMY\nBrowser development preview\nMy collection\n0 demos\n·\n4 illustrations\nOur little corner of Seoul\n0 confirmed demos · 4 illustrations. More chapters await.\nMy collection\nA MOMENT\nTO KEEP\nRegional foods · ILLUSTRATIVE MEMORY\nGwangjang Market flavors\n\n“서울 — a short-screen market memory.”\n\nMemory note updated and saved on this device.\n\nCURATED NEXT CHAPTER\nMangwon Market picnic\n\nExplore a second market-food chapter with a Mangwon picnic. Curated demo inspiration.\n\nPLACE\nIllustrative Gwangjang Market memory\nLOCATION\nJongno, Seoul · illustrative\nVISIT DATE\n2026-06-14 · illustrative date\nEdit memory note\nDiscover Mangwon Market picnic\n\nIllustrative Seoul demo data. A memory, never a score.",
+  "pageErrors": [],
+  "inspected": true,
+  "inspectionNote": "Focused updated Unicode quote and persistent saved status visible below sticky header at960×480."
+}

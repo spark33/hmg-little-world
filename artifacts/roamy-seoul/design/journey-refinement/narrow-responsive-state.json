@@ -1,0 +1,17 @@
+{
+  "file": "responsive-02-narrow-header.png",
+  "viewport": {
+    "width": 360,
+    "height": 480
+  },
+  "source": "Actual current production browser UI; no saved world injection",
+  "reducedMotion": "reduce",
+  "assets": [
+    "http://localhost:5174/assets/index-DCyRyVFv.js",
+    "http://localhost:5174/assets/index-Cf8Zrivz.css"
+  ],
+  "dom": "ROAMY\nBrowser development preview\nMy collection\n0 demos\nWhat shall we add to our Seoul world today?\nFind a little adventure",
+  "pageErrors": [],
+  "inspected": true,
+  "inspectionNote": "Descriptive count fits compact pill and stays separate from Settings at360×480; full counts remain accessible."
+}
