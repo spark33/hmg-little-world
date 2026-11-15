@@ -1,8 +1,34 @@
 plugins { id("com.android.application"); id("org.jetbrains.kotlin.android") }
+val releaseStoreFile = providers.environmentVariable("ROAMY_RELEASE_STORE_FILE").orNull
+val releaseStorePassword = providers.environmentVariable("ROAMY_RELEASE_STORE_PASSWORD").orNull
+val releaseKeyAlias = providers.environmentVariable("ROAMY_RELEASE_KEY_ALIAS").orNull
+val releaseKeyPassword = providers.environmentVariable("ROAMY_RELEASE_KEY_PASSWORD").orNull
+val releaseSigningValues = listOf(releaseStoreFile, releaseStorePassword, releaseKeyAlias, releaseKeyPassword)
+require(releaseSigningValues.all { it == null } || releaseSigningValues.all { !it.isNullOrBlank() }) {
+    "Release signing requires all four ROAMY_RELEASE_* variables. Values are never logged."
+}
 android {
     namespace = "ai.littleworld"
     compileSdk = 35
-    defaultConfig { applicationId = "ai.littleworld"; minSdk = 28; targetSdk = 34; versionCode = 1; versionName = "0.1.0" }
+    defaultConfig { applicationId = "ai.littleworld"; minSdk = 28; targetSdk = 34; versionCode = 2; versionName = "0.2.0" }
+    useLibrary("android.car", false)
+    signingConfigs {
+        if (releaseStoreFile != null) create("release") {
+            storeFile = file(releaseStoreFile)
+            storePassword = releaseStorePassword
+            keyAlias = releaseKeyAlias
+            keyPassword = releaseKeyPassword
+            enableV1Signing = false
+            enableV2Signing = true
+            enableV3Signing = true
+        }
+    }
+    buildTypes {
+        getByName("release") {
+            isDebuggable = false
+            if (releaseStoreFile != null) signingConfig = signingConfigs.getByName("release")
+        }
+    }
     buildFeatures { buildConfig = true }
     flavorDimensions += "environment"
     productFlavors {
