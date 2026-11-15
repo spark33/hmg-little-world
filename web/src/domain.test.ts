@@ -4,6 +4,8 @@ import {
   collect,
   initialState,
   loadWorld,
+  readWorld,
+  isVisitDate,
   recommend,
   saveWorld,
   STORAGE_KEY,
@@ -19,6 +21,62 @@ const storage = () => {
   };
 };
 describe("persistent world", () => {
+  it("checks real calendar dates including leap years", () => {
+    expect(isVisitDate("2024-02-29")).toBe(true);
+    for (const date of [
+      "2026-02-29",
+      "2026-04-31",
+      "2026-13-01",
+      "2026-00-10",
+      "26-01-01",
+      null,
+    ])
+      expect(isVisitDate(date)).toBe(false);
+    expect(collect(initialState(), "chicago", "2026-02-30")).toEqual(
+      initialState(),
+    );
+  });
+  it("distinguishes missing, corrupt, unavailable, and future saves without writing", () => {
+    const s = storage();
+    expect(readWorld(s).status).toBe("empty");
+    for (const [raw, status] of [
+      ["{", "corrupt"],
+      ['{"version":1,"collected":[]}', "corrupt"],
+      ['{"version":2,"collected":{"future":{}}}', "unsupported"],
+    ]) {
+      s.setItem(STORAGE_KEY, raw);
+      expect(readWorld(s).status).toBe(status);
+      expect(s.getItem(STORAGE_KEY)).toBe(raw);
+    }
+    expect(
+      readWorld({
+        ...s,
+        getItem: () => {
+          throw Error();
+        },
+      }).status,
+    ).toBe("unavailable");
+  });
+  it("preserves a damaged record for recovery instead of accepting an impossible date", () => {
+    const s = storage();
+    const raw =
+      '{"version":1,"collected":{"chicago":{"visitDate":"2026-02-31"}}}';
+    s.setItem(STORAGE_KEY, raw);
+    expect(readWorld(s)).toEqual({ state: initialState(), status: "corrupt" });
+    expect(s.getItem(STORAGE_KEY)).toBe(raw);
+  });
+  it("bounds memories consistently before and after reload", () => {
+    const s = storage();
+    const state = collect(
+      initialState(),
+      "chicago",
+      "2026-11-16",
+      "x".repeat(600),
+    );
+    expect(state.collected.chicago.memory).toHaveLength(500);
+    saveWorld(s, state);
+    expect(readWorld(s)).toEqual({ state, status: "ready" });
+  });
   it("starts with four illustrative memories and no Chicago", () => {
     const w = initialState();
     expect(Object.keys(w.collected)).toHaveLength(4);

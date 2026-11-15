@@ -44,7 +44,8 @@ export function parseSafety(value: unknown): Safety | undefined {
   if (!value || typeof value !== "object") return;
   const s = value as Record<string, unknown>;
   if (
-    !["parked", "driving", "unknown"].includes(String(s.state)) ||
+    typeof s.state !== "string" ||
+    !["parked", "driving", "unknown"].includes(s.state) ||
     typeof s.preview !== "boolean"
   )
     return;
@@ -52,6 +53,7 @@ export function parseSafety(value: unknown): Safety | undefined {
 }
 export function requestNavigation(
   destinationId: "nearby" | "weekend" | "chicago",
+  signal?: AbortSignal,
 ): Promise<Reply> {
   const id = crypto.randomUUID();
   const fallback: Reply = {
@@ -60,32 +62,61 @@ export function requestNavigation(
     available: false,
     reason: "Demo adapter · live navigation unavailable",
   };
-  if (!window.NativeBridge) return Promise.resolve(fallback);
+  if (signal?.aborted) return Promise.resolve(fallback);
+  const bridge = window.NativeBridge;
+  if (!bridge) return Promise.resolve(fallback);
   return new Promise((resolve) => {
-    const bridge = window.NativeBridge!;
-    const timer = window.setTimeout(() => {
-      bridge.onmessage = null;
-      resolve(fallback);
-    }, 1800);
+    const requests = pendingFor(bridge);
+    let settled = false;
+    const finish = (reply: Reply) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      signal?.removeEventListener("abort", cancel);
+      requests.delete(id);
+      if (requests.size === 0) {
+        bridge.onmessage = null;
+        pending.delete(bridge);
+      }
+      resolve(reply);
+    };
+    const cancel = () => finish(fallback);
+    const timer = window.setTimeout(cancel, 1800);
+    requests.set(id, finish);
+    signal?.addEventListener("abort", cancel, { once: true });
+    try {
+      bridge.postMessage(
+        JSON.stringify({
+          v: 1,
+          id,
+          type: "navigate",
+          destinationId,
+        } satisfies Request),
+      );
+    } catch {
+      finish(fallback);
+    }
+  });
+}
+
+type NativeTransport = NonNullable<Window["NativeBridge"]>;
+const pending = new WeakMap<
+  NativeTransport,
+  Map<string, (reply: Reply) => void>
+>();
+function pendingFor(bridge: NativeTransport) {
+  let requests = pending.get(bridge);
+  if (!requests) {
+    requests = new Map();
+    pending.set(bridge, requests);
     bridge.onmessage = (event) => {
       try {
         const reply = parseReply(JSON.parse(event.data));
-        if (reply?.id === id) {
-          clearTimeout(timer);
-          bridge.onmessage = null;
-          resolve(reply);
-        }
+        if (reply) pending.get(bridge)?.get(reply.id)?.(reply);
       } catch {
-        /* reject malformed response by waiting for fallback */
+        // Malformed and unrelated replies cannot resolve a request.
       }
     };
-    bridge.postMessage(
-      JSON.stringify({
-        v: 1,
-        id,
-        type: "navigate",
-        destinationId,
-      } satisfies Request),
-    );
-  });
+  }
+  return requests;
 }

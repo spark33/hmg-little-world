@@ -63,6 +63,7 @@ test("complete Detroit → Chicago flow, explicit consent, seven-second reveal, 
   ).toBeVisible();
   await page.getByRole("button", { name: "Demo settings" }).click();
   await page.getByRole("button", { name: "Reset demo world" }).click();
+  await page.getByRole("button", { name: "Confirm reset", exact: true }).click();
   await page.reload();
   await expect(
     page.getByText("4 memories made. So many more to come."),

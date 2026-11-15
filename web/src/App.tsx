@@ -27,7 +27,7 @@ import {
   collect,
   destinations,
   initialState,
-  loadWorld,
+  readWorld,
   recommend,
   saveWorld,
   type Destination,
@@ -76,7 +76,11 @@ class RenderBoundary extends Component<
   }
 }
 export default function App() {
-  const [world, setWorld] = useState(() => loadWorld(storage));
+  const [loaded] = useState(() => readWorld(storage));
+  const [world, setWorld] = useState(loaded.state);
+  const [protectedSave, setProtectedSave] = useState(
+    loaded.status === "corrupt" || loaded.status === "unsupported",
+  );
   const [panel, setPanel] = useState<Panel>(null),
     [selected, setSelected] = useState<string | null>(null);
   const [night, setNight] = useState(false),
@@ -89,7 +93,8 @@ export default function App() {
     [start, setStart] = useState(0),
     [toast, setToast] = useState(""),
     [resetToken, setResetToken] = useState(0);
-  const [saved, setSaved] = useState(true);
+  const [saved, setSaved] = useState(loaded.status === "ready");
+  const [confirmReset, setConfirmReset] = useState(false);
   const [safety, setSafety] = useState<Safety>({
     state: "unknown",
     preview: !nativeHost,
@@ -97,20 +102,27 @@ export default function App() {
   const [active, setActive] = useState(!document.hidden);
   const permitted = canInteract(safety) && active;
   const timers = useRef<number[]>([]);
+  const navigationRequest = useRef<AbortController | null>(null);
   const chicago = Boolean(world.collected.chicago);
   const experience = catalog.find((x) => x.id === selected) ?? catalog[0];
   const count = Object.keys(world.collected).length;
   useEffect(() => {
-    setSaved(saveWorld(storage, world));
-  }, [world]);
+    if (loaded.status === "empty") setSaved(saveWorld(storage, loaded.state));
+  }, [loaded]);
   useEffect(() => {
     const safetyListener = (event: Event) => {
       const value = parseSafety((event as CustomEvent).detail);
-      if (value) setSafety(value);
+      if (value) {
+        if (!canInteract(value)) navigationRequest.current?.abort();
+        setSafety(value);
+      }
     };
     const visible = () => {
       setActive(!document.hidden);
-      if (document.hidden) suspendSound();
+      if (document.hidden) {
+        navigationRequest.current?.abort();
+        suspendSound();
+      }
     };
     window.addEventListener("vehicle-safety", safetyListener);
     document.addEventListener("visibilitychange", visible);
@@ -125,10 +137,25 @@ export default function App() {
       setCollecting(false);
       setPanel(null);
       setToast("");
+      setPending(false);
+      setConfirmReset(false);
       suspendSound();
     }
   }, [permitted]);
-  useEffect(() => () => timers.current.forEach(clearTimeout), []);
+  useEffect(() => {
+    if (panel !== "destinations" || !permitted) {
+      navigationRequest.current?.abort();
+      navigationRequest.current = null;
+      setPending(false);
+    }
+  }, [panel, permitted]);
+  useEffect(
+    () => () => {
+      timers.current.forEach(clearTimeout);
+      navigationRequest.current?.abort();
+    },
+    [],
+  );
   function select(id: string) {
     if (!permitted || collecting) return;
     if (!id) {
@@ -146,14 +173,15 @@ export default function App() {
   function add() {
     if (!permitted || chicago || collecting || panel !== "arrival") return;
     if (!muted) unlockSound();
-    setWorld((w) =>
-      collect(
-        w,
-        "chicago",
-        new Date().toISOString().slice(0, 10),
-        "A new chapter in our great pizza debate.",
-      ),
+    const next = collect(
+      world,
+      "chicago",
+      new Date().toISOString().slice(0, 10),
+      "A new chapter in our great pizza debate.",
     );
+    // Save in the confirmation handler, before any reveal or lifecycle interruption.
+    setSaved(!protectedSave && saveWorld(storage, next));
+    setWorld(next);
     setPanel(null);
     setSelected(null);
     setStart(performance.now());
@@ -170,7 +198,11 @@ export default function App() {
   }
   function reset() {
     timers.current.forEach(clearTimeout);
-    setWorld(initialState());
+    const next = initialState();
+    setSaved(saveWorld(storage, next));
+    setProtectedSave(false);
+    setConfirmReset(false);
+    setWorld(next);
     setPanel(null);
     setSelected(null);
     setCollecting(false);
@@ -180,9 +212,13 @@ export default function App() {
     setNavigationStatus("");
   }
   async function navigate() {
-    if (pending || !permitted) return;
+    if (navigationRequest.current || pending || !permitted) return;
+    const controller = new AbortController();
+    navigationRequest.current = controller;
     setPending(true);
-    const reply = await requestNavigation(destination.id);
+    const reply = await requestNavigation(destination.id, controller.signal);
+    if (controller.signal.aborted) return;
+    navigationRequest.current = null;
     setNavigationStatus(
       reply.available
         ? "Navigation requested"
@@ -324,6 +360,23 @@ export default function App() {
           <ArrowUpRight size={18} />
         </button>
       </footer>
+      {!saved && (
+        <div className="save-warning" role="alert">
+          <span>
+            {protectedSave
+              ? "Existing save needs attention. It has been preserved; changes are session only."
+              : "Changes are session only. Saving on this device is unavailable."}
+          </span>
+          <button
+            onClick={() => {
+              if (protectedSave) setPanel("settings");
+              else setSaved(saveWorld(storage, world));
+            }}
+          >
+            {protectedSave ? "Review save" : "Retry save"}
+          </button>
+        </div>
+      )}
       {panel && (
         <aside
           className={`panel ${panel === "destinations" ? "wide" : ""}`}
@@ -668,10 +721,35 @@ export default function App() {
                 <span>Local save</span>
                 <span>{saved ? "Available" : "Unavailable"}</span>
               </div>
-              <button className="secondary reset-button" onClick={reset}>
-                <RotateCcw size={18} />
-                Reset demo world
-              </button>
+              {confirmReset ? (
+                <div
+                  className="reset-confirmation"
+                  role="group"
+                  aria-label="Confirm world reset"
+                >
+                  <p>
+                    This replaces the saved world on this device. Your added
+                    memories will be removed.
+                  </p>
+                  <button
+                    className="secondary"
+                    onClick={() => setConfirmReset(false)}
+                  >
+                    Keep my world
+                  </button>
+                  <button className="secondary reset-button" onClick={reset}>
+                    Confirm reset
+                  </button>
+                </div>
+              ) : (
+                <button
+                  className="secondary reset-button"
+                  onClick={() => setConfirmReset(true)}
+                >
+                  <RotateCcw size={18} />
+                  Reset demo world
+                </button>
+              )}
               <p className="fine-print">
                 Resets only this device’s demo collection so you can replay the
                 full arrival moment.
