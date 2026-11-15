@@ -15,6 +15,10 @@ Run `scripts/build-release.sh`. It checks configuration without printing values,
 
 `scripts/verify-apk.py` also verifies debug APKs without `--release`. `--unsigned` is an explicit static-inspection mode for unsigned artifacts; it reports `signatureVerified: false` and cannot be combined with `--release`. It emits package, public artifact hash, permission inventory and static checks, never certificate identities or passwords. Static verification does not certify runtime behavior or prevent a malicious build from bypassing application policy.
 
+Every Android build checks the generated attribution against the emitted production dependency inventory before bundling assets. Resolve stale/missing notices with the [documented generation process](licenses/README.md); a successful compile does not replace that check.
+
+For the competition filename, use [the staging tool](../apk/README.md) after building an authorized release. It additionally requires the owner-approved `ROAMY_RELEASE_CERT_SHA256`, rejects an unrelated signer and preserves existing staged artifacts. Its report explicitly records that static verification does not establish official runtime validation or organizer acceptance.
+
 ## Cloud runtime gate
 
 Use the official Pleos 2.1.0 API 34 system image with a cold boot, 4 GB AVD RAM, usable KVM and supported GPU. The current cloud host fails the hardware prerequisites; see [EMULATOR_FEASIBILITY.md](EMULATOR_FEASIBILITY.md). A generic Android emulator is not a substitute.
