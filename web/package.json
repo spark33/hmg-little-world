@@ -1,6 +1,6 @@
 {
-  "name": "little-world",
-  "version": "0.1.0",
+  "name": "roamy",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",
+    "@types/node": "^22.20.5",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "@types/three": "^0.180.0",

@@ -8,6 +8,7 @@ local.properties
 playwright-report/
 test-results/
 *.tsbuildinfo
+__pycache__/
 .env
 .env.*
 !.env.example

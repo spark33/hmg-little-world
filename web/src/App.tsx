@@ -24,6 +24,7 @@ import World, { ShopPreview } from "./World";
 import { KeepsakeIcon } from "./KeepsakeIcon";
 import { NavigationPanel } from "./NavigationPanel";
 import BackupPanel from "./BackupPanel";
+import ThirdPartyNotices from "./ThirdPartyNotices";
 import {
   canInteract,
   catalog,
@@ -212,7 +213,10 @@ export default function App() {
       setToast("");
       if (!wasPanelOpen.current)
         panelOpener.current = document.activeElement as HTMLElement;
-      panelElement.current?.focus({ preventScroll: true });
+      if (panelElement.current) {
+        panelElement.current.scrollTop = 0;
+        panelElement.current.focus({ preventScroll: true });
+      }
       wasPanelOpen.current = true;
     } else {
       if (wasPanelOpen.current && permitted && panelOpener.current?.isConnected)
@@ -229,7 +233,7 @@ export default function App() {
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [panel, permitted]);
+  }, [panel, permitted, selected]);
   useEffect(
     () => () => {
       timers.current.forEach(clearTimeout);
@@ -906,6 +910,7 @@ export default function App() {
                   <button
                     key={d.id}
                     className={`destination ${destination.id === d.id ? "chosen" : ""}`}
+                    aria-pressed={destination.id === d.id}
                     onClick={() => setDestination(d)}
                   >
                     <span className="destination-number">0{i + 1}</span>
@@ -1196,6 +1201,7 @@ export default function App() {
                 config={persistenceConfig}
                 onRestore={restoreWorld}
               />
+              <ThirdPartyNotices />
               {confirmReset ? (
                 <div
                   className="reset-confirmation"

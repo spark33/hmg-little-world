@@ -20,6 +20,8 @@ Strict bridge actions `audio-request` and `audio-release` have no arbitrary argu
 
 The native activity publishes `roamy-audio-focus` with `granted: false` on loss. Web code treats this as a stop instruction and does not echo another release request indefinitely. Native lifecycle abandonment is independent of the JavaScript event being processed, so a stalled WebView cannot retain focus indefinitely.
 
+Abandoning Android focus is not proof that an already scheduled Web Audio source has become physically silent. Before enabling vehicle entertainment, stall the renderer and change safety state while a chime is active; measure actual output-stop latency. If platform behavior cannot stop it promptly, use native-owned playback with a native stop path. The current production vehicle gate remains disabled, so this unverified path cannot emit vehicle entertainment audio.
+
 ## Evidence and remaining gate
 
 Web unit tests use in-memory AudioContext/node/focus ports to exercise silent priming, actual-grant gating, denial, late grants and resumes after mute, oscillator cleanup, focus loss, visibility/safety events, last-note release, watchdog cleanup and delayed browser-preview playback. Native bridge tests use fake ports to verify the decision is mirrored faithfully, driving never invokes focus acquisition and releases remain available for cleanup. These tests do not fabricate real OS grants or play through vehicle speakers.
