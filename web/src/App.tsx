@@ -535,7 +535,16 @@ export default function App() {
           >
             <BookOpen size={18} /> My collection{" "}
             <span className="count">
-              {confirmed.length} demos · {illustrations.length} illustrations
+              <span className="demo-count">
+                {confirmed.length} demo{confirmed.length === 1 ? "" : "s"}
+              </span>
+              <span className="count-separator" aria-hidden="true">
+                {" "}
+                ·{" "}
+              </span>
+              <span className="illustration-count">
+                {illustrations.length} illustrations
+              </span>
             </span>
           </button>
           <button
