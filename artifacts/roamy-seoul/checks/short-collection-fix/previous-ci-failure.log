@@ -1,0 +1,31 @@
+Run: https://github.com/spark33/hmg-little-world/actions/runs/43707823551
+Reported job status: success (unreliable because logging did not propagate pipeline failures)
+Actual browser result: 49 passed, 1 failed
+Correction: explicit Bash pipefail plus logged-pipeline runtime guard; compact collection layout; original reachability test unchanged.
+
+2026-11-15T11:21:27.8675682Z   1) e2e/ux.spec.ts:167:1 › short landscape collection exposes a keepsake without an empty footer gap 
+2026-11-15T11:21:27.8676333Z 
+2026-11-15T11:21:27.8676959Z     Error: expect(received).toBeLessThanOrEqual(expected)
+2026-11-15T11:21:27.8677379Z 
+2026-11-15T11:21:27.8677598Z     Expected: <= 480
+2026-11-15T11:21:27.8678071Z     Received:    789.4375
+2026-11-15T11:21:27.8679881Z 
+2026-11-15T11:21:27.8680039Z       184 |     };
+2026-11-15T11:21:27.8680394Z       185 |   });
+2026-11-15T11:21:27.8680918Z     > 186 |   expect(geometry.bottom).toBeLessThanOrEqual(480);
+2026-11-15T11:21:27.8681431Z           |                           ^
+2026-11-15T11:21:27.8681883Z       187 |   expect(geometry.reachable).toBe(true);
+2026-11-15T11:21:27.8682311Z       188 | });
+2026-11-15T11:21:27.8682607Z       189 |
+2026-11-15T11:21:27.8683221Z         at /home/runner/work/hmg-little-world/hmg-little-world/web/e2e/ux.spec.ts:186:27
+2026-11-15T11:21:27.8683563Z 
+2026-11-15T11:21:27.8684150Z     Error Context: test-results/ux-short-landscape-collect-2bd65-without-an-empty-footer-gap/error-context.md
+2026-11-15T11:21:27.8684773Z 
+2026-11-15T11:21:27.8684936Z   1 failed
+2026-11-15T11:21:27.8685940Z     e2e/ux.spec.ts:167:1 › short landscape collection exposes a keepsake without an empty footer gap 
+2026-11-15T11:21:27.8686486Z   49 passed (7.3m)
+2026-11-15T11:21:27.8894348Z ##[group]Run ./gradlew --no-daemon :app:assemblePreviewDebug :app:assembleVehicleDebug :app:assembleVehicleRelease :app:testPreviewDebugUnitTest :app:testVehicleDebugUnitTest :app:lintPreviewDebug :app:lintVehicleDebug :app:lintVehicleRelease 2>&1 | tee ../artifacts/ci-cloud/android.log
+2026-11-15T11:21:27.8896240Z ./gradlew --no-daemon :app:assemblePreviewDebug :app:assembleVehicleDebug :app:assembleVehicleRelease :app:testPreviewDebugUnitTest :app:testVehicleDebugUnitTest :app:lintPreviewDebug :app:lintVehicleDebug :app:lintVehicleRelease 2>&1 | tee ../artifacts/ci-cloud/android.log
+2026-11-15T11:21:27.8929342Z shell: /usr/bin/bash -e {0}
+2026-11-15T11:21:27.8929790Z env:
+

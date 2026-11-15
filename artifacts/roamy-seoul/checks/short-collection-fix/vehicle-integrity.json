@@ -1,0 +1,12 @@
+{
+  "package": "ai.littleworld",
+  "sha256": "81439a33752d27819a28df1bd837b43923c884649994c3b06d89e94531aa36b9",
+  "signatureVerified": true,
+  "releaseCertificateRequired": false,
+  "unsignedInspectionOnly": false,
+  "webFilesMatched": 6,
+  "permissions": [
+    "pleos.car.permission.NAVI_ROUTE_SEARCH"
+  ],
+  "runtimeValidated": false
+}
