@@ -5,6 +5,8 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
+import android.webkit.RenderProcessGoneDetail
+import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
@@ -23,36 +25,61 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class MainActivity : Activity() {
-    private lateinit var web: WebView
+    private var web: WebView? = null
+    private lateinit var root: FrameLayout
     private lateinit var safetyCover: TextView
     private lateinit var vehicle: VehicleIntegration
+    private val presentation = NativePresentationPolicy()
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-    private var foreground = false
+    private var destroyed = false
+    private var bridgeRegistered = false
+    private var contentFailure = false
     private val origin = "https://appassets.androidplatform.net"
     private val entryPage = "$origin/assets/web/index.html"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        vehicle = createVehicleAdapter(this)
-        web = WebView(this)
-        val root = FrameLayout(this)
-        root.addView(web, FrameLayout.LayoutParams(-1, -1))
+        root = FrameLayout(this)
         safetyCover = TextView(this).apply {
             text = getString(R.string.safety_cover)
             textSize = 24f
             gravity = Gravity.CENTER
+            setPadding(32, 32, 32, 32)
             setTextColor(Color.rgb(60, 83, 63))
             setBackgroundColor(Color.rgb(237, 240, 223))
             isClickable = true
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
         }
         root.addView(safetyCover, FrameLayout.LayoutParams(-1, -1))
         setContentView(root)
-        publishSafety()
+        // Show the native cover before initializing optional services or the renderer.
+        vehicle = try {
+            createVehicleAdapter(this)
+        } catch (_: Exception) {
+            DemoVehicleAdapter()
+        } catch (_: LinkageError) {
+            DemoVehicleAdapter()
+        }
+        try {
+            val created = WebView(this)
+            web = created
+            created.visibility = View.INVISIBLE
+            root.addView(created, 0, FrameLayout.LayoutParams(-1, -1))
+            configureWebView(created)
+            created.loadUrl(entryPage)
+            scope.launch { vehicle.safety.collect { publishSafety() } }
+        } catch (_: Exception) {
+            failContent()
+        } catch (_: LinkageError) {
+            failContent()
+        }
+    }
 
+    private fun configureWebView(view: WebView) {
         val loader = WebViewAssetLoader.Builder()
             .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(this))
             .build()
-        web.settings.apply {
+        view.settings.apply {
             javaScriptEnabled = true
             domStorageEnabled = true
             allowFileAccess = false
@@ -62,15 +89,17 @@ class MainActivity : Activity() {
         }
         val bridge = PleosBridge(vehicle)
         if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
-            WebViewCompat.addWebMessageListener(web, "NativeBridge", setOf(origin)) {
-                    _, message, source, mainFrame, proxy ->
-                if (foreground && mainFrame && source.toString() == origin &&
-                    canInteract(vehicle.safety.value, BuildConfig.DEVELOPMENT_PREVIEW)) {
-                    proxy.postMessage(bridge.reply(message.data ?: ""))
+            WebViewCompat.addWebMessageListener(view, "NativeBridge", setOf(origin)) {
+                    sender, message, source, mainFrame, proxy ->
+                if (!destroyed && sender === web && mainFrame && source.toString() == origin &&
+                    presentation.allowed(vehicle.safety.value, BuildConfig.DEVELOPMENT_PREVIEW)) {
+                    try { proxy.postMessage(bridge.reply(message.data ?: "")) }
+                    catch (_: Exception) { /* The frame may have disappeared during the reply. */ }
                 }
             }
+            bridgeRegistered = true
         }
-        web.webViewClient = object : WebViewClient() {
+        view.webViewClient = object : WebViewClient() {
             override fun shouldInterceptRequest(
                 view: WebView,
                 request: WebResourceRequest
@@ -83,48 +112,103 @@ class MainActivity : Activity() {
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest) =
                 request.url.toString() != entryPage
 
-            override fun onPageFinished(view: WebView, url: String) { publishSafety() }
+            override fun onPageFinished(view: WebView, url: String) {
+                if (!destroyed && view === web && url == entryPage) {
+                    presentation.pageReady()
+                    publishSafety()
+                }
+            }
+
+            override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
+                if (request.isForMainFrame && view === web) failContent()
+            }
+
+            override fun onRenderProcessGone(view: WebView, detail: RenderProcessGoneDetail): Boolean {
+                if (view === web) failContent()
+                // Android requires the affected WebView to be removed and destroyed.
+                disposeWebView(view)
+                return true
+            }
         }
-        scope.launch { vehicle.safety.collect { publishSafety() } }
-        web.loadUrl(entryPage)
     }
 
-    private fun publishSafety(active: Boolean = foreground) {
-        if (!::web.isInitialized) return
-        // Native visibility gates remain effective even when JavaScript is busy or fails.
-        val allowed = active && canInteract(vehicle.safety.value, BuildConfig.DEVELOPMENT_PREVIEW)
-        web.visibility = if (allowed) View.VISIBLE else View.INVISIBLE
+    private fun publishSafety() {
+        if (destroyed || !::vehicle.isInitialized) return
+        val view = web
+        val allowed = view != null && presentation.allowed(vehicle.safety.value, BuildConfig.DEVELOPMENT_PREVIEW)
+        // This opaque native gate does not depend on responsive or trustworthy JavaScript.
+        view?.visibility = if (allowed) View.VISIBLE else View.INVISIBLE
         safetyCover.visibility = if (allowed) View.GONE else View.VISIBLE
+        if (view == null || contentFailure) return
         val payload = JSONObject()
-            .put("state", if (active) vehicle.safety.value.name.lowercase() else "unknown")
-            .put("preview", active && BuildConfig.DEVELOPMENT_PREVIEW)
-        web.evaluateJavascript(
-            "window.dispatchEvent(new CustomEvent('vehicle-safety',{detail:$payload}));", null
-        )
+            .put("state", if (allowed) vehicle.safety.value.name.lowercase() else "unknown")
+            .put("preview", allowed && BuildConfig.DEVELOPMENT_PREVIEW)
+        try {
+            view.evaluateJavascript(
+                "window.dispatchEvent(new CustomEvent('vehicle-safety',{detail:$payload}));", null
+            )
+        } catch (_: Exception) {
+            failContent()
+        }
+    }
+
+    private fun failContent() {
+        contentFailure = true
+        presentation.contentFailed()
+        web?.visibility = View.INVISIBLE
+        safetyCover.visibility = View.VISIBLE
+        safetyCover.setText(R.string.roamy_content_restart)
+        if (::vehicle.isInitialized) {
+            cleanupSafely({ vehicle.onBackground() }, { vehicle.restoreLighting() })
+        }
+    }
+
+    private fun disposeWebView(view: WebView) {
+        if (view === web) web = null
+        if (bridgeRegistered && WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
+            try { WebViewCompat.removeWebMessageListener(view, "NativeBridge") }
+            catch (_: Exception) { /* Renderer already gone. */ }
+            bridgeRegistered = false
+        }
+        root.removeView(view)
+        try { view.destroy() } catch (_: Exception) { /* Already destroyed. */ }
     }
 
     override fun onPause() {
-        foreground = false
-        publishSafety(false)
-        web.onPause()
-        vehicle.restoreLighting()
+        presentation.background()
+        publishSafety()
+        try { web?.onPause() } catch (_: Exception) { failContent() }
+        if (::vehicle.isInitialized) {
+            cleanupSafely({ vehicle.onBackground() }, { vehicle.restoreLighting() })
+        }
         super.onPause()
     }
 
     override fun onResume() {
         super.onResume()
-        foreground = true
-        if (::web.isInitialized) {
-            web.onResume()
-            publishSafety()
+        if (destroyed || contentFailure || !::vehicle.isInitialized) return
+        presentation.foreground()
+        try {
+            vehicle.onForeground()
+            web?.onResume()
+        } catch (_: Exception) {
+            failContent()
+            return
+        } catch (_: LinkageError) {
+            failContent()
+            return
         }
+        publishSafety()
     }
 
     override fun onDestroy() {
+        destroyed = true
+        presentation.destroy()
         scope.cancel()
-        vehicle.restoreLighting()
-        vehicle.close()
-        web.destroy()
+        if (::vehicle.isInitialized) {
+            cleanupSafely({ vehicle.onBackground() }, { vehicle.restoreLighting() }, { vehicle.close() })
+        }
+        web?.let { disposeWebView(it) }
         super.onDestroy()
     }
 }

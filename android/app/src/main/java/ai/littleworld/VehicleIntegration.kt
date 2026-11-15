@@ -13,6 +13,10 @@ interface VehicleIntegration {
     fun lightingCapability(): LightingCapability
     fun applyTemporaryLighting(deliberateUserAction: Boolean): Boolean
     fun restoreLighting()
+    /** Reacquire fresh observations; a previous foreground session grants no authorization. */
+    fun onForeground() {}
+    /** Invalidate observations and stop background work before content can be shown again. */
+    fun onBackground() {}
     fun close()
 }
 fun canInteract(safety: SafetyState, nonVehiclePreview: Boolean): Boolean = safety == SafetyState.PARKED || (nonVehiclePreview && safety == SafetyState.UNKNOWN)
