@@ -1,0 +1,11 @@
+W/Watchdog( 1446): *** WATCHDOG KILLING SYSTEM PROCESS: Blocked in handler on  on main thread (main) for 60s
+W/Watchdog( 1446): main annotated stack trace:
+W/Watchdog( 1446):     at android.os.SystemProperties.native_set(Native Method)
+W/Watchdog( 1446):     at android.os.SystemProperties.set(SystemProperties.java:235)
+W/Watchdog( 1446):     at com.android.server.am.ActivityManagerService.watchDeviceProvisioning(ActivityManagerService.java:8754)
+W/Watchdog( 1446):     at com.android.server.am.ActivityManagerService.systemReady(ActivityManagerService.java:8580)
+W/Watchdog( 1446): *** GOODBYE!
+W/Watchdog( 4723): *** WATCHDOG KILLING SYSTEM PROCESS: Blocked in handler on  on main thread (main) for 126s
+W/Watchdog( 4723): main annotated stack trace:
+W/Watchdog( 4723):     at com.android.server.am.ActivityManagerService.systemReady(ActivityManagerService.java:8603)
+W/Watchdog( 4723): *** GOODBYE!

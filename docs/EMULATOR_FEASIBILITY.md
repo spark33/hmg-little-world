@@ -1,6 +1,8 @@
 # Official Pleos emulator: cloud feasibility
 
-Inspected 2026-11-15 (Asia/Seoul); cloud-only environment. Repository baseline `4879837`.
+Initial inspection 2026-11-15 (Asia/Seoul); cloud-only environment, repository baseline `4879837`.
+
+**Follow-up:** the official image is now downloaded/checksum-verified and installed, and an official-profile AVD was created. Hardware startup failed; software fallback reached ADB but entered a framework boot loop. No completed Android boot or ROAMY runtime test is claimed. See the [installation and boot-attempt report](PLEOS_INSTALL_ATTEMPT.md).
 
 ## Host findings
 
@@ -29,7 +31,7 @@ It declares `system-images;android-34;pleos_car_emulator;x86_64`, revision 2, di
 
 `https://nexus-playground.pleos.ai/repository/raw-releases/connect-avd/2.x/crp_car_emulator.zip`
 
-An unauthenticated HEAD request returned HTTP 200 and Content-Length **4,087,751,964** bytes. Published SHA-1: `b4f858d5bcc6c71506d7edfc872bcb9e5a11acaa`. This proves current source availability, not a completed archive download/checksum or boot. No access controls were bypassed. The large image is not downloaded while the host prerequisites fail.
+An unauthenticated HEAD request returned HTTP 200 and Content-Length **4,087,751,964** bytes. Published SHA-1: `b4f858d5bcc6c71506d7edfc872bcb9e5a11acaa`. The initial check proved source availability only. The subsequent follow-up downloaded the complete archive and verified this checksum; installation and boot results are recorded separately below. No access controls were bypassed.
 
 CRN is explicitly unnecessary starting with emulator 2.1.0. No Pleos/CRN environment configuration was found (values were not logged); account/project credential stores were not searched. A project may still be needed for publication or SDKs requiring credentials. The official access guide lists Vehicle State and NaviHelper as ready to use; this must not be confused with Vehicle Control availability. No credential or sensitive project identifier belongs in committed evidence.
 
@@ -41,4 +43,4 @@ Minimum user/platform action: provision a cloud worker with nested virtualizatio
 
 Once available: verify `emulator -accel-check` and GPU capabilities; install the manifest-provided image and validate its published checksum; create the official automotive API 34 AVD, allocate 4 GB and cold boot; wait for Android boot completion; verify `adb devices`; install/launch the freshly built **vehicle** APK. Capture Pleos screenshots and filtered logcat; exercise startup, UNKNOWN/DRIVING safety, foreground/background, service disconnect, rendering, navigation permission/errors and recovery. The vehicle must remain locked until a trusted stationary restriction integration is verified.
 
-No AVD was created or booted, and no runtime screenshots/logcat can truthfully be supplied from this host. Fresh build/test and emulator diagnostic results are recorded in [CLOUD_VALIDATION.md](CLOUD_VALIDATION.md) as checks complete.
+At initial inspection no AVD existed. The [follow-up](PLEOS_INSTALL_ATTEMPT.md) installed the genuine image and created an AVD, reached ADB in software mode, and captured Android boot/watchdog diagnostics. Android never completed boot, so no ROAMY launch, device screenshot or smoothness validation is claimed. Earlier build/test observations remain in [CLOUD_VALIDATION.md](CLOUD_VALIDATION.md).

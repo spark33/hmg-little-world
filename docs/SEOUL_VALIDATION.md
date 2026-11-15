@@ -6,7 +6,7 @@ This increment replaces the new-adventure theme with Seoul and completes the fix
 
 The eight-site island contains four seeded illustrations and four explicitly confirmed demo adventures. Saved older locations remain in an honest legacy archive. The integration adds robust save recovery, typed navigation service boundaries, native lifecycle/restriction coverage, transient chime focus, local license reading, short-display layout fixes and competition preparation.
 
-Production vehicle entertainment remains disabled by the unvalidated-platform gate. No simulated PARKED state, route-completion-as-arrival, licensed POI claim or cabin integration was introduced. Official runtime validation requires a cloud worker with usable KVM and the documented supported GPU; see [feasibility](EMULATOR_FEASIBILITY.md). No official AVD, device install/launch, logcat, instrumentation, speaker validation or native runtime screenshot was produced.
+Production vehicle entertainment remains disabled by the unvalidated-platform gate. No simulated PARKED state, route-completion-as-arrival, licensed POI claim or cabin integration was introduced. Official runtime validation requires a cloud worker with usable KVM and the documented supported GPU; see [feasibility](EMULATOR_FEASIBILITY.md). A subsequent [official-image installation and software boot attempt](PLEOS_INSTALL_ATTEMPT.md) reached ADB but failed to complete Android boot; boot/watchdog logs were captured. No successful ROAMY install/launch, app instrumentation, speaker validation or app runtime screenshot was produced.
 
 ## Checks
 

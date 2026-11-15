@@ -1,0 +1,78 @@
+{
+  "dateKst": "2026-11-15",
+  "applicationSourceCommit": "5eb59a1b6ea4b3c3f2ef250ba7d214a593f69e97",
+  "officialImage": {
+    "manifest": "https://nexus-playground.pleos.ai/repository/raw-releases/connect-avd/2.x/crp-sys-img.xml",
+    "package": "system-images;android-34;pleos_car_emulator;x86_64",
+    "url": "https://nexus-playground.pleos.ai/repository/raw-releases/connect-avd/2.x/crp_car_emulator.zip",
+    "bytes": 4087751964,
+    "sha1": "b4f858d5bcc6c71506d7edfc872bcb9e5a11acaa",
+    "checksumVerified": true,
+    "allArchiveMemberCrcsVerified": true,
+    "installed": true,
+    "archiveRemovedAfterVerifiedExtraction": true
+  },
+  "avd": {
+    "created": true,
+    "name": "ROAMY_Pleos_2_1",
+    "officialProfile": "Pleos Connect v2.1.0",
+    "androidVersion": "14",
+    "api": 34,
+    "manufacturer": "42dot",
+    "width": 2560,
+    "height": 1440,
+    "densityDpi": 160,
+    "ramMiB": 4096,
+    "coldBoot": true,
+    "officialManifestPackage": "system-images;android-34;pleos_car_emulator;x86_64",
+    "installedPackageFromArchiveProperties": "system-images;android-34;android-automotive;x86_64",
+    "imageBytesModified": false
+  },
+  "host": {
+    "kvmAvailable": false,
+    "virtualizationCpuFlagsExposed": false,
+    "gpuDeviceAvailable": false
+  },
+  "supportedStartup": {
+    "exitCode": 1,
+    "errors": [
+      "GPU cannot be used for hardware rendering",
+      "VK_ERROR_INCOMPATIBLE_DRIVER",
+      "x86_64 emulation currently requires hardware acceleration",
+      "KVM requires a CPU that supports vmx or svm"
+    ]
+  },
+  "softwareFallback": {
+    "supportedConfiguration": false,
+    "cpuAcceleration": "off",
+    "graphics": "SwiftShader",
+    "vulkanEnabled": false,
+    "audioOutputEnabled": false,
+    "adbConnected": true,
+    "androidBootCompleted": false,
+    "observedGuestUptimeSeconds": 1075.49,
+    "systemServerPidsObserved": [
+      1446,
+      4723,
+      8135
+    ],
+    "frameworkWatchdogSeconds": 60,
+    "watchdogLocation": "SystemProperties.native_set -> ActivityManagerService.watchDeviceProvisioning -> systemReady",
+    "vendorServiceAbortsObserved": true,
+    "apkInstallAttempted": true,
+    "apkInstallSucceeded": false,
+    "installError": "PackageManagerInternal.freeStorage null while framework initializes",
+    "applicationLaunched": false,
+    "validScreenCaptureObtained": false,
+    "smoothnessValidated": false,
+    "stoppedAfterDiagnostics": true,
+    "shutdownRequested": true
+  },
+  "applicationSafety": {
+    "vehicleProductionGateUnchanged": true,
+    "parkedStateFabricated": false,
+    "watchdogsDisabled": false,
+    "imageSecurityRestrictionsDisabled": false
+  },
+  "limits": "An ADB device connection is not completed Android boot or an application test. Software-mode failure does not prove a defect in ROAMY or identify KVM/GPU as the sole cause of every guest crash."
+}

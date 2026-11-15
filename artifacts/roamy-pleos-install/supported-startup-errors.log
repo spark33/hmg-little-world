@@ -1,0 +1,4 @@
+ERROR        | Your GPU cannot be used for hardware rendering. Consider using software rendering.
+ERROR        | emuglConfig_get_vulkan_hardware_gpu_support_info: Failed to create vulkan instance. Error: [VK_ERROR_INCOMPATIBLE_DRIVER] -9
+ERROR        | x86_64 emulation currently requires hardware acceleration!
+CPU acceleration status: KVM requires a CPU that supports vmx or svm

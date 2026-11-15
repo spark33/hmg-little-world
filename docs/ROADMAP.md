@@ -23,7 +23,7 @@ This is the current implementation plan after the cloud-readiness PR was merged.
 
 | Feature | Precise remaining limitation |
 | --- | --- |
-| Official Pleos validation | Current worker has no usable KVM/nested CPU flags or exposed GPU. No official AVD boot, connected ADB device, on-device install/launch, native screenshot/logcat, instrumentation or head-unit profiling is claimed. |
+| Official Pleos validation | Current worker has no usable KVM/nested CPU flags or exposed GPU. The official image is installed and its AVD reached ADB in software mode, but Android initialization repeatedly failed. No successful APK install/launch, app runtime screenshot, instrumentation or head-unit profiling is claimed. See [the attempt](PLEOS_INSTALL_ATTEMPT.md). |
 | Vehicle gameplay | Production `StationarySafetyGate(platformValidated=false)` keeps unrestricted observations UNKNOWN. A documented API and passing unit tests do not establish safe runtime authorization. No fake PARKED state or override exists. |
 | Real discovery/navigation | All user-facing journeys, destinations, distances and confirmations are labeled demo/illustrative. The production native POI registry is empty until an accurate authorized source is reviewed. No live POI search, GPS-based arrival or real visit detection is advertised. |
 | Sensitive data protection | Browser saves and exported backups are plaintext with explicit warnings. Approved encrypted native persistence is required before handling sensitive personal/vehicle information. Automatic backup exclusions and sandboxing do not provide encryption. |

@@ -1,0 +1,5 @@
+Exception occurred while executing 'install':
+java.lang.NullPointerException: Attempt to invoke virtual method 'void android.content.pm.PackageManagerInternal.freeStorage(java.lang.String, long, int)' on a null object reference
+	at com.android.server.StorageManagerService.allocateBytes(StorageManagerService.java:4058)
+	at com.android.server.pm.PackageInstallerSession.doWriteInternal(PackageInstallerSession.java:1745)
+	at com.android.server.pm.PackageInstallerSession.write(PackageInstallerSession.java:1648)
