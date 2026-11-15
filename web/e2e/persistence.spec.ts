@@ -55,7 +55,7 @@ test("world backup import is previewed and cancelable before a durable replaceme
     .click();
   await expect(
     page.getByRole("group", { name: "Confirm world replacement" }),
-  ).toContainText("1 confirmed demo keepsakes");
+  ).toContainText("1 confirmed demo keepsake");
   expect(await currentSave(page)).toBe(original);
   await page
     .getByRole("button", { name: "Keep current data", exact: true })
@@ -283,4 +283,85 @@ test("a delayed file read cannot overwrite newer pasted backup text", async ({
   await expect(
     page.getByRole("group", { name: "Confirm world replacement" }),
   ).toBeVisible();
+});
+
+test("retry after an unreadable startup never overwrites the existing world with fallback seeds", async ({
+  page,
+}) => {
+  const original = JSON.stringify({
+    version: 2,
+    collected: {
+      gwangjang: {
+        visitDate: "2026-11-15",
+        memory: "An edited Seoul illustration",
+        provenance: "illustration",
+      },
+      mangwon: {
+        visitDate: "2026-11-15",
+        memory: "A previously saved Mangwon keepsake",
+        provenance: "confirmed-demo",
+      },
+      detroit: {
+        visitDate: "2026-06-14",
+        memory: "Original Detroit illustration",
+        provenance: "illustration",
+      },
+      chicago: {
+        visitDate: "2026-11-14",
+        memory: "Original archived Chicago note",
+        provenance: "confirmed-demo",
+      },
+    },
+  });
+  await page.addInitScript((raw) => {
+    localStorage.setItem("little-world:v1", raw);
+    const read = Storage.prototype.getItem;
+    let readable = false;
+    Storage.prototype.getItem = function (key) {
+      if (key === "little-world:v1" && !readable)
+        throw Error("Storage temporarily unavailable");
+      return read.call(this, key);
+    };
+    window.addEventListener(
+      "restore-test-storage-read",
+      () => {
+        readable = true;
+      },
+      { once: true },
+    );
+  }, original);
+  await page.goto("/");
+  await expect(page.getByRole("alert")).toContainText("session only");
+  await page.evaluate(() =>
+    window.dispatchEvent(new Event("restore-test-storage-read")),
+  );
+  await page.getByRole("button", { name: "Retry save", exact: true }).click();
+  expect(await currentSave(page)).toBe(original);
+  await expect(
+    page.getByRole("group", { name: "Choose saved world" }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Restore saved world", exact: true })
+    .click();
+  expect(await currentSave(page)).toBe(original);
+  const saved = JSON.parse((await currentSave(page))!);
+  expect(saved.collected.mangwon.memory).toBe(
+    "A previously saved Mangwon keepsake",
+  );
+  expect(saved.collected.chicago.memory).toBe("Original archived Chicago note");
+  await settings(page);
+  await page
+    .getByRole("button", { name: "Prepare world backup", exact: true })
+    .click();
+  const restored = JSON.parse(
+    await page
+      .getByRole("textbox", { name: "Exported world backup" })
+      .inputValue(),
+  );
+  expect(restored.world.collected.mangwon.memory).toBe(
+    "A previously saved Mangwon keepsake",
+  );
+  expect(restored.world.collected.chicago.memory).toBe(
+    "Original archived Chicago note",
+  );
 });

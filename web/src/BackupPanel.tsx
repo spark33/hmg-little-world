@@ -294,14 +294,16 @@ export default function BackupPanel({
             <p>
               This removes the last recovery world and any preserved unreadable
               save. Export anything you want to keep first. Your current world
-              stays unchanged.
+              stays unchanged. Copies you already exported or copied elsewhere
+              must be removed there separately.
             </p>
           ) : (
             <>
               <p className="backup-summary">
                 This world contains{" "}
                 {Object.keys(pending.world.collected).length} memories:{" "}
-                {confirmedCount} confirmed demo keepsakes and{" "}
+                {confirmedCount} confirmed demo keepsake
+                {confirmedCount === 1 ? "" : "s"} and{" "}
                 {Object.keys(pending.world.collected).length - confirmedCount}{" "}
                 illustrative memories.
               </p>
