@@ -67,6 +67,20 @@ class NoticeGenerationTests(unittest.TestCase):
         self.command()
         self.assertEqual((self.root / "web/public/third-party-notices.txt").read_bytes(), before)
 
+    def test_crlf_license_input_remains_checkable_after_lf_checkout(self):
+        source = self.root / "web/node_modules/alpha/LICENSE"
+        original = MIT.replace(b"\n", b"\r\n")
+        source.write_bytes(original)
+        self.command()
+        output = self.root / "web/public/third-party-notices.txt"
+        generated = output.read_bytes()
+        self.assertNotIn(b"\r", generated)
+        # Emulate Git's text=auto checkout representation of the composed asset.
+        output.write_bytes(generated.replace(b"\r\n", b"\n"))
+        self.command("--check")
+        row = next(row for row in self.inventory()["packages"] if row["name"] == "alpha")
+        self.assertEqual(row["notices"][0]["sha256"], hashlib.sha256(original).hexdigest())
+
     def test_missing_full_shipped_license_fails_instead_of_using_metadata_only(self):
         self.command()
         (self.root / "web/node_modules/alpha/LICENSE").unlink()
