@@ -1,0 +1,56 @@
+{
+  "environment": "Cloud Chromium 156, SwiftShader software WebGL, 1440x900, parallel development workload; diagnostic only, not Pleos GPU performance",
+  "beforeRoadAndRoofBatching": {
+    "seeded": {
+      "medianDrawCalls": 832,
+      "ordinaryFrameDrawCalls": 428,
+      "shadowFrameDrawCalls": 832,
+      "samples": 6
+    },
+    "complete": {
+      "medianDrawCalls": 1205,
+      "ordinaryFrameDrawCalls": 615,
+      "shadowFrameDrawCalls": 1205,
+      "samples": 6
+    }
+  },
+  "afterRoadAndRoofBatching": {
+    "seeded": {
+      "samples": 36,
+      "minDrawCalls": 341,
+      "medianDrawCalls": 657,
+      "maxDrawCalls": 657,
+      "medianAnimationFrameIntervalMs": 266.59999999999945,
+      "p95AnimationFrameIntervalMs": 583.3000000000002
+    },
+    "complete": {
+      "samples": 28,
+      "minDrawCalls": 505,
+      "medianDrawCalls": 984,
+      "maxDrawCalls": 984,
+      "medianAnimationFrameIntervalMs": 366.60000000000036,
+      "p95AnimationFrameIntervalMs": 566.7000000000003
+    }
+  },
+  "reducedMotionPixelStable": true,
+  "provenance": {
+    "captureDate": "2026-11-15",
+    "rendererWorkstreamCommit": "c4514a6",
+    "capture": "Isolated React world harness with seeded or complete eight-site Seoul scene; application panels excluded.",
+    "instrumentation": "Scratch Playwright initialization counted WebGL draw calls and requestAnimationFrame intervals. No production debug globals were added.",
+    "viewportCssPixels": {
+      "width": 1440,
+      "height": 900
+    },
+    "rendererDprCap": 1.25,
+    "baseline": "The same Seoul world before repeated road markings and shop roof ribs were instanced.",
+    "optimized": "Road and roof batching, same keepsake geometry placement and materials; static collection-shadow invalidation enabled.",
+    "limitations": [
+      "SwiftShader software WebGL under a contended parallel cloud workload; not official Pleos runtime or GPU evidence.",
+      "Animation-frame intervals measure the browser event loop plus rendering workload and do not isolate GPU execution time.",
+      "The small sample sets are diagnostics, not a stable frame-rate benchmark or head-unit acceptance budget.",
+      "Counts include main and shadow rendering work; ordinary frames and frames that update shadows differ.",
+      "No CPU, GPU, memory, thermal, long-session or physical-display automotive certification is established."
+    ]
+  }
+}
