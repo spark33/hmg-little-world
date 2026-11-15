@@ -1,4 +1,29 @@
+import {
+  isVisitDate,
+  readWorld as readStoredWorld,
+  saveWorld as saveStoredWorld,
+  type MemoryRecord,
+  type PersistenceConfig,
+  type StorageLike,
+  type WorldState,
+} from "./persistence";
+export { STORAGE_KEY, isVisitDate } from "./persistence";
+export type {
+  MemoryRecord,
+  SaveStatus,
+  StorageLike,
+  WorldState,
+} from "./persistence";
+
 export type AssetType =
+  | "gwangjang"
+  | "seongsu"
+  | "seokchon"
+  | "namsan"
+  | "mangwon"
+  | "gyeongbokgung"
+  | "bukhansan"
+  | "seoul-museum"
   | "detroit"
   | "chicago"
   | "new-york"
@@ -20,7 +45,7 @@ export interface Experience {
   visual: { color: string };
   suggestions: string[];
 }
-export const catalog: Experience[] = [
+export const legacyCatalog: Experience[] = [
   {
     id: "detroit",
     category: "Regional foods",
@@ -113,91 +138,132 @@ export const catalog: Experience[] = [
     suggestions: [],
   },
 ];
-export interface WorldState {
-  version: 1;
-  collected: Record<string, { visitDate: string; memory?: string }>;
-}
+/** Current Seoul chapters. Names describe illustrative experiences, not verified visits. */
+export const catalog: Experience[] = [
+  {
+    id: "gwangjang",
+    category: "Regional foods",
+    displayName: "Gwangjang Market flavors",
+    location: "Jongno, Seoul · illustrative",
+    venue: "Illustrative Gwangjang Market memory",
+    status: "collected",
+    visitDate: "2026-06-14",
+    memory: "A market afternoon full of little discoveries.",
+    asset: "gwangjang",
+    visual: { color: "#d89160" },
+    suggestions: ["mangwon"],
+  },
+  {
+    id: "namsan",
+    category: "Landmarks",
+    displayName: "Namsan evening lights",
+    location: "Namsan, Seoul · illustrative",
+    status: "collected",
+    visitDate: "2026-06-16",
+    memory: "The city lights felt close enough to touch.",
+    asset: "namsan",
+    visual: { color: "#819ba7" },
+    suggestions: ["gyeongbokgung"],
+  },
+  {
+    id: "seokchon",
+    category: "Nature",
+    displayName: "Seokchon Lake blossoms",
+    location: "Songpa, Seoul · illustrative",
+    status: "collected",
+    visitDate: "2026-04-19",
+    memory: "A whole afternoon under pink skies.",
+    asset: "seokchon",
+    visual: { color: "#ecb7c3" },
+    suggestions: ["bukhansan"],
+  },
+  {
+    id: "seongsu",
+    category: "Cultural experiences",
+    displayName: "Seongsu slow morning",
+    location: "Seongsu, Seoul · illustrative",
+    status: "collected",
+    visitDate: "2026-05-02",
+    memory: "One more coffee. Nowhere to hurry.",
+    asset: "seongsu",
+    visual: { color: "#83ada2" },
+    suggestions: ["seoul-museum"],
+  },
+  {
+    id: "mangwon",
+    category: "Regional foods",
+    displayName: "Mangwon Market picnic",
+    location: "Mapo, Seoul · demo",
+    status: "available",
+    memory: "Market treats and a little room for a picnic.",
+    asset: "mangwon",
+    visual: { color: "#d79872" },
+    suggestions: ["gyeongbokgung"],
+  },
+  {
+    id: "gyeongbokgung",
+    category: "Landmarks",
+    displayName: "Gyeongbokgung palace walk",
+    location: "Jongno, Seoul · demo",
+    status: "available",
+    memory: "A quiet courtyard in the middle of our city day.",
+    asset: "gyeongbokgung",
+    visual: { color: "#7b9c8b" },
+    suggestions: ["bukhansan"],
+  },
+  {
+    id: "bukhansan",
+    category: "Nature",
+    displayName: "Bukhansan trail morning",
+    location: "Bukhansan, Seoul · demo",
+    status: "available",
+    memory: "Fresh air, tall pines, and a new view of Seoul.",
+    asset: "bukhansan",
+    visual: { color: "#88a27c" },
+    suggestions: ["seoul-museum"],
+  },
+  {
+    id: "seoul-museum",
+    category: "Cultural experiences",
+    displayName: "Seoul museum afternoon",
+    location: "Seoul · illustrative museum experience",
+    status: "available",
+    memory: "We found a new favorite way to see our city.",
+    asset: "seoul-museum",
+    visual: { color: "#bd9fc6" },
+    suggestions: [],
+  },
+];
+export const allExperiences = [...catalog, ...legacyCatalog];
+export const illustrationIds = [...catalog, ...legacyCatalog]
+  .filter((item) => item.status === "collected")
+  .map((item) => item.id);
+
 export const initialState = (): WorldState => ({
-  version: 1,
+  version: 2,
   collected: Object.fromEntries(
     catalog
       .filter((x) => x.status === "collected")
-      .map((x) => [x.id, { visitDate: x.visitDate!, memory: x.memory }]),
+      .map((x) => [
+        x.id,
+        {
+          visitDate: x.visitDate!,
+          memory: x.memory,
+          provenance: "illustration" as const,
+        },
+      ]),
   ),
 });
-export const STORAGE_KEY = "little-world:v1";
-export interface StorageLike {
-  getItem(key: string): string | null;
-  setItem(key: string, value: string): void;
+export const persistenceConfig: PersistenceConfig = {
+  knownIds: allExperiences.map((item) => item.id),
+  illustrationIds,
+  initialState,
+};
+export function readWorld(storage: StorageLike) {
+  return readStoredWorld(storage, persistenceConfig);
 }
 export function loadWorld(storage: StorageLike): WorldState {
   return readWorld(storage).state;
-}
-export type SaveStatus =
-  "ready" | "empty" | "unavailable" | "corrupt" | "unsupported";
-export function isVisitDate(date: unknown): date is string {
-  if (typeof date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(date))
-    return false;
-  const time = Date.parse(`${date}T00:00:00Z`);
-  return (
-    Number.isFinite(time) && new Date(time).toISOString().slice(0, 10) === date
-  );
-}
-export function readWorld(storage: StorageLike): {
-  state: WorldState;
-  status: SaveStatus;
-} {
-  let text: string | null;
-  try {
-    text = storage.getItem(STORAGE_KEY);
-  } catch {
-    return { state: initialState(), status: "unavailable" };
-  }
-  if (text === null) return { state: initialState(), status: "empty" };
-  try {
-    const raw: unknown = JSON.parse(text);
-    if (
-      raw &&
-      typeof raw === "object" &&
-      "version" in raw &&
-      typeof raw.version === "number" &&
-      raw.version > 1
-    )
-      return { state: initialState(), status: "unsupported" };
-    if (
-      !raw ||
-      typeof raw !== "object" ||
-      !("version" in raw) ||
-      raw.version !== 1 ||
-      !("collected" in raw) ||
-      !raw.collected ||
-      typeof raw.collected !== "object" ||
-      Array.isArray(raw.collected)
-    )
-      return { state: initialState(), status: "corrupt" };
-    const base = initialState();
-    for (const [id, value] of Object.entries(raw.collected)) {
-      if (
-        id === "chicago" &&
-        value &&
-        typeof value === "object" &&
-        isVisitDate(value.visitDate)
-      )
-        base.collected[id] = {
-          visitDate: value.visitDate,
-          memory:
-            typeof value.memory === "string"
-              ? value.memory.slice(0, 500)
-              : undefined,
-        };
-    }
-    // Keep a damaged save intact for deliberate recovery instead of replacing it on load.
-    const invalidChicago =
-      Object.hasOwn(raw.collected, "chicago") && !base.collected.chicago;
-    return { state: base, status: invalidChicago ? "corrupt" : "ready" };
-  } catch {
-    return { state: initialState(), status: "corrupt" };
-  }
 }
 export function collect(
   state: WorldState,
@@ -205,23 +271,30 @@ export function collect(
   date: string,
   memory?: string,
 ): WorldState {
-  if (state.collected[id] || id !== "chicago" || !isVisitDate(date))
+  if (
+    state.collected[id] ||
+    !catalog.some((x) => x.id === id && x.status === "available") ||
+    !isVisitDate(date)
+  )
     return state;
   return {
     ...state,
     collected: {
       ...state.collected,
-      [id]: { visitDate: date, memory: memory?.slice(0, 500) },
+      [id]: {
+        visitDate: date,
+        memory: memory?.slice(0, 500),
+        provenance: "confirmed-demo",
+      },
     },
   };
 }
-export function saveWorld(storage: StorageLike, state: WorldState): boolean {
-  try {
-    storage.setItem(STORAGE_KEY, JSON.stringify(state));
-    return true;
-  } catch {
-    return false;
-  }
+export function saveWorld(
+  storage: StorageLike,
+  state: WorldState,
+  options?: { replaceProtected?: boolean },
+): boolean {
+  return saveStoredWorld(storage, state, persistenceConfig, options);
 }
 export function recommend(
   id: string,
@@ -246,29 +319,224 @@ export interface Destination {
   distance: string;
   description: string;
 }
+export const categories = [
+  "All keepsakes",
+  "Regional foods",
+  "Nature",
+  "Landmarks",
+  "Cultural experiences",
+] as const;
+export type CategoryFilter = (typeof categories)[number];
+export const collectibleIds = catalog
+  .filter((x) => x.status === "available")
+  .map((x) => x.id);
+export function nextExperience(state: WorldState): Experience | undefined {
+  return catalog.find(
+    (x) => x.status === "available" && !state.collected[x.id],
+  );
+}
+export function updateMemory(
+  state: WorldState,
+  id: string,
+  memory: string,
+): WorldState {
+  if (!allExperiences.some((x) => x.id === id) || !state.collected[id])
+    return state;
+  return {
+    ...state,
+    collected: {
+      ...state.collected,
+      [id]: { ...state.collected[id], memory: memory.trim().slice(0, 500) },
+    },
+  };
+}
+export const experienceDetails: Record<
+  AssetType,
+  {
+    symbol: string;
+    description: string;
+    findLabel: string;
+    question: string;
+    memory: string;
+  }
+> = {
+  gwangjang: {
+    symbol: "▤",
+    description:
+      "A warm market stall and a city afternoon full of small discoveries.",
+    findLabel: "Explore market flavors",
+    question: "Did you enjoy Gwangjang Market flavors?",
+    memory: "A market afternoon full of little discoveries.",
+  },
+  seongsu: {
+    symbol: "☕",
+    description: "A café morning, with a little space to slow down.",
+    findLabel: "Explore Seongsu",
+    question: "Did you enjoy a Seongsu slow morning?",
+    memory: "One more coffee. Nowhere to hurry.",
+  },
+  seokchon: {
+    symbol: "❀",
+    description: "An afternoon of blossoms around a quiet city lake.",
+    findLabel: "Explore Seokchon Lake",
+    question: "Did you enjoy the Seokchon Lake blossoms?",
+    memory: "A whole afternoon under pink skies.",
+  },
+  namsan: {
+    symbol: "⌁",
+    description: "A miniature tower keeping watch over the city lights.",
+    findLabel: "Explore Namsan",
+    question: "Did you enjoy the Namsan evening lights?",
+    memory: "The city lights felt close enough to touch.",
+  },
+  mangwon: {
+    symbol: "▤",
+    description:
+      "A market basket. A little picnic. A new Seoul gathering place for your world.",
+    findLabel: "Find a Mangwon picnic",
+    question: "Did you enjoy a Mangwon Market picnic?",
+    memory: "Market treats and a little room for a picnic.",
+  },
+  gyeongbokgung: {
+    symbol: "⌂",
+    description:
+      "A tiled roof, a quiet courtyard, and a little piece of Seoul history for your island.",
+    findLabel: "Find a palace walk",
+    question: "Did you enjoy a Gyeongbokgung palace walk?",
+    memory: "A quiet courtyard in the middle of our city day.",
+  },
+  bukhansan: {
+    symbol: "▲",
+    description:
+      "A trail under tall pines. Keep a little of Seoul’s mountain quiet, wherever you go.",
+    findLabel: "Find a Bukhansan trail",
+    question: "Did you enjoy a Bukhansan trail morning?",
+    memory: "Fresh air, tall pines, and a new view of Seoul.",
+  },
+  "seoul-museum": {
+    symbol: "▥",
+    description:
+      "A tiny Seoul museum for a big new perspective. Bring home the feeling of discovering something beautiful.",
+    findLabel: "Find a Seoul art adventure",
+    question: "Did you enjoy a Seoul museum afternoon?",
+    memory: "We found a new favorite way to see our city.",
+  },
+  detroit: {
+    symbol: "🍕",
+    description: "Our first square slice of adventure.",
+    findLabel: "Explore Detroit",
+    question: "Did you try Detroit-style pizza?",
+    memory: "Our first Detroit-style pizza!",
+  },
+  lighthouse: {
+    symbol: "⚓",
+    description: "A quiet light at the edge of the lake.",
+    findLabel: "Explore the lakeside",
+    question: "Did you visit the lighthouse?",
+    memory: "We stayed until the sky turned peach.",
+  },
+  cherry: {
+    symbol: "❀",
+    description: "An afternoon beneath a pink canopy.",
+    findLabel: "Explore the garden",
+    question: "Did you enjoy the blossoms?",
+    memory: "A whole afternoon under pink skies.",
+  },
+  cafe: {
+    symbol: "☕",
+    description: "A slow morning, with nowhere to hurry.",
+    findLabel: "Explore the café",
+    question: "Did you stop for a coffee?",
+    memory: "One more coffee. Nowhere to hurry.",
+  },
+  chicago: {
+    symbol: "🍕",
+    description:
+      "A golden crust. A wonderfully deep filling. A new little gathering place for your world.",
+    findLabel: "Find deep-dish pizza",
+    question: "Did you try Chicago deep-dish pizza?",
+    memory: "A new chapter in our great pizza debate.",
+  },
+  "new-york": {
+    symbol: "🍕",
+    description:
+      "A corner slice shop, a yellow cab, and a little big-city energy for your island.",
+    findLabel: "Find a New York slice",
+    question: "Did you try New York-style pizza?",
+    memory: "A foldable slice and a city-sized smile.",
+  },
+  mountain: {
+    symbol: "▲",
+    description:
+      "A tent under tall pines. Keep a little of the quiet, wherever you go.",
+    findLabel: "Find a mountain escape",
+    question: "Did you enjoy a night under the pines?",
+    memory: "The stars were brighter than we remembered.",
+  },
+  museum: {
+    symbol: "▥",
+    description:
+      "A tiny gallery for a big new perspective. Bring home the feeling of discovering something beautiful.",
+    findLabel: "Find an art adventure",
+    question: "Did you enjoy a little art adventure?",
+    memory: "We found a new favorite way to see the world.",
+  },
+};
 export const destinations: Destination[] = [
   {
     id: "nearby",
-    kind: "Nearby option",
-    name: "The Neighborhood Pie",
-    location: "Sample destination · Detroit area",
-    distance: "8 mi",
-    description: "A little deep-dish discovery, close to home.",
+    kind: "Nearby Seoul possibility",
+    name: "Mangwon picnic corner",
+    location: "Sample destination · Mapo, Seoul",
+    distance: "2 km",
+    description: "Imagine a little market picnic, close to home.",
   },
   {
     id: "weekend",
-    kind: "Weekend-drive option",
-    name: "Lakeside Deep Dish",
-    location: "Sample destination · West Michigan",
-    distance: "165 mi",
-    description: "Make a day of it. Take the scenic way.",
+    kind: "A little farther in Seoul",
+    name: "Han River picnic pause",
+    location: "Sample destination · Seoul riverside",
+    distance: "6 km",
+    description: "Make a little room for a slower city afternoon.",
   },
   {
     id: "chicago",
-    kind: "Iconic Chicago destination",
-    name: "The Chicago Original",
-    location: "Sample destination · Chicago, Illinois",
-    distance: "282 mi",
-    description: "A big-city chapter for your little world.",
+    kind: "A Seoul day out",
+    name: "Mapo market afternoon",
+    location: "Sample destination · Seoul",
+    distance: "11 km",
+    description: "A sample chapter for your Seoul keepsake story.",
   },
 ];
+export function destinationsFor(id: string): Destination[] {
+  if (id === "mangwon") return destinations;
+  const experience = catalog.find((x) => x.id === id);
+  if (!experience || experience.status !== "available") return [];
+  const names: Record<string, string[]> = {
+    gyeongbokgung: [
+      "Palace courtyard chapter",
+      "Jongno culture stroll",
+      "Seoul history afternoon",
+    ],
+    bukhansan: [
+      "Pine trail pause",
+      "A Seoul mountain morning",
+      "A quiet summit chapter",
+    ],
+    "seoul-museum": [
+      "A neighborhood gallery chapter",
+      "A city museum afternoon",
+      "A little art discovery",
+    ],
+  };
+  return destinations.map((destination, index) => ({
+    ...destination,
+    name: names[id][index],
+    location: "Illustrative destination · Seoul · no verified venue",
+    description: [
+      "A little Seoul discovery, close to home.",
+      "Leave room for a city adventure.",
+      "Imagine a new chapter a little farther away.",
+    ][index],
+  }));
+}

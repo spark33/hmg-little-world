@@ -2,6 +2,11 @@ import { describe, it, expect } from "vitest";
 import {
   canInteract,
   collect,
+  collectibleIds,
+  catalog,
+  nextExperience,
+  updateMemory,
+  destinationsFor,
   initialState,
   loadWorld,
   readWorld,
@@ -32,7 +37,7 @@ describe("persistent world", () => {
       null,
     ])
       expect(isVisitDate(date)).toBe(false);
-    expect(collect(initialState(), "chicago", "2026-02-30")).toEqual(
+    expect(collect(initialState(), "mangwon", "2026-02-30")).toEqual(
       initialState(),
     );
   });
@@ -42,7 +47,7 @@ describe("persistent world", () => {
     for (const [raw, status] of [
       ["{", "corrupt"],
       ['{"version":1,"collected":[]}', "corrupt"],
-      ['{"version":2,"collected":{"future":{}}}', "unsupported"],
+      ['{"version":3,"collected":{"future":{}}}', "unsupported"],
     ]) {
       s.setItem(STORAGE_KEY, raw);
       expect(readWorld(s).status).toBe(status);
@@ -60,33 +65,36 @@ describe("persistent world", () => {
   it("preserves a damaged record for recovery instead of accepting an impossible date", () => {
     const s = storage();
     const raw =
-      '{"version":1,"collected":{"chicago":{"visitDate":"2026-02-31"}}}';
+      '{"version":1,"collected":{"mangwon":{"visitDate":"2026-02-31"}}}';
     s.setItem(STORAGE_KEY, raw);
-    expect(readWorld(s)).toEqual({ state: initialState(), status: "corrupt" });
+    expect(readWorld(s)).toMatchObject({
+      state: initialState(),
+      status: "corrupt",
+    });
     expect(s.getItem(STORAGE_KEY)).toBe(raw);
   });
   it("bounds memories consistently before and after reload", () => {
     const s = storage();
     const state = collect(
       initialState(),
-      "chicago",
+      "mangwon",
       "2026-11-16",
       "x".repeat(600),
     );
-    expect(state.collected.chicago.memory).toHaveLength(500);
+    expect(state.collected.mangwon.memory).toHaveLength(500);
     saveWorld(s, state);
-    expect(readWorld(s)).toEqual({ state, status: "ready" });
+    expect(readWorld(s)).toMatchObject({ state, status: "ready" });
   });
-  it("starts with four illustrative memories and no Chicago", () => {
+  it("starts with four illustrative memories and no Mangwon", () => {
     const w = initialState();
     expect(Object.keys(w.collected)).toHaveLength(4);
-    expect(w.collected.chicago).toBeUndefined();
+    expect(w.collected.mangwon).toBeUndefined();
   });
   it("round trips a confirmed collectible", () => {
     const s = storage();
     const w = collect(
       initialState(),
-      "chicago",
+      "mangwon",
       "2026-11-14",
       "A delicious debate",
     );
@@ -94,8 +102,8 @@ describe("persistent world", () => {
     expect(loadWorld(s)).toEqual(w);
   });
   it("prevents duplicates and preserves original visit", () => {
-    const w = collect(initialState(), "chicago", "2026-11-14");
-    expect(collect(w, "chicago", "2026-11-15")).toBe(w);
+    const w = collect(initialState(), "mangwon", "2026-11-14");
+    expect(collect(w, "mangwon", "2026-11-15")).toBe(w);
   });
   it("does not collect unknown ids", () =>
     expect(collect(initialState(), "arbitrary", "2026-11-14")).toEqual(
@@ -103,9 +111,9 @@ describe("persistent world", () => {
     ));
   it("resets and persists the initial world", () => {
     const s = storage();
-    saveWorld(s, collect(initialState(), "chicago", "2026-11-14"));
+    saveWorld(s, collect(initialState(), "mangwon", "2026-11-14"));
     saveWorld(s, initialState());
-    expect(loadWorld(s).collected.chicago).toBeUndefined();
+    expect(loadWorld(s).collected.mangwon).toBeUndefined();
   });
   it("recovers from corrupt or hostile storage", () => {
     const s = storage();
@@ -113,7 +121,7 @@ describe("persistent world", () => {
       "{",
       "null",
       '{"version":2}',
-      '{"version":1,"collected":{"chicago":{"visitDate":2},"evil":{}}}',
+      '{"version":1,"collected":{"mangwon":{"visitDate":2},"evil":{}}}',
     ]) {
       s.setItem(STORAGE_KEY, value);
       expect(loadWorld(s)).toEqual(initialState());
@@ -133,16 +141,16 @@ describe("persistent world", () => {
   });
 });
 describe("recommendations", () => {
-  it("deterministically recommends Chicago after Detroit", () =>
-    expect(recommend("detroit", initialState())?.id).toBe("chicago"));
-  it("recommends New York after Chicago", () =>
+  it("deterministically recommends Mangwon after Gwangjang", () =>
+    expect(recommend("gwangjang", initialState())?.id).toBe("mangwon"));
+  it("recommends Gyeongbokgung after Mangwon", () =>
     expect(
-      recommend("chicago", collect(initialState(), "chicago", "2026-11-14"))
+      recommend("mangwon", collect(initialState(), "mangwon", "2026-11-14"))
         ?.id,
-    ).toBe("new-york"));
+    ).toBe("gyeongbokgung"));
   it("does not recommend collected memories", () =>
     expect(
-      recommend("detroit", collect(initialState(), "chicago", "2026-11-14")),
+      recommend("gwangjang", collect(initialState(), "mangwon", "2026-11-14")),
     ).toBeUndefined());
 });
 describe("bridge validation", () => {
@@ -173,4 +181,111 @@ describe("driving restrictions", () => {
     expect(canInteract({ state: "parked", preview: false })).toBe(true));
   it("allows explicitly identified non-vehicle preview", () =>
     expect(canInteract({ state: "unknown", preview: true })).toBe(true));
+});
+
+describe("complete keepsake progression", () => {
+  it("collects every advertised new keepsake exactly once and retains its provenance", () => {
+    let state = initialState();
+    for (const id of collectibleIds) {
+      const before = state;
+      state = collect(state, id, "2026-11-15", `${id} note`);
+      expect(state).not.toBe(before);
+      expect(state.collected[id]).toMatchObject({
+        visitDate: "2026-11-15",
+        provenance: "confirmed-demo",
+        memory: `${id} note`,
+      });
+      expect(collect(state, id, "2026-11-16", "duplicate")).toBe(state);
+    }
+    expect(Object.keys(state.collected)).toHaveLength(catalog.length);
+    expect(nextExperience(state)).toBeUndefined();
+    expect(state.collected.gwangjang.provenance).toBe("illustration");
+  });
+  it("finds each remaining adventure deterministically", () => {
+    let state = initialState();
+    for (const id of [
+      "mangwon",
+      "gyeongbokgung",
+      "bukhansan",
+      "seoul-museum",
+    ]) {
+      expect(nextExperience(state)?.id).toBe(id);
+      state = collect(state, id, "2026-11-15");
+    }
+  });
+  it("offers only clearly illustrative destinations for playable keepsakes", () => {
+    for (const id of collectibleIds) {
+      const options = destinationsFor(id);
+      expect(options).toHaveLength(3);
+      expect(
+        options.every((option) => /sample|illustrative/i.test(option.location)),
+      ).toBe(true);
+    }
+    expect(destinationsFor("not-a-keepsake")).toEqual([]);
+  });
+  it("edits collected notes without changing visit date or illustration provenance", () => {
+    const initial = initialState();
+    const edited = updateMemory(
+      initial,
+      "gwangjang",
+      "  Our own market picnic  ",
+    );
+    expect(edited.collected.gwangjang).toEqual({
+      ...initial.collected.gwangjang,
+      memory: "Our own market picnic",
+    });
+    expect(initial.collected.gwangjang.memory).not.toBe(
+      edited.collected.gwangjang.memory,
+    );
+    expect(updateMemory(initial, "gyeongbokgung", "not collected")).toBe(
+      initial,
+    );
+    expect(updateMemory(initial, "arbitrary", "untrusted")).toBe(initial);
+    expect(
+      updateMemory(initial, "gwangjang", "x".repeat(700)).collected.gwangjang
+        .memory,
+    ).toHaveLength(500);
+  });
+});
+
+describe("Seoul theme and legacy archive", () => {
+  it("starts with Seoul illustrations and never silently relabels legacy Chicago data", () => {
+    const s = storage();
+    s.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        version: 1,
+        collected: {
+          detroit: {
+            visitDate: "2026-06-14",
+            memory: "Original Detroit illustration",
+          },
+          chicago: {
+            visitDate: "2026-08-01",
+            memory: "Our original Chicago confirmation",
+          },
+        },
+      }),
+    );
+    const migrated = readWorld(s);
+    expect(migrated.status).toBe("ready");
+    expect(migrated.migrated).toBe(true);
+    expect(migrated.state.collected.chicago).toEqual({
+      visitDate: "2026-08-01",
+      memory: "Our original Chicago confirmation",
+      provenance: "confirmed-demo",
+    });
+    expect(migrated.state.collected.detroit.provenance).toBe("illustration");
+    expect(migrated.state.collected.mangwon).toBeUndefined();
+    expect(
+      catalog.filter((item) => migrated.state.collected[item.id]),
+    ).toHaveLength(4);
+    expect(collectibleIds.some((id) => migrated.state.collected[id])).toBe(
+      false,
+    );
+    expect(saveWorld(s, migrated.state)).toBe(true);
+    expect(loadWorld(s).collected.chicago.memory).toBe(
+      "Our original Chicago confirmation",
+    );
+  });
 });
