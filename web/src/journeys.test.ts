@@ -24,10 +24,8 @@ describe("collection journeys", () => {
     expect(world.collected.chicago.memory).toBe("Original Chicago");
   });
   it("describes a curated pairing without inferring a real visit from an illustration", () => {
-    expect(curatedReason("gwangjang")).toContain("market-food illustration");
-    expect(curatedReason("gwangjang")).toContain(
-      "not a recommendation based on a verified visit",
-    );
+    expect(curatedReason("gwangjang")).toContain("market-food chapter");
+    expect(curatedReason("gwangjang")).toContain("Curated demo inspiration");
     expect(curatedReason("gwangjang")).not.toContain("you explored");
   });
 });

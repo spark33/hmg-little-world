@@ -84,7 +84,17 @@ test("illustration gives a named curated pairing and both Back steps preserve co
   await expect(
     next.getByRole("heading", { name: "Mangwon Market picnic" }),
   ).toBeVisible();
-  await expect(next).toContainText("market-food illustration");
+  await expect(next).toContainText("market-food chapter");
+  expect(
+    await page
+      .locator(".memory-quote")
+      .evaluate(
+        (quote) =>
+          quote.compareDocumentPosition(
+            document.querySelector(".curated-next")!,
+          ) & Node.DOCUMENT_POSITION_FOLLOWING,
+      ),
+  ).toBeTruthy();
   await expect(page.locator(".panel")).not.toContainText("You’ve explored");
   await page
     .getByRole("button", { name: "Discover Mangwon Market picnic" })

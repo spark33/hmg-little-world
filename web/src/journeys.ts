@@ -23,7 +23,7 @@ export function collectionGroups(world: WorldState) {
 export function curatedReason(sourceId: string): string {
   switch (sourceId) {
     case "gwangjang":
-      return "A curated pairing: Gwangjang’s market-food illustration leads to a picnic chapter at Mangwon. This is inspiration for a demo outing, not a recommendation based on a verified visit.";
+      return "Explore a second market-food chapter with a Mangwon picnic. Curated demo inspiration.";
     case "namsan":
       return "A curated pairing of Seoul landmarks: from the tower illustration to a palace walk.";
     case "seokchon":

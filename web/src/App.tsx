@@ -702,16 +702,6 @@ export default function App() {
                   : "CONFIRMED DEMO KEEPSAKE"}
               </div>
               <h2>{experience.displayName}</h2>
-              {recommendation && !editingMemory && (
-                <section
-                  className="curated-next"
-                  aria-label="Curated next chapter"
-                >
-                  <div className="eyebrow">CURATED NEXT CHAPTER</div>
-                  <h3>{recommendation.displayName}</h3>
-                  <p>{curatedReason(experience.id)}</p>
-                </section>
-              )}
               <p
                 className="memory-quote"
                 ref={memoryQuote}
@@ -727,6 +717,16 @@ export default function App() {
                     ? " and saved on this device."
                     : " for this session only."}
                 </p>
+              )}
+              {recommendation && !editingMemory && (
+                <section
+                  className="curated-next"
+                  aria-label="Curated next chapter"
+                >
+                  <div className="eyebrow">CURATED NEXT CHAPTER</div>
+                  <h3>{recommendation.displayName}</h3>
+                  <p>{curatedReason(experience.id)}</p>
+                </section>
               )}
               <dl>
                 {world.collected[experience.id]?.provenance ===
