@@ -6,8 +6,8 @@ android {
     buildFeatures { buildConfig = true }
     flavorDimensions += "environment"
     productFlavors {
-        create("vehicle") { dimension = "environment"; resValue("string", "app_name", "Little World"); buildConfigField("boolean", "DEVELOPMENT_PREVIEW", "false") }
-        create("preview") { dimension = "environment"; resValue("string", "app_name", "Little World Dev Preview"); applicationIdSuffix = ".preview"; buildConfigField("boolean", "DEVELOPMENT_PREVIEW", "true") }
+        create("vehicle") { dimension = "environment"; resValue("string", "app_name", "ROAMY"); buildConfigField("boolean", "DEVELOPMENT_PREVIEW", "false") }
+        create("preview") { dimension = "environment"; resValue("string", "app_name", "ROAMY Dev Preview"); applicationIdSuffix = ".preview"; buildConfigField("boolean", "DEVELOPMENT_PREVIEW", "true") }
     }
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
     kotlinOptions { jvmTarget = "17" }

@@ -1,6 +1,7 @@
 node_modules/
 dist/
 .gradle/
+.kotlin/
 build/
 local.properties
 /android/app/src/main/assets/web/

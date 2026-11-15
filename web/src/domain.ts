@@ -131,8 +131,39 @@ export interface StorageLike {
   setItem(key: string, value: string): void;
 }
 export function loadWorld(storage: StorageLike): WorldState {
+  return readWorld(storage).state;
+}
+export type SaveStatus =
+  "ready" | "empty" | "unavailable" | "corrupt" | "unsupported";
+export function isVisitDate(date: unknown): date is string {
+  if (typeof date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(date))
+    return false;
+  const time = Date.parse(`${date}T00:00:00Z`);
+  return (
+    Number.isFinite(time) && new Date(time).toISOString().slice(0, 10) === date
+  );
+}
+export function readWorld(storage: StorageLike): {
+  state: WorldState;
+  status: SaveStatus;
+} {
+  let text: string | null;
   try {
-    const raw: unknown = JSON.parse(storage.getItem(STORAGE_KEY) || "null");
+    text = storage.getItem(STORAGE_KEY);
+  } catch {
+    return { state: initialState(), status: "unavailable" };
+  }
+  if (text === null) return { state: initialState(), status: "empty" };
+  try {
+    const raw: unknown = JSON.parse(text);
+    if (
+      raw &&
+      typeof raw === "object" &&
+      "version" in raw &&
+      typeof raw.version === "number" &&
+      raw.version > 1
+    )
+      return { state: initialState(), status: "unsupported" };
     if (
       !raw ||
       typeof raw !== "object" ||
@@ -140,17 +171,17 @@ export function loadWorld(storage: StorageLike): WorldState {
       raw.version !== 1 ||
       !("collected" in raw) ||
       !raw.collected ||
-      typeof raw.collected !== "object"
+      typeof raw.collected !== "object" ||
+      Array.isArray(raw.collected)
     )
-      return initialState();
+      return { state: initialState(), status: "corrupt" };
     const base = initialState();
     for (const [id, value] of Object.entries(raw.collected)) {
       if (
         id === "chicago" &&
         value &&
         typeof value === "object" &&
-        typeof value.visitDate === "string" &&
-        /^\d{4}-\d{2}-\d{2}$/.test(value.visitDate)
+        isVisitDate(value.visitDate)
       )
         base.collected[id] = {
           visitDate: value.visitDate,
@@ -160,9 +191,12 @@ export function loadWorld(storage: StorageLike): WorldState {
               : undefined,
         };
     }
-    return base;
+    // Keep a damaged save intact for deliberate recovery instead of replacing it on load.
+    const invalidChicago =
+      Object.hasOwn(raw.collected, "chicago") && !base.collected.chicago;
+    return { state: base, status: invalidChicago ? "corrupt" : "ready" };
   } catch {
-    return initialState();
+    return { state: initialState(), status: "corrupt" };
   }
 }
 export function collect(
@@ -171,10 +205,14 @@ export function collect(
   date: string,
   memory?: string,
 ): WorldState {
-  if (state.collected[id] || id !== "chicago") return state;
+  if (state.collected[id] || id !== "chicago" || !isVisitDate(date))
+    return state;
   return {
     ...state,
-    collected: { ...state.collected, [id]: { visitDate: date, memory } },
+    collected: {
+      ...state.collected,
+      [id]: { visitDate: date, memory: memory?.slice(0, 500) },
+    },
   };
 }
 export function saveWorld(storage: StorageLike, state: WorldState): boolean {

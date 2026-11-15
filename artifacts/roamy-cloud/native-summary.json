@@ -1,0 +1,60 @@
+{
+  "preview": {
+    "apkSha256": "bfdf6bce7ed361734988175b398de927aa8995cb2a8ae39a65eefe6ddfa82b9f",
+    "bundledWebFilesMatch": 4,
+    "tests": 4,
+    "failures": 0,
+    "lintErrors": 0,
+    "lintWarnings": [
+      {
+        "id": "OldTargetApi",
+        "severity": "Warning"
+      },
+      {
+        "id": "GradleDependency",
+        "severity": "Warning"
+      },
+      {
+        "id": "DiscouragedApi",
+        "severity": "Warning"
+      },
+      {
+        "id": "SetJavaScriptEnabled",
+        "severity": "Warning"
+      },
+      {
+        "id": "DataExtractionRules",
+        "severity": "Warning"
+      }
+    ]
+  },
+  "vehicle": {
+    "apkSha256": "acb16e7db90525cc518318b8098361c6b5a86b20e52d76f0f1eecd9848359cd9",
+    "bundledWebFilesMatch": 4,
+    "tests": 4,
+    "failures": 0,
+    "lintErrors": 0,
+    "lintWarnings": [
+      {
+        "id": "OldTargetApi",
+        "severity": "Warning"
+      },
+      {
+        "id": "GradleDependency",
+        "severity": "Warning"
+      },
+      {
+        "id": "DiscouragedApi",
+        "severity": "Warning"
+      },
+      {
+        "id": "SetJavaScriptEnabled",
+        "severity": "Warning"
+      },
+      {
+        "id": "DataExtractionRules",
+        "severity": "Warning"
+      }
+    ]
+  }
+}

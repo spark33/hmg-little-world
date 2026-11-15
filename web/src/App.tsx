@@ -27,7 +27,7 @@ import {
   collect,
   destinations,
   initialState,
-  loadWorld,
+  readWorld,
   recommend,
   saveWorld,
   type Destination,
@@ -35,6 +35,11 @@ import {
 } from "./domain";
 import { nativeHost, parseSafety, requestNavigation } from "./bridge";
 import { flourish, suspendSound, unlockSound } from "./sound";
+import {
+  loadPreferences,
+  savePreferences,
+  type Preferences,
+} from "./preferences";
 import "./styles.css";
 import "./vehicle.css";
 const storage = {
@@ -76,12 +81,22 @@ class RenderBoundary extends Component<
   }
 }
 export default function App() {
-  const [world, setWorld] = useState(() => loadWorld(storage));
+  const [loaded] = useState(() => readWorld(storage));
+  const [world, setWorld] = useState(loaded.state);
+  const [protectedSave, setProtectedSave] = useState(
+    loaded.status === "corrupt" || loaded.status === "unsupported",
+  );
   const [panel, setPanel] = useState<Panel>(null),
     [selected, setSelected] = useState<string | null>(null);
-  const [night, setNight] = useState(false),
-    [muted, setMuted] = useState(false),
-    [zoom, setZoom] = useState(0);
+  const [preferences, setPreferences] = useState(() =>
+    loadPreferences(
+      storage,
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    ),
+  );
+  const { night, muted, reducedMotion } = preferences;
+  const [preferencesSaved, setPreferencesSaved] = useState(true);
+  const [zoom, setZoom] = useState(0);
   const [destination, setDestination] = useState<Destination>(destinations[0]);
   const [navigationStatus, setNavigationStatus] = useState(""),
     [pending, setPending] = useState(false);
@@ -89,7 +104,8 @@ export default function App() {
     [start, setStart] = useState(0),
     [toast, setToast] = useState(""),
     [resetToken, setResetToken] = useState(0);
-  const [saved, setSaved] = useState(true);
+  const [saved, setSaved] = useState(loaded.status === "ready");
+  const [confirmReset, setConfirmReset] = useState(false);
   const [safety, setSafety] = useState<Safety>({
     state: "unknown",
     preview: !nativeHost,
@@ -97,20 +113,30 @@ export default function App() {
   const [active, setActive] = useState(!document.hidden);
   const permitted = canInteract(safety) && active;
   const timers = useRef<number[]>([]);
+  const navigationRequest = useRef<AbortController | null>(null);
+  const panelElement = useRef<HTMLElement | null>(null);
+  const panelOpener = useRef<HTMLElement | null>(null);
+  const wasPanelOpen = useRef(false);
   const chicago = Boolean(world.collected.chicago);
   const experience = catalog.find((x) => x.id === selected) ?? catalog[0];
   const count = Object.keys(world.collected).length;
   useEffect(() => {
-    setSaved(saveWorld(storage, world));
-  }, [world]);
+    if (loaded.status === "empty") setSaved(saveWorld(storage, loaded.state));
+  }, [loaded]);
   useEffect(() => {
     const safetyListener = (event: Event) => {
       const value = parseSafety((event as CustomEvent).detail);
-      if (value) setSafety(value);
+      if (value) {
+        if (!canInteract(value)) navigationRequest.current?.abort();
+        setSafety(value);
+      }
     };
     const visible = () => {
       setActive(!document.hidden);
-      if (document.hidden) suspendSound();
+      if (document.hidden) {
+        navigationRequest.current?.abort();
+        suspendSound();
+      }
     };
     window.addEventListener("vehicle-safety", safetyListener);
     document.addEventListener("visibilitychange", visible);
@@ -125,10 +151,46 @@ export default function App() {
       setCollecting(false);
       setPanel(null);
       setToast("");
+      setPending(false);
+      setConfirmReset(false);
       suspendSound();
     }
   }, [permitted]);
-  useEffect(() => () => timers.current.forEach(clearTimeout), []);
+  useEffect(() => {
+    if (panel !== "destinations" || !permitted) {
+      navigationRequest.current?.abort();
+      navigationRequest.current = null;
+      setPending(false);
+    }
+  }, [panel, permitted]);
+  useEffect(() => {
+    if (panel && permitted) {
+      if (!wasPanelOpen.current)
+        panelOpener.current = document.activeElement as HTMLElement;
+      panelElement.current?.focus({ preventScroll: true });
+      wasPanelOpen.current = true;
+    } else {
+      if (wasPanelOpen.current && permitted && panelOpener.current?.isConnected)
+        panelOpener.current.focus({ preventScroll: true });
+      wasPanelOpen.current = false;
+    }
+    if (panel !== "settings") setConfirmReset(false);
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && panel) {
+        navigationRequest.current?.abort();
+        setPanel(null);
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [panel, permitted]);
+  useEffect(
+    () => () => {
+      timers.current.forEach(clearTimeout);
+      navigationRequest.current?.abort();
+    },
+    [],
+  );
   function select(id: string) {
     if (!permitted || collecting) return;
     if (!id) {
@@ -146,16 +208,21 @@ export default function App() {
   function add() {
     if (!permitted || chicago || collecting || panel !== "arrival") return;
     if (!muted) unlockSound();
-    setWorld((w) =>
-      collect(
-        w,
-        "chicago",
-        new Date().toISOString().slice(0, 10),
-        "A new chapter in our great pizza debate.",
-      ),
+    const next = collect(
+      world,
+      "chicago",
+      new Date().toISOString().slice(0, 10),
+      "A new chapter in our great pizza debate.",
     );
+    // Save in the confirmation handler, before any reveal or lifecycle interruption.
+    setSaved(!protectedSave && saveWorld(storage, next));
+    setWorld(next);
     setPanel(null);
     setSelected(null);
+    if (reducedMotion) {
+      setToast("Your little world just got bigger!");
+      return;
+    }
     setStart(performance.now());
     setCollecting(true);
     timers.current.push(
@@ -168,9 +235,18 @@ export default function App() {
       }, 7000),
     );
   }
+  function updatePreferences(patch: Partial<Preferences>) {
+    const next = { ...preferences, ...patch };
+    setPreferencesSaved(savePreferences(storage, next));
+    setPreferences(next);
+  }
   function reset() {
     timers.current.forEach(clearTimeout);
-    setWorld(initialState());
+    const next = initialState();
+    setSaved(saveWorld(storage, next));
+    setProtectedSave(false);
+    setConfirmReset(false);
+    setWorld(next);
     setPanel(null);
     setSelected(null);
     setCollecting(false);
@@ -180,9 +256,13 @@ export default function App() {
     setNavigationStatus("");
   }
   async function navigate() {
-    if (pending || !permitted) return;
+    if (navigationRequest.current || pending || !permitted) return;
+    const controller = new AbortController();
+    navigationRequest.current = controller;
     setPending(true);
-    const reply = await requestNavigation(destination.id);
+    const reply = await requestNavigation(destination.id, controller.signal);
+    if (controller.signal.aborted) return;
+    navigationRequest.current = null;
     setNavigationStatus(
       reply.available
         ? "Navigation requested"
@@ -197,7 +277,7 @@ export default function App() {
         <div className="safe-symbol">
           <Leaf size={42} />
         </div>
-        <div className="eyebrow">LITTLE WORLD</div>
+        <div className="eyebrow">ROAMY</div>
         <h1>Your little world can wait.</h1>
         <p>
           {active
@@ -214,7 +294,7 @@ export default function App() {
     );
   return (
     <main
-      className={`app ${night ? "night" : ""} ${panel ? "panel-open" : ""} ${collecting ? "collecting" : ""}`}
+      className={`app ${night ? "night" : ""} ${panel ? "panel-open" : ""} ${collecting ? "collecting" : ""} ${reducedMotion ? "reduced-motion" : ""}`}
     >
       <div className="world" aria-label="Interactive miniature world">
         <RenderBoundary>
@@ -227,6 +307,7 @@ export default function App() {
             onSelect={select}
             resetToken={resetToken}
             zoom={zoom}
+            reducedMotion={reducedMotion}
           />
         </RenderBoundary>
       </div>
@@ -243,18 +324,21 @@ export default function App() {
             <Leaf size={25} strokeWidth={1.7} />
           </span>
           <span>
-            LITTLE WORLD<small>DRIVE THE REAL WORLD. BUILD YOUR OWN.</small>
+            ROAMY<small>DRIVE THE REAL WORLD. BUILD YOUR OWN.</small>
           </span>
         </a>
         <nav>
           <span className="preview-tag">
             <span />{" "}
             {nativeHost
-              ? "Non-vehicle development preview"
+              ? safety.preview
+                ? "Non-vehicle development preview"
+                : "Parked vehicle"
               : "Browser development preview"}
           </span>
           <button
             className={`nav-button ${panel === "album" ? "active" : ""}`}
+            aria-label={`My collection · ${count} memories`}
             onClick={() => setPanel(panel === "album" ? null : "album")}
           >
             <BookOpen size={18} /> My collection{" "}
@@ -324,8 +408,27 @@ export default function App() {
           <ArrowUpRight size={18} />
         </button>
       </footer>
+      {!saved && (
+        <div className="save-warning" role="alert">
+          <span>
+            {protectedSave
+              ? "Existing save needs attention. It has been preserved; changes are session only."
+              : "Changes are session only. Saving on this device is unavailable."}
+          </span>
+          <button
+            onClick={() => {
+              if (protectedSave) setPanel("settings");
+              else setSaved(saveWorld(storage, world));
+            }}
+          >
+            {protectedSave ? "Review save" : "Retry save"}
+          </button>
+        </div>
+      )}
       {panel && (
         <aside
+          ref={panelElement}
+          tabIndex={-1}
           className={`panel ${panel === "destinations" ? "wide" : ""}`}
           aria-label="Adventure details"
         >
@@ -619,7 +722,7 @@ export default function App() {
           )}
           {panel === "settings" && (
             <>
-              <div className="eyebrow">BEHIND THE LITTLE WORLD</div>
+              <div className="eyebrow">BEHIND ROAMY</div>
               <h2>
                 A place to
                 <br />
@@ -634,7 +737,7 @@ export default function App() {
                 <button
                   className="secondary preference-button"
                   aria-label={night ? "Switch to daytime" : "Switch to evening"}
-                  onClick={() => setNight((n) => !n)}
+                  onClick={() => updatePreferences({ night: !night })}
                 >
                   {night ? <Sun size={22} /> : <Moon size={22} />}
                   <span>{night ? "Daytime world" : "Evening world"}</span>
@@ -643,7 +746,7 @@ export default function App() {
                   className="secondary preference-button"
                   aria-label={muted ? "Enable sound" : "Mute sound"}
                   onClick={() => {
-                    setMuted((m) => !m);
+                    updatePreferences({ muted: !muted });
                     if (muted) unlockSound();
                     else suspendSound();
                   }}
@@ -651,7 +754,24 @@ export default function App() {
                   {muted ? <VolumeX size={22} /> : <Volume2 size={22} />}
                   <span>{muted ? "Sound off" : "Sound on"}</span>
                 </button>
+                <button
+                  className="secondary preference-button"
+                  aria-pressed={reducedMotion}
+                  onClick={() =>
+                    updatePreferences({ reducedMotion: !reducedMotion })
+                  }
+                >
+                  <Leaf size={22} />
+                  <span>Reduce motion</span>
+                  <span>{reducedMotion ? "On" : "Off"}</span>
+                </button>
               </div>
+              {!preferencesSaved && (
+                <p role="status">
+                  Preferences could not be saved. These settings apply to this
+                  session.
+                </p>
+              )}
               <div className="settings-row">
                 <span>Navigation</span>
                 <span>Demo adapter</span>
@@ -668,10 +788,35 @@ export default function App() {
                 <span>Local save</span>
                 <span>{saved ? "Available" : "Unavailable"}</span>
               </div>
-              <button className="secondary reset-button" onClick={reset}>
-                <RotateCcw size={18} />
-                Reset demo world
-              </button>
+              {confirmReset ? (
+                <div
+                  className="reset-confirmation"
+                  role="group"
+                  aria-label="Confirm world reset"
+                >
+                  <p>
+                    This replaces the saved world on this device. Your added
+                    memories will be removed.
+                  </p>
+                  <button
+                    className="secondary"
+                    onClick={() => setConfirmReset(false)}
+                  >
+                    Keep my world
+                  </button>
+                  <button className="secondary reset-button" onClick={reset}>
+                    Confirm reset
+                  </button>
+                </div>
+              ) : (
+                <button
+                  className="secondary reset-button"
+                  onClick={() => setConfirmReset(true)}
+                >
+                  <RotateCcw size={18} />
+                  Reset demo world
+                </button>
+              )}
               <p className="fine-print">
                 Resets only this device’s demo collection so you can replay the
                 full arrival moment.
