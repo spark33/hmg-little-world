@@ -15,6 +15,14 @@ import {
 import { OrbitControls, RoundedBox } from "@react-three/drei";
 import * as THREE from "three";
 import type { OrbitControls as OrbitImpl } from "three-stdlib";
+import {
+  assetForSelection,
+  COLLECTIBLE_ASSET_IDS,
+  WORLD_LAYOUT,
+  worldProgress,
+  type CollectibleAssetId,
+  type WorldAssetId,
+} from "./world-layout";
 type V3 = [number, number, number];
 const MotionContext = createContext(false);
 const C = {
@@ -642,7 +650,214 @@ function Fence({ p }: { p: V3 }) {
     </group>
   );
 }
-const plot: V3 = [3.55, 0.06, 0.45];
+const plot: V3 = WORLD_LAYOUT.chicago.position;
+// Each new keepsake is built from local procedural geometry. Their scales fit
+// the reserved sites in world-layout.ts, so collecting never rearranges a town.
+function NewYorkShop({ night = false }: { night?: boolean }) {
+  return (
+    <group scale={0.8}>
+      <Box p={[0, 0.04, 0]} s={[2.7, 0.08, 2.2]} c="#ded0b4" />
+      <Box p={[0, 1.45, -0.12]} s={[2.1, 2.8, 1.55]} c="#b9826d" r={0.06} />
+      <Box p={[0, 2.9, -0.12]} s={[2.38, 0.16, 1.8]} c="#6c7f80" />
+      <Box p={[0, 2.72, 0.7]} s={[2.2, 0.1, 0.18]} c="#eed4aa" />
+      {[-0.63, 0.63].map((x) =>
+        [1.55, 2.25].map((y) => (
+          <group key={`${x}-${y}`}>
+            <Box p={[x, y, 0.67]} s={[0.55, 0.59, 0.08]} c="#f0d7ac" />
+            <Box
+              p={[x, y, 0.72]}
+              s={[0.39, 0.43, 0.04]}
+              c={night ? "#ffd17c" : "#92b2ae"}
+              glow={night}
+            />
+            <Box p={[x, y, 0.75]} s={[0.035, 0.43, 0.025]} c="#f7e2bc" />
+          </group>
+        )),
+      )}
+      <Box p={[0, 0.5, 0.69]} s={[0.42, 0.88, 0.08]} c="#527a77" />
+      {[-0.7, 0.7].map((x) => (
+        <Box
+          key={x}
+          p={[x, 0.55, 0.71]}
+          s={[0.57, 0.66, 0.05]}
+          c={night ? "#ffd17c" : "#8cb1ab"}
+          glow={night}
+        />
+      ))}
+      <Box
+        p={[0, 1.06, 0.84]}
+        s={[2.3, 0.15, 0.6]}
+        c="#bc674e"
+        rotation={[0.15, 0, 0]}
+      />
+      <Label
+        text="CORNER SLICE"
+        p={[0, 1.13, 1.16]}
+        width={2.15}
+        size={0.27}
+        color="#a6624d"
+      />
+      <Box p={[0.04, 1.84, 0.83]} s={[0.05, 1.65, 0.06]} c="#5c6f6b" />
+      {[1.41, 2.08].map((y) => (
+        <group key={y}>
+          <Box p={[0.04, y, 0.89]} s={[0.95, 0.055, 0.35]} c="#5c6f6b" />
+          <Box p={[0.04, y + 0.2, 1.06]} s={[0.95, 0.035, 0.035]} c="#5c6f6b" />
+          {[-0.4, 0.4].map((x) => (
+            <Box
+              key={x}
+              p={[x, y + 0.1, 1.06]}
+              s={[0.035, 0.22, 0.035]}
+              c="#5c6f6b"
+            />
+          ))}
+        </group>
+      ))}
+      <Plant p={[-1.18, 0, 0.75]} flowers />
+      <Cylinder p={[1.13, 0.26, 0.6]} r={0.18} h={0.52} c="#78918c" />
+    </group>
+  );
+}
+function MountainCamp() {
+  return (
+    <group scale={0.8}>
+      <Box p={[0, 0.035, 0]} s={[3.6, 0.07, 2.8]} c="#9caf81" r={0.18} />
+      {[
+        [-0.45, 1.0, -0.45, 1.05],
+        [0.6, 0.77, -0.6, 0.77],
+      ].map(([x, y, z, radius], i) => (
+        <group key={i} position={[x, y, z]}>
+          <mesh castShadow>
+            <coneGeometry args={[radius, y * 2, 5]} />
+            <meshStandardMaterial
+              color={i ? "#91a4a2" : "#778f91"}
+              roughness={0.95}
+            />
+          </mesh>
+          <mesh position={[0, y * 0.66, 0]}>
+            <coneGeometry args={[radius * 0.34, y * 0.69, 5]} />
+            <meshStandardMaterial color="#eee9d5" roughness={0.95} />
+          </mesh>
+        </group>
+      ))}
+      <Pine p={[-1.35, 0.07, 0.45]} scale={0.55} />
+      <Pine p={[1.31, 0.07, -0.25]} scale={0.62} />
+      <group position={[0.35, 0.07, 0.7]}>
+        <mesh castShadow>
+          <bufferGeometry>
+            <bufferAttribute
+              attach="attributes-position"
+              args={[
+                new Float32Array([
+                  -0.62, 0, -0.5, 0.62, 0, -0.5, 0, 0.83, -0.5, -0.62, 0, 0.5,
+                  0.62, 0, 0.5, 0, 0.83, 0.5,
+                ]),
+                3,
+              ]}
+            />
+            <bufferAttribute
+              attach="index"
+              args={[
+                new Uint16Array([
+                  0, 2, 1, 3, 4, 5, 0, 3, 5, 0, 5, 2, 1, 2, 5, 1, 5, 4,
+                ]),
+                1,
+              ]}
+            />
+          </bufferGeometry>
+          <meshStandardMaterial color="#d6aa6d" side={THREE.DoubleSide} />
+        </mesh>
+        <mesh position={[0, 0.01, 0.51]}>
+          <bufferGeometry>
+            <bufferAttribute
+              attach="attributes-position"
+              args={[
+                new Float32Array([-0.36, 0, 0, 0.36, 0, 0, 0, 0.57, 0]),
+                3,
+              ]}
+            />
+          </bufferGeometry>
+          <meshStandardMaterial color="#6c8275" side={THREE.DoubleSide} />
+        </mesh>
+      </group>
+      <group position={[-0.85, 0.07, 1]}>
+        <Cylinder p={[0, 0.025, 0]} r={0.3} h={0.05} c="#c8c1a9" />
+        <Box
+          p={[0, 0.07, 0]}
+          s={[0.4, 0.07, 0.09]}
+          c="#9f7957"
+          rotation={[0, 0.6, 0]}
+        />
+        <Box
+          p={[0, 0.11, 0]}
+          s={[0.4, 0.07, 0.09]}
+          c="#9f7957"
+          rotation={[0, -0.6, 0]}
+        />
+        <Ball p={[0, 0.23, 0]} s={[0.1, 0.18, 0.1]} c="#e7b268" />
+      </group>
+    </group>
+  );
+}
+function ArtMuseum({ night = false }: { night?: boolean }) {
+  return (
+    <group scale={0.8}>
+      <Box p={[0, 0.05, 0]} s={[3.2, 0.1, 2.8]} c="#d9d1ba" r={0.12} />
+      <Box p={[0, 0.8, -0.15]} s={[2.5, 1.5, 1.9]} c="#c8bbd2" />
+      <Box p={[0, 1.62, -0.15]} s={[2.85, 0.15, 2.15]} c="#8b879d" />
+      <Box
+        p={[0, 0.52, 0.85]}
+        s={[0.62, 0.95, 0.06]}
+        c={night ? "#ffcf8b" : "#7c9e9e"}
+        glow={night}
+      />
+      {[-0.99, -0.48, 0.48, 0.99].map((x) => (
+        <group key={x}>
+          <Cylinder p={[x, 0.73, 1.04]} r={0.095} h={1.22} c="#f3e7cc" />
+          <Box p={[x, 0.13, 1.04]} s={[0.27, 0.13, 0.27]} c="#ede0c5" />
+          <Box p={[x, 1.37, 1.04]} s={[0.28, 0.12, 0.28]} c="#ede0c5" />
+        </group>
+      ))}
+      <Box p={[0, 1.47, 1.04]} s={[2.75, 0.14, 0.48]} c="#e8dbc2" />
+      <mesh position={[0, 1.53, 1.27]} castShadow>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[new Float32Array([-1.4, 0, 0, 1.4, 0, 0, 0, 0.65, 0]), 3]}
+          />
+        </bufferGeometry>
+        <meshStandardMaterial color="#a59bb7" side={THREE.DoubleSide} />
+      </mesh>
+      <Label
+        text="LITTLE ART MUSEUM"
+        p={[0, 1.57, 1.28]}
+        width={2.25}
+        size={0.21}
+        color="#756880"
+      />
+      <Box p={[0, 0.08, 1.3]} s={[1.3, 0.1, 0.18]} c="#e9dfca" />
+      <group position={[-1.35, 0.12, 0.1]}>
+        <Cylinder p={[0, 0.18, 0]} r={0.18} h={0.36} c="#eee0c4" />
+        <mesh position={[0, 0.68, 0]} rotation={[0.2, 0.5, 0]} castShadow>
+          <torusGeometry args={[0.27, 0.075, 6, 16]} />
+          <meshStandardMaterial color="#cf9772" roughness={0.6} />
+        </mesh>
+      </group>
+      <Plant p={[1.35, 0.1, 0.2]} flowers />
+    </group>
+  );
+}
+function CollectibleAsset({
+  id,
+  night,
+}: {
+  id: CollectibleAssetId;
+  night: boolean;
+}) {
+  if (id === "new-york") return <NewYorkShop night={night} />;
+  if (id === "mountain") return <MountainCamp />;
+  if (id === "museum") return <ArtMuseum night={night} />;
+  return <Shop kind="chicago" night={night} />;
+}
 function spring(t: number) {
   return t <= 0 ? 0 : t >= 1 ? 1 : 1 - Math.exp(-6 * t) * Math.cos(t * 9);
 }
@@ -959,6 +1174,8 @@ function CameraRig({
 export interface WorldProps {
   reducedMotion: boolean;
   collected: boolean;
+  collectedIds?: readonly string[];
+  collectingId?: string | null;
   collecting: boolean;
   start: number;
   night: boolean;
@@ -1150,7 +1367,10 @@ export default function World(props: WorldProps) {
     </Canvas>
   );
 }
-export function ShopPreview() {
+export function ShopPreview({ asset = "chicago" }: { asset?: string } = {}) {
+  const id = COLLECTIBLE_ASSET_IDS.includes(asset as CollectibleAssetId)
+    ? (asset as CollectibleAssetId)
+    : "chicago";
   return (
     <Canvas
       orthographic
@@ -1164,7 +1384,7 @@ export function ShopPreview() {
       <ambientLight intensity={2} />
       <directionalLight position={[-3, 5, 4]} intensity={2} />
       <group position={[0, -1.1, 0]} rotation={[0, -0.2, 0]} scale={0.85}>
-        <Shop kind="chicago" />
+        <CollectibleAsset id={id} night={false} />
       </group>
     </Canvas>
   );
