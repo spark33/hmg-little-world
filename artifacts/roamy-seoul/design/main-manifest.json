@@ -1,0 +1,671 @@
+{
+  "run": "main",
+  "base": "http://localhost:5174",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "started": 1794738657654,
+  "browser": "156.0.8078.79",
+  "environment": "Cloud Chromium; software WebGL; browser development preview",
+  "videoAudio": "Playwright screen recording has no audio track",
+  "completionMethod": "UI interaction only; no injected completed world or fabricated parked signal",
+  "safetyTestMethod": "No safety state injected",
+  "steps": [
+    {
+      "number": 1,
+      "name": "clean-start",
+      "description": "Four clearly illustrative Seoul memories in a clean browser context.",
+      "file": "main-01-clean-start.png",
+      "videoSeconds": 4.925,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n4\nWhat shall we add to our Seoul world today?\nOur little corner of Seoul\n4 memories made. So many more to come.\nFind a little adventure",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Clean Seoul island, four seeded illustrations, browser-preview disclosure and primary navigation remain visible."
+    },
+    {
+      "number": 2,
+      "name": "collection",
+      "description": "Accessible collection presents the four seeded Seoul illustrations.",
+      "file": "main-02-collection.png",
+      "videoSeconds": 154.571,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n4\nWhat shall we add to our Seoul world today?\nOur little corner of Seoul\n4 memories made. So many more to come.\nYour little world\nTHE PLACES WE CARRY WITH US\nA world of\nlittle memories.\n\nEvery Seoul keepsake has a story. Here are yours.\n\nGwangjang Market flavors\n2026-06-14 · illustration\nNamsan evening lights\n2026-06-16 · illustration\nSeokchon Lake blossoms\n2026-04-19 · illustration\nSeongsu slow morning\n2026-05-02 · illustration\nBrowse all keepsakes\n\nSaved locally on this device. No account needed.",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Four named illustration cards and Browse action fit the panel; original disclosure and dates remain explicit."
+    },
+    {
+      "number": 3,
+      "name": "gwangjang-memory",
+      "description": "Memory details disclose illustrative provenance and suggest a related keepsake.",
+      "file": "main-03-gwangjang-memory.png",
+      "videoSeconds": 167.336,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n4\nWhat shall we add to our Seoul world today?\nOur little corner of Seoul\n4 memories made. So many more to come.\nYour little world\nA MOMENT\nTO KEEP\nRegional foods · ILLUSTRATIVE MEMORY\nGwangjang Market flavors\n\n“A market afternoon full of little discoveries.”\n\nPLACE\nIllustrative Gwangjang Market memory\nLOCATION\nJongno, Seoul · illustrative\nVISIT DATE\n2026-06-14 · illustrative date\nEdit memory note\n\nYou’ve explored Gwangjang flavors. Shall we imagine a Mangwon Market picnic next?\n\nMeet your next keepsake\n\nIllustrative Seoul demo data. A memory, never a score.",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Full SVG fits its frame; title, sample provenance, location and editable note are readable without cropping."
+    },
+    {
+      "number": 4,
+      "name": "mangwon-discovery",
+      "description": "Mangwon picnic preview offers an explicit next adventure.",
+      "file": "main-04-mangwon-discovery.png",
+      "videoSeconds": 182.589,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n4\nWhat shall we add to our Seoul world today?\nOur little corner of Seoul\n4 memories made. So many more to come.\nYour little world\nA SPACE FOR SOMETHING WONDERFUL\nA little taste of Seoul.\nYOUR NEXT KEEPSAKE\nMangwon Market picnic\nRegional foods\n\nA market basket. A little picnic. A new Seoul gathering place for your world.\n\nYou’ve explored Gwangjang flavors. Shall we imagine a Mangwon Market picnic next?\n\nFind a Mangwon picnic\nBrowse all keepsakes\n\nIllustrative demo experience. No real venue, visit or arrival is verified.",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Mangwon preview has readable explanation, named primary action, and explicit unverified-demo disclaimer."
+    },
+    {
+      "number": 5,
+      "name": "sample-destinations",
+      "description": "The three destinations and distances are explicitly illustrative.",
+      "file": "main-05-sample-destinations.png",
+      "videoSeconds": 198.974,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n4\nWhat shall we add to our Seoul world today?\nOur little corner of Seoul\n4 memories made. So many more to come.\nThe next keepsake\nFOLLOW YOUR APPETITE\nHow far does\ncuriosity take you?\n\nThree illustrative possibilities for mangwon market picnic.\n\nDEMO DESTINATIONS · SAMPLE DISTANCES\nIllustrative venues. No live availability or route data.\n01\nNEARBY SEOUL POSSIBILITY\nMangwon picnic corner\nSample destination · Mapo, Seoul\nImagine a little market picnic, close to home.\n2 km\nsample\n02\nA LITTLE FARTHER IN SEOUL\nHan River picnic pause\nSample destination · Seoul riverside\nMake a little room for a slower city afternoon.\n6 km\nsample\n03\nA SEOUL DAY OUT\nMapo market afternoon\nSample destination · Seoul\nA sample chapter for your Seoul keepsake story.\n11 km\nsample\nLet’s go",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Selected and unselected sample destination labels are legible; distances and venue provenance remain illustrative."
+    },
+    {
+      "number": 6,
+      "name": "navigation-unavailable",
+      "description": "Real navigation is honestly unavailable; simulation is a separate deliberate action.",
+      "file": "main-06-navigation-unavailable.png",
+      "videoSeconds": 214.443,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n4\nWhat shall we add to our Seoul world today?\nOur little corner of Seoul\n4 memories made. So many more to come.\nYour little world\n⋯\nA LITTLE ADVENTURE AWAITS\nMangwon picnic corner\n\nSample destination · Mapo, Seoul\n\nLive navigation is unavailable. This is a sample destination.\n\nThis development preview can simulate the journey and arrival. No real route will start.\n\nSimulate journey\n\nSIMULATED TRAVEL · NO VEHICLE CONTROL",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Navigation unavailable and simulation disclosure are prominent; no real route is claimed."
+    },
+    {
+      "number": 7,
+      "name": "explicit-confirmation",
+      "description": "A simulated arrival asks whether to add the keepsake; confirmation has not yet saved it.",
+      "file": "main-07-explicit-confirmation.png",
+      "videoSeconds": 230.799,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n4\nWhat shall we add to our Seoul world today?\nOur little corner of Seoul\n4 memories made. So many more to come.\nYour little world\nSIMULATED ARRIVAL\nOne delicious\nnew memory?\n\nDid you enjoy a Mangwon Market picnic?\n\nA keepsake belongs in your world only when you say it does.\n\nAdd to my world\nNot yet\n\nThis confirmation records an illustrative demo experience.",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Explicit Add and Not yet choices are distinct; collection remains four until confirmation."
+    },
+    {
+      "number": 8,
+      "name": "seven-second-reveal",
+      "description": "The real timed reveal is captured midway after a durable confirmation.",
+      "file": "main-08-seven-second-reveal.png",
+      "videoSeconds": 248.611,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n5\nWhat shall we add to our Seoul world today?\nOur little corner of Seoul\n5 memories made. So many more to come.\nFind a little adventure\nA little memory is finding its home…",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Actual timed reveal displays readable caption and contrasting progress stripe; confirmed count updates to five."
+    },
+    {
+      "number": 9,
+      "name": "mangwon-collected",
+      "description": "The fifth memory has a home and the product confirms completion.",
+      "file": "main-09-mangwon-collected.png",
+      "videoSeconds": 261.577,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n5\nWhat shall we add to our Seoul world today?\nOur little corner of Seoul\n5 memories made. So many more to come.\nFind a little adventure\nYour little world just got bigger!\nMangwon Market picnic · a memory to keep",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Mangwon building is present and named success status confirms the added keepsake."
+    },
+    {
+      "number": 10,
+      "name": "browse-all",
+      "description": "All eight Seoul keepsakes and category filters are discoverable in the collection browser.",
+      "file": "main-10-browse-all.png",
+      "videoSeconds": 278.384,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n5\nWhat shall we add to our Seoul world today?\nOur little corner of Seoul\n5 memories made. So many more to come.\nYour little world\nA LITTLE WORLD OF POSSIBILITIES\nFind your next keepsake.\n\n1 of 4 demo keepsakes confirmed · 4 illustrative memories\n\nAll keepsakes\nRegional foods\nNature\nLandmarks\nCultural experiences\nGwangjang Market flavors\nRegional foods\nIllustrative memory\nNamsan evening lights\nLandmarks\nIllustrative memory\nSeokchon Lake blossoms\nNature\nIllustrative memory\nSeongsu slow morning\nCultural experiences\nIllustrative memory\nMangwon Market picnic\nRegional foods\nCollected demo keepsake\nGyeongbokgung palace walk\nLandmarks\nAvailable demo keepsake\nBukhansan trail morning\nNature\nAvailable demo keepsake\nSeoul museum afternoon\nCultural experiences\nAvailable demo keepsake\n\nFour reserved plots grow through your confirmed demo experiences. Time and driving do not unlock or add keepsakes.",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Browse opens at heading and progress summary; filters and status distinctions are readable, remaining rows scroll normally."
+    },
+    {
+      "number": 11,
+      "name": "palace-collected",
+      "description": "A real UI-confirmed palace demonstration adds its own asset after the full reveal.",
+      "file": "main-11-palace-collected.png",
+      "videoSeconds": 305.941,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n6\nWhat shall we add to our Seoul world today?\nOur little corner of Seoul\n6 memories made. So many more to come.\nFind a little adventure\nYour little world just got bigger!\nGyeongbokgung palace walk · a memory to keep",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Six-memory world now includes the palace pavilion; named confirmation is visible."
+    },
+    {
+      "number": 12,
+      "name": "bukhansan-collected",
+      "description": "The Bukhansan demonstration adds a distinct mountain keepsake.",
+      "file": "main-12-bukhansan-collected.png",
+      "videoSeconds": 333.367,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n7\nWhat shall we add to our Seoul world today?\nOur little corner of Seoul\n7 memories made. So many more to come.\nFind a little adventure\nYour little world just got bigger!\nBukhansan trail morning · a memory to keep",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Seven-memory world includes distinctive Bukhansan peaks and named confirmation."
+    },
+    {
+      "number": 13,
+      "name": "museum-collected",
+      "description": "The fourth newly confirmed demonstration completes the eight-keepsake world.",
+      "file": "main-13-museum-collected.png",
+      "videoSeconds": 360.386,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n8\nWhat shall we add to our Seoul world today?\nOur little corner of Seoul\n8 memories made. Your demo collection is complete.\nExplore all keepsakes\nYour little world just got bigger!\nSeoul museum afternoon · a memory to keep",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "All eight distinct Seoul assets appear after four actual UI confirmations; completion footer and Explore action are visible."
+    },
+    {
+      "number": 14,
+      "name": "complete-collection",
+      "description": "Completion and a four-of-four progress bar are reached solely through actual UI interaction.",
+      "file": "main-14-complete-collection.png",
+      "videoSeconds": 372.048,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n8\nWhat shall we add to our Seoul world today?\nOur little corner of Seoul\n8 memories made. Your demo collection is complete.\nYour little world\nA LITTLE WORLD OF POSSIBILITIES\nEvery little chapter, together.\n\n4 of 4 demo keepsakes confirmed · 4 illustrative memories\n\nYour demo collection is complete.\n\nAll four new keepsakes have a home. Revisit their stories, edit your notes, or explore a different view of your island.\n\nAll keepsakes\nRegional foods\nNature\nLandmarks\nCultural experiences\nGwangjang Market flavors\nRegional foods\nIllustrative memory\nNamsan evening lights\nLandmarks\nIllustrative memory\nSeokchon Lake blossoms\nNature\nIllustrative memory\nSeongsu slow morning\nCultural experiences\nIllustrative memory\nMangwon Market picnic\nRegional foods\nCollected demo keepsake\nGyeongbokgung palace walk\nLandmarks\nCollected demo keepsake\nBukhansan trail morning\nNature\nCollected demo keepsake\nSeoul museum afternoon\nCultural experiences\nCollected demo keepsake\n\nFour reserved plots grow through your confirmed demo experiences. Time and driving do not unlock or add keepsakes.",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Completion opens at its heading, four-of-four progress and collection legend; prior retained-scroll defect is resolved."
+    }
+  ],
+  "productionAssets": [
+    {
+      "url": "http://localhost:5174/assets/index-bs_eDp8G.js",
+      "bytes": 1222750,
+      "sha256": "85e49dc89424193a094da9a2e2937b4f6e6c1678a252f3ae4b05b48bd3a02b38"
+    },
+    {
+      "url": "http://localhost:5174/assets/index-CFNyFp_I.css",
+      "bytes": 31508,
+      "sha256": "27a64db8d5bb68be436dd5f50fefcd2f961dc5d75a7c1f0b8801f1cb6e283791"
+    }
+  ],
+  "bundledNotices": {
+    "url": "http://localhost:5174/third-party-notices.txt",
+    "bytes": 101857,
+    "sha256": "c022b59652eb7764c4e0535ed65cc6a85839d959b66d950c2fca782568aca37e"
+  },
+  "observations": [
+    {
+      "action": "before clicking /My collection/",
+      "seconds": 149.986,
+      "buttons": [
+        "My collection · 4 memories",
+        "Demo settings",
+        "Show whole world",
+        "Zoom in",
+        "Zoom out",
+        "Find a little adventure"
+      ]
+    },
+    {
+      "action": "before clicking /Gwangjang Market flavors/",
+      "seconds": 164.363,
+      "buttons": [
+        "My collection · 4 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Gwangjang Market flavors2026-06-14 · illustration",
+        "Namsan evening lights2026-06-16 · illustration",
+        "Seokchon Lake blossoms2026-04-19 · illustration",
+        "Seongsu slow morning2026-05-02 · illustration",
+        "Browse all keepsakes"
+      ]
+    },
+    {
+      "action": "before clicking Meet your next keepsake",
+      "seconds": 179.531,
+      "buttons": [
+        "My collection · 4 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Edit memory note",
+        "Meet your next keepsake"
+      ]
+    },
+    {
+      "action": "before clicking Find a Mangwon picnic",
+      "seconds": 195.631,
+      "buttons": [
+        "My collection · 4 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Find a Mangwon picnic",
+        "Browse all keepsakes"
+      ]
+    },
+    {
+      "action": "before clicking Let’s go",
+      "seconds": 211.461,
+      "buttons": [
+        "My collection · 4 memories",
+        "Demo settings",
+        "The next keepsake",
+        "Close panel",
+        "01Nearby Seoul possibilityMangwon picnic cornerSample destination · Mapo, SeoulImagine a little market picnic, close to home.2 kmsample",
+        "02A little farther in SeoulHan River picnic pauseSample destination · Seoul riversideMake a little room for a slower city afternoon.6 kmsample",
+        "03A Seoul day outMapo market afternoonSample destination · SeoulA sample chapter for your Seoul keepsake story.11 kmsample",
+        "Let’s go"
+      ]
+    },
+    {
+      "action": "before clicking Simulate journey",
+      "seconds": 227.653,
+      "buttons": [
+        "My collection · 4 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Simulate journey"
+      ]
+    },
+    {
+      "action": "before clicking Add to my world",
+      "seconds": 242.969,
+      "buttons": [
+        "My collection · 4 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Add to my world",
+        "Not yet"
+      ]
+    },
+    {
+      "action": "before clicking /My collection/",
+      "seconds": 274.578,
+      "buttons": [
+        "My collection · 5 memories",
+        "Demo settings",
+        "Show whole world",
+        "Zoom in",
+        "Zoom out",
+        "Find a little adventure",
+        "Dismiss message"
+      ]
+    },
+    {
+      "action": "before clicking Browse all keepsakes",
+      "seconds": 274.999,
+      "buttons": [
+        "My collection · 5 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Gwangjang Market flavors2026-06-14 · illustration",
+        "Namsan evening lights2026-06-16 · illustration",
+        "Seokchon Lake blossoms2026-04-19 · illustration",
+        "Seongsu slow morning2026-05-02 · illustration",
+        "Mangwon Market picnic2026-11-15 · confirmed demo",
+        "Browse all keepsakes",
+        "Dismiss message"
+      ]
+    },
+    {
+      "action": "before clicking Close panel",
+      "seconds": 290.034,
+      "buttons": [
+        "My collection · 5 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "All keepsakes",
+        "Regional foods",
+        "Nature",
+        "Landmarks",
+        "Cultural experiences",
+        "Gwangjang Market flavorsRegional foodsIllustrative memory",
+        "Namsan evening lightsLandmarksIllustrative memory",
+        "Seokchon Lake blossomsNatureIllustrative memory",
+        "Seongsu slow morningCultural experiencesIllustrative memory",
+        "Mangwon Market picnicRegional foodsCollected demo keepsake",
+        "Gyeongbokgung palace walkLandmarksAvailable demo keepsake",
+        "Bukhansan trail morningNatureAvailable demo keepsake",
+        "Seoul museum afternoonCultural experiencesAvailable demo keepsake"
+      ]
+    },
+    {
+      "action": "before clicking /My collection/",
+      "seconds": 290.775,
+      "buttons": [
+        "My collection · 5 memories",
+        "Demo settings",
+        "Show whole world",
+        "Zoom in",
+        "Zoom out",
+        "Find a little adventure"
+      ]
+    },
+    {
+      "action": "before clicking Browse all keepsakes",
+      "seconds": 291.107,
+      "buttons": [
+        "My collection · 5 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Gwangjang Market flavors2026-06-14 · illustration",
+        "Namsan evening lights2026-06-16 · illustration",
+        "Seokchon Lake blossoms2026-04-19 · illustration",
+        "Seongsu slow morning2026-05-02 · illustration",
+        "Mangwon Market picnic2026-11-15 · confirmed demo",
+        "Browse all keepsakes"
+      ]
+    },
+    {
+      "action": "before clicking /Gyeongbokgung palace walk/",
+      "seconds": 291.58,
+      "buttons": [
+        "My collection · 5 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "All keepsakes",
+        "Regional foods",
+        "Nature",
+        "Landmarks",
+        "Cultural experiences",
+        "Gwangjang Market flavorsRegional foodsIllustrative memory",
+        "Namsan evening lightsLandmarksIllustrative memory",
+        "Seokchon Lake blossomsNatureIllustrative memory",
+        "Seongsu slow morningCultural experiencesIllustrative memory",
+        "Mangwon Market picnicRegional foodsCollected demo keepsake",
+        "Gyeongbokgung palace walkLandmarksAvailable demo keepsake",
+        "Bukhansan trail morningNatureAvailable demo keepsake",
+        "Seoul museum afternoonCultural experiencesAvailable demo keepsake"
+      ]
+    },
+    {
+      "action": "before clicking Find a palace walk",
+      "seconds": 292.155,
+      "buttons": [
+        "My collection · 5 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Find a palace walk",
+        "Browse all keepsakes"
+      ]
+    },
+    {
+      "action": "before clicking Let’s go",
+      "seconds": 294.186,
+      "buttons": [
+        "My collection · 5 memories",
+        "Demo settings",
+        "The next keepsake",
+        "Close panel",
+        "01Nearby Seoul possibilityPalace courtyard chapterIllustrative destination · Seoul · no verified venueA little Seoul discovery, close to home.2 kmsample",
+        "02A little farther in SeoulJongno culture strollIllustrative destination · Seoul · no verified venueLeave room for a city adventure.6 kmsample",
+        "03A Seoul day outSeoul history afternoonIllustrative destination · Seoul · no verified venueImagine a new chapter a little farther away.11 kmsample",
+        "Let’s go"
+      ]
+    },
+    {
+      "action": "before clicking Simulate journey",
+      "seconds": 295.401,
+      "buttons": [
+        "My collection · 5 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Simulate journey"
+      ]
+    },
+    {
+      "action": "before clicking Add to my world",
+      "seconds": 296.465,
+      "buttons": [
+        "My collection · 5 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Add to my world",
+        "Not yet"
+      ]
+    },
+    {
+      "action": "before clicking /My collection/",
+      "seconds": 315.975,
+      "buttons": [
+        "My collection · 6 memories",
+        "Demo settings",
+        "Show whole world",
+        "Zoom in",
+        "Zoom out",
+        "Find a little adventure",
+        "Dismiss message"
+      ]
+    },
+    {
+      "action": "before clicking Browse all keepsakes",
+      "seconds": 316.692,
+      "buttons": [
+        "My collection · 6 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Gwangjang Market flavors2026-06-14 · illustration",
+        "Namsan evening lights2026-06-16 · illustration",
+        "Seokchon Lake blossoms2026-04-19 · illustration",
+        "Seongsu slow morning2026-05-02 · illustration",
+        "Mangwon Market picnic2026-11-15 · confirmed demo",
+        "Gyeongbokgung palace walk2026-11-15 · confirmed demo",
+        "Browse all keepsakes",
+        "Dismiss message"
+      ]
+    },
+    {
+      "action": "before clicking /Bukhansan trail morning/",
+      "seconds": 317.473,
+      "buttons": [
+        "My collection · 6 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "All keepsakes",
+        "Regional foods",
+        "Nature",
+        "Landmarks",
+        "Cultural experiences",
+        "Gwangjang Market flavorsRegional foodsIllustrative memory",
+        "Namsan evening lightsLandmarksIllustrative memory",
+        "Seokchon Lake blossomsNatureIllustrative memory",
+        "Seongsu slow morningCultural experiencesIllustrative memory",
+        "Mangwon Market picnicRegional foodsCollected demo keepsake",
+        "Gyeongbokgung palace walkLandmarksCollected demo keepsake",
+        "Bukhansan trail morningNatureAvailable demo keepsake",
+        "Seoul museum afternoonCultural experiencesAvailable demo keepsake"
+      ]
+    },
+    {
+      "action": "before clicking Find a Bukhansan trail",
+      "seconds": 318.942,
+      "buttons": [
+        "My collection · 6 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Find a Bukhansan trail",
+        "Browse all keepsakes"
+      ]
+    },
+    {
+      "action": "before clicking Let’s go",
+      "seconds": 321.127,
+      "buttons": [
+        "My collection · 6 memories",
+        "Demo settings",
+        "The next keepsake",
+        "Close panel",
+        "01Nearby Seoul possibilityPine trail pauseIllustrative destination · Seoul · no verified venueA little Seoul discovery, close to home.2 kmsample",
+        "02A little farther in SeoulA Seoul mountain morningIllustrative destination · Seoul · no verified venueLeave room for a city adventure.6 kmsample",
+        "03A Seoul day outA quiet summit chapterIllustrative destination · Seoul · no verified venueImagine a new chapter a little farther away.11 kmsample",
+        "Let’s go"
+      ]
+    },
+    {
+      "action": "before clicking Simulate journey",
+      "seconds": 322.433,
+      "buttons": [
+        "My collection · 6 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Simulate journey"
+      ]
+    },
+    {
+      "action": "before clicking Add to my world",
+      "seconds": 323.482,
+      "buttons": [
+        "My collection · 6 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Add to my world",
+        "Not yet"
+      ]
+    },
+    {
+      "action": "before clicking /My collection/",
+      "seconds": 340.085,
+      "buttons": [
+        "My collection · 7 memories",
+        "Demo settings",
+        "Show whole world",
+        "Zoom in",
+        "Zoom out",
+        "Find a little adventure",
+        "Dismiss message"
+      ]
+    },
+    {
+      "action": "before clicking Browse all keepsakes",
+      "seconds": 340.729,
+      "buttons": [
+        "My collection · 7 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Gwangjang Market flavors2026-06-14 · illustration",
+        "Namsan evening lights2026-06-16 · illustration",
+        "Seokchon Lake blossoms2026-04-19 · illustration",
+        "Seongsu slow morning2026-05-02 · illustration",
+        "Mangwon Market picnic2026-11-15 · confirmed demo",
+        "Gyeongbokgung palace walk2026-11-15 · confirmed demo",
+        "Bukhansan trail morning2026-11-15 · confirmed demo",
+        "Browse all keepsakes",
+        "Dismiss message"
+      ]
+    },
+    {
+      "action": "before clicking /Seoul museum afternoon/",
+      "seconds": 341.751,
+      "buttons": [
+        "My collection · 7 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "All keepsakes",
+        "Regional foods",
+        "Nature",
+        "Landmarks",
+        "Cultural experiences",
+        "Gwangjang Market flavorsRegional foodsIllustrative memory",
+        "Namsan evening lightsLandmarksIllustrative memory",
+        "Seokchon Lake blossomsNatureIllustrative memory",
+        "Seongsu slow morningCultural experiencesIllustrative memory",
+        "Mangwon Market picnicRegional foodsCollected demo keepsake",
+        "Gyeongbokgung palace walkLandmarksCollected demo keepsake",
+        "Bukhansan trail morningNatureCollected demo keepsake",
+        "Seoul museum afternoonCultural experiencesAvailable demo keepsake"
+      ]
+    },
+    {
+      "action": "before clicking Find a Seoul art adventure",
+      "seconds": 344.31,
+      "buttons": [
+        "My collection · 7 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Find a Seoul art adventure",
+        "Browse all keepsakes"
+      ]
+    },
+    {
+      "action": "before clicking Let’s go",
+      "seconds": 347.329,
+      "buttons": [
+        "My collection · 7 memories",
+        "Demo settings",
+        "The next keepsake",
+        "Close panel",
+        "01Nearby Seoul possibilityA neighborhood gallery chapterIllustrative destination · Seoul · no verified venueA little Seoul discovery, close to home.2 kmsample",
+        "02A little farther in SeoulA city museum afternoonIllustrative destination · Seoul · no verified venueLeave room for a city adventure.6 kmsample",
+        "03A Seoul day outA little art discoveryIllustrative destination · Seoul · no verified venueImagine a new chapter a little farther away.11 kmsample",
+        "Let’s go"
+      ]
+    },
+    {
+      "action": "before clicking Simulate journey",
+      "seconds": 348.593,
+      "buttons": [
+        "My collection · 7 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Simulate journey"
+      ]
+    },
+    {
+      "action": "before clicking Add to my world",
+      "seconds": 349.701,
+      "buttons": [
+        "My collection · 7 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Add to my world",
+        "Not yet"
+      ]
+    },
+    {
+      "action": "before clicking /My collection/",
+      "seconds": 367.533,
+      "buttons": [
+        "My collection · 8 memories",
+        "Demo settings",
+        "Show whole world",
+        "Zoom in",
+        "Zoom out",
+        "Explore all keepsakes",
+        "Dismiss message"
+      ]
+    },
+    {
+      "action": "before clicking Browse all keepsakes",
+      "seconds": 367.992,
+      "buttons": [
+        "My collection · 8 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Gwangjang Market flavors2026-06-14 · illustration",
+        "Namsan evening lights2026-06-16 · illustration",
+        "Seokchon Lake blossoms2026-04-19 · illustration",
+        "Seongsu slow morning2026-05-02 · illustration",
+        "Mangwon Market picnic2026-11-15 · confirmed demo",
+        "Gyeongbokgung palace walk2026-11-15 · confirmed demo",
+        "Bukhansan trail morning2026-11-15 · confirmed demo",
+        "Seoul museum afternoon2026-11-15 · confirmed demo",
+        "Browse all keepsakes",
+        "Dismiss message"
+      ]
+    }
+  ],
+  "errors": []
+}

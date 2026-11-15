@@ -1,0 +1,17 @@
+{
+  ".preview-tag": {
+    "color": "rgb(213, 221, 195)",
+    "background": "rgb(101, 123, 133)",
+    "text": "Browser development preview"
+  },
+  ".world-name > span:nth-child(2)": {
+    "color": "rgb(228, 232, 205)",
+    "background": "rgb(101, 123, 133)",
+    "text": "Our little corner of Seoul4 memories made. So many more to come."
+  },
+  ".world-name small": {
+    "color": "rgb(213, 222, 199)",
+    "background": "rgb(101, 123, 133)",
+    "text": "4 memories made. So many more to come."
+  }
+}

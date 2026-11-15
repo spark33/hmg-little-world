@@ -1,0 +1,189 @@
+{
+  "method": "Actual continuous Playwright screen recording; silent H264 conversion at 15fps; no speed alteration or trimming. Full files decoded before frame review. Frame inspection notes are appended after viewing.",
+  "videos": [
+    {
+      "file": "main-walkthrough.mp4",
+      "bytes": 4883125,
+      "sha256": "5f394ebb6eea9bfc203991c42715feb28212c21282b9c0d13f680d2b85844ad9",
+      "codec": "h264",
+      "width": 1440,
+      "height": 900,
+      "frameRate": "15/1",
+      "durationSeconds": 382.133333,
+      "rawDurationSeconds": 382.16,
+      "hasAudio": false,
+      "fullDecode": "passed",
+      "productionAssets": [
+        {
+          "url": "http://localhost:5174/assets/index-bs_eDp8G.js",
+          "bytes": 1222750,
+          "sha256": "85e49dc89424193a094da9a2e2937b4f6e6c1678a252f3ae4b05b48bd3a02b38"
+        },
+        {
+          "url": "http://localhost:5174/assets/index-CFNyFp_I.css",
+          "bytes": 31508,
+          "sha256": "27a64db8d5bb68be436dd5f50fefcd2f961dc5d75a7c1f0b8801f1cb6e283791"
+        }
+      ],
+      "frames": [
+        {
+          "file": "verified-frames/main-01-decoded.png",
+          "timestampSeconds": 5.075,
+          "sourceScreenshot": "main-01-clean-start.png",
+          "inspected": true,
+          "inspectionNote": "Clean seeded world and mode disclosure match the inspected PNG.",
+          "sha256": "233bba7eb661597a6ae0fd80f5cc0425e1a44387d2cbc4f48753b43ba385d2a0"
+        },
+        {
+          "file": "verified-frames/main-03-decoded.png",
+          "timestampSeconds": 167.48600000000002,
+          "sourceScreenshot": "main-03-gwangjang-memory.png",
+          "inspected": true,
+          "inspectionNote": "Full fitted memory icon, illustrative facts and quote match the inspected PNG.",
+          "sha256": "9cbfed86e8e8906b6ec3328f02297c6652b49fd24f1f55b7a4b109a1f0955fa0"
+        },
+        {
+          "file": "verified-frames/main-07-decoded.png",
+          "timestampSeconds": 230.949,
+          "sourceScreenshot": "main-07-explicit-confirmation.png",
+          "inspected": true,
+          "inspectionNote": "Explicit Add/Not yet consent and sample disclosure remain legible.",
+          "sha256": "94a7717938c104d80fb28cb0900df68c1da262f97f2f07a3bd85bd2ff540ec4d"
+        },
+        {
+          "file": "verified-frames/main-08-decoded.png",
+          "timestampSeconds": 248.761,
+          "sourceScreenshot": "main-08-seven-second-reveal.png",
+          "inspected": true,
+          "inspectionNote": "Actual mid-reveal caption/progress visible; progress advanced slightly after still capture as expected.",
+          "sha256": "9925b6e923dca46c1bd2294f6894511e9b60455d845200fdd06ba7ccc609c545"
+        },
+        {
+          "file": "verified-frames/main-14-decoded.png",
+          "timestampSeconds": 372.198,
+          "sourceScreenshot": "main-14-complete-collection.png",
+          "inspected": true,
+          "inspectionNote": "Eight memories, four-of-four summary and completion heading visible.",
+          "sha256": "bfc60a86f9f7791bf17cf0ed3323990dbf768fe8cea9d8de84291a59382b14d6"
+        }
+      ],
+      "durationDifferenceSeconds": -0.026667,
+      "durationNote": "Less than one output frame of container rounding; no speed alteration."
+    },
+    {
+      "file": "short-walkthrough.mp4",
+      "bytes": 665040,
+      "sha256": "0688f4a4d968a05cd96bf0ea6c1e540a4df09ae126e5d1e0079f5d48842b5ebd",
+      "codec": "h264",
+      "width": 960,
+      "height": 480,
+      "frameRate": "15/1",
+      "durationSeconds": 150.266667,
+      "rawDurationSeconds": 150.28,
+      "hasAudio": false,
+      "fullDecode": "passed",
+      "productionAssets": [
+        {
+          "url": "http://localhost:5174/assets/index-bs_eDp8G.js",
+          "bytes": 1222750,
+          "sha256": "85e49dc89424193a094da9a2e2937b4f6e6c1678a252f3ae4b05b48bd3a02b38"
+        },
+        {
+          "url": "http://localhost:5174/assets/index-CFNyFp_I.css",
+          "bytes": 31508,
+          "sha256": "27a64db8d5bb68be436dd5f50fefcd2f961dc5d75a7c1f0b8801f1cb6e283791"
+        }
+      ],
+      "frames": [
+        {
+          "file": "verified-frames/short-02-decoded.png",
+          "timestampSeconds": 16.244999999999997,
+          "sourceScreenshot": "short-02-memory-edit.png",
+          "inspected": true,
+          "inspectionNote": "Save/Cancel are accessible, textarea partly above current scroll; no competing discovery control.",
+          "sha256": "950223b86d4d7b02561bb6d64d4de295fa439fb631791ecd94214f7094c5f1b0"
+        },
+        {
+          "file": "verified-frames/short-06-decoded.png",
+          "timestampSeconds": 82.32400000000001,
+          "sourceScreenshot": "short-06-recovery-review.png",
+          "inspected": true,
+          "inspectionNote": "Replacement safeguards and separate Keep/Confirm actions legible.",
+          "sha256": "c1155c18710e909137d57f39a26bc64bf4d3a752a43c3e64825d11d9c7151ea0"
+        },
+        {
+          "file": "verified-frames/short-08-decoded.png",
+          "timestampSeconds": 115.2,
+          "sourceScreenshot": "short-08-evening.png",
+          "inspected": true,
+          "inspectionNote": "Evening opaque header/footer protect normal-sized text.",
+          "sha256": "cbe88041e6f4cf531db807117ce5b8c8d46ad55aacadd925605376920fef86bd"
+        },
+        {
+          "file": "verified-frames/short-09-decoded.png",
+          "timestampSeconds": 133.49,
+          "sourceScreenshot": "short-09-bundled-licenses.png",
+          "inspected": true,
+          "inspectionNote": "Actual local license text is readable in nested scroll area.",
+          "sha256": "b460200938a443e1496894f7e8c59d41dab25c3321d46ffcc28b8d394688e638"
+        }
+      ],
+      "durationDifferenceSeconds": -0.013333,
+      "durationNote": "Less than one output frame of container rounding; no speed alteration."
+    },
+    {
+      "file": "narrow-walkthrough.mp4",
+      "bytes": 189111,
+      "sha256": "9af0b878cf55fd2e08547e2cc2b9aa3e0627cabbfe09958c3fd37fbb570a6805",
+      "codec": "h264",
+      "width": 360,
+      "height": 480,
+      "frameRate": "15/1",
+      "durationSeconds": 96.733333,
+      "rawDurationSeconds": 96.72,
+      "hasAudio": false,
+      "fullDecode": "passed",
+      "productionAssets": [
+        {
+          "url": "http://localhost:5174/assets/index-bs_eDp8G.js",
+          "bytes": 1222750,
+          "sha256": "85e49dc89424193a094da9a2e2937b4f6e6c1678a252f3ae4b05b48bd3a02b38"
+        },
+        {
+          "url": "http://localhost:5174/assets/index-CFNyFp_I.css",
+          "bytes": 31508,
+          "sha256": "27a64db8d5bb68be436dd5f50fefcd2f961dc5d75a7c1f0b8801f1cb6e283791"
+        }
+      ],
+      "frames": [
+        {
+          "file": "verified-frames/narrow-01-decoded.png",
+          "timestampSeconds": 3.683,
+          "sourceScreenshot": "narrow-01-narrow-evening.png",
+          "inspected": true,
+          "inspectionNote": "Preview disclosure and heading sit on opaque dark surfaces.",
+          "sha256": "baa0a0230e3eb5a361cb624d6fa93f35f1f4002b6cebfb44db126def8a2956d8"
+        },
+        {
+          "file": "verified-frames/narrow-02-decoded.png",
+          "timestampSeconds": 16.581,
+          "sourceScreenshot": "narrow-02-invalid-backup.png",
+          "inspected": true,
+          "inspectionNote": "Specific invalid-backup alert is readable in narrow panel.",
+          "sha256": "862a7aa08bc104bc8a1aee148cad768806590d8d2fc8c53ac8d8f569a0029c11"
+        },
+        {
+          "file": "verified-frames/narrow-05-decoded.png",
+          "timestampSeconds": 65.62,
+          "sourceScreenshot": "narrow-05-browser-safety-test.png",
+          "inspected": true,
+          "inspectionNote": "Paused safety screen contains explanation with no world or interactive controls.",
+          "sha256": "32f6c385927a788f8cbea239bc6c397252cb57849d482eee41ff80111ec86d03"
+        }
+      ],
+      "durationDifferenceSeconds": 0.013333,
+      "durationNote": "Less than one output frame of container rounding; no speed alteration."
+    }
+  ],
+  "allAcceptedScreenshotCount": 28
+}

@@ -1,0 +1,246 @@
+{
+  "run": "narrow",
+  "base": "http://localhost:5174",
+  "viewport": {
+    "width": 360,
+    "height": 480
+  },
+  "started": 1794739244727,
+  "browser": "156.0.8078.79",
+  "environment": "Cloud Chromium; software WebGL; browser development preview",
+  "videoAudio": "Playwright screen recording has no audio track",
+  "completionMethod": "UI interaction only; no injected completed world or fabricated parked signal",
+  "safetyTestMethod": "Restrictive browser driving event only; never PARKED; not native Pleos runtime evidence",
+  "steps": [
+    {
+      "number": 1,
+      "name": "narrow-evening",
+      "description": "The narrow preview disclosure remains visible on its own dark header surface.",
+      "file": "narrow-01-narrow-evening.png",
+      "videoSeconds": 3.533,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n4\nWhat shall we add to our Seoul world today?\nFind a little adventure",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Narrow evening disclosure is entirely contained by opaque dark header; large navigation targets remain visible."
+    },
+    {
+      "number": 2,
+      "name": "invalid-backup",
+      "description": "Malformed backup text produces a readable error and keeps the active world unchanged.",
+      "file": "narrow-02-invalid-backup.png",
+      "videoSeconds": 16.431,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n4\nWhat shall we add to our Seoul world today?\nYour little world\nBEHIND ROAMY\nA place to\ntry the magic.\n\nThis is an explicitly identified non-vehicle development preview. Vehicle state, live routes, and cabin lighting are unavailable.\n\nDaytime world\nSound on\nReduce motion\nOn\nVehicle navigation\nLive navigation unavailable\n\nSample venues and distances are illustrative. No real route will start from a demo destination.\n\nRefresh navigation status\n\nROAMY delegates route requests to the vehicle navigation app. A submitted route never records a visit or arrival.\n\nCabin lighting\nUnavailable\nVehicle safety signal\nunknown\nLocal save\nAvailable\nBackup and recovery\n\nKeep a copy of your world or restore one you saved earlier. This feature never uploads your backup.\n\nWorlds, notes and recovery copies are stored as plain text on this device. Backups and clipboard copies are not encrypted. Avoid sensitive personal information.\n\nPrepare world backup\nPaste a world backup\nOr choose a backup file in a supported browser\n\nMaximum backup size: 64 KiB. Pasting text works without a file picker.\n\nReview imported world\n\nThis backup does not contain a valid ROAMY world.\n\nResetting the world keeps a recovery copy until you clear it here. Uninstalling the app or clearing its data removes local saves and recovery copies; browser previews use their own browser storage.\n\nOpen-source licenses\nReset demo world\n\nResets only this device’s demo collection so you can replay the full arrival moment.",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Malformed-backup alert is legible and specific; review action remains available and active count stays four."
+    },
+    {
+      "number": 3,
+      "name": "import-review",
+      "description": "The corrected backup is parsed and previewed; replacement remains cancelable.",
+      "file": "narrow-03-import-review.png",
+      "videoSeconds": 31.93,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n4\nWhat shall we add to our Seoul world today?\nYour little world\nBEHIND ROAMY\nA place to\ntry the magic.\n\nThis is an explicitly identified non-vehicle development preview. Vehicle state, live routes, and cabin lighting are unavailable.\n\nDaytime world\nSound on\nReduce motion\nOn\nVehicle navigation\nLive navigation unavailable\n\nSample venues and distances are illustrative. No real route will start from a demo destination.\n\nRefresh navigation status\n\nROAMY delegates route requests to the vehicle navigation app. A submitted route never records a visit or arrival.\n\nCabin lighting\nUnavailable\nVehicle safety signal\nunknown\nLocal save\nAvailable\nBackup and recovery\n\nKeep a copy of your world or restore one you saved earlier. This feature never uploads your backup.\n\nWorlds, notes and recovery copies are stored as plain text on this device. Backups and clipboard copies are not encrypted. Avoid sensitive personal information.\n\nPrepare world backup\nComplete backup text\nCopy complete backup\n\nYou can select and copy this text even when file export or automatic clipboard access is unavailable.\n\nPaste a world backup\nOr choose a backup file in a supported browser\n\nMaximum backup size: 64 KiB. Pasting text works without a file picker.\n\nReview imported world\nReplace the world on this device?\n\nThis world contains 4 memories: 0 confirmed demo keepsakes and 4 illustrative memories.\n\nYour current save is copied before replacement. Only the most recent valid recovery world and most recent replaced unreadable save are retained. Restoring a backup does not verify a real visit.\n\nKeep current data\nConfirm replace world\n\nResetting the world keeps a recovery copy until you clear it here. Uninstalling the app or clearing its data removes local saves and recovery copies; browser previews use their own browser storage.\n\nOpen-source licenses\nReset demo world\n\nResets only this device’s demo collection so you can replay the full arrival moment.",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Replacement heading and four-memory summary wrap within the panel. Deliberate Keep/Confirm controls require further scrolling at 360 by 480; the subsequent actual cancellation succeeds."
+    },
+    {
+      "number": 4,
+      "name": "import-cancelled",
+      "description": "Canceling backup replacement leaves all four original illustrations in the world.",
+      "file": "narrow-04-import-cancelled.png",
+      "videoSeconds": 47.852,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n4\nWhat shall we add to our Seoul world today?\nFind a little adventure",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Cancel returns to unchanged four-memory world, with no replacement applied."
+    },
+    {
+      "number": 5,
+      "name": "browser-safety-test",
+      "description": "A clearly scoped browser safety-event test removes the Canvas and interactive controls; this is not native Pleos runtime evidence.",
+      "file": "narrow-05-browser-safety-test.png",
+      "videoSeconds": 65.47,
+      "dom": "ROAMY\nYour little world can wait.\n\nThe interactive world is available only with a trusted parked signal.\n\nDriving · world paused\nThere is no driving-mode override.",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Browser restrictive-driving event removes interactive world and controls; readable paused explanation states trusted parked requirement with no override."
+    }
+  ],
+  "productionAssets": [
+    {
+      "url": "http://localhost:5174/assets/index-bs_eDp8G.js",
+      "bytes": 1222750,
+      "sha256": "85e49dc89424193a094da9a2e2937b4f6e6c1678a252f3ae4b05b48bd3a02b38"
+    },
+    {
+      "url": "http://localhost:5174/assets/index-CFNyFp_I.css",
+      "bytes": 31508,
+      "sha256": "27a64db8d5bb68be436dd5f50fefcd2f961dc5d75a7c1f0b8801f1cb6e283791"
+    }
+  ],
+  "bundledNotices": {
+    "url": "http://localhost:5174/third-party-notices.txt",
+    "bytes": 101857,
+    "sha256": "c022b59652eb7764c4e0535ed65cc6a85839d959b66d950c2fca782568aca37e"
+  },
+  "observations": [
+    {
+      "action": "before clicking Demo settings",
+      "seconds": 2.612,
+      "buttons": [
+        "My collection · 4 memories",
+        "Demo settings",
+        "Show whole world",
+        "Zoom in",
+        "Zoom out",
+        "Find a little adventure"
+      ]
+    },
+    {
+      "action": "before clicking Switch to evening",
+      "seconds": 2.706,
+      "buttons": [
+        "My collection · 4 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Switch to evening",
+        "Mute sound",
+        "Reduce motionOn",
+        "Refresh navigation status",
+        "Prepare world backup",
+        "",
+        "Review imported world",
+        "Reset demo world"
+      ]
+    },
+    {
+      "action": "before clicking Close panel",
+      "seconds": 2.979,
+      "buttons": [
+        "My collection · 4 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Switch to daytime",
+        "Mute sound",
+        "Reduce motionOn",
+        "Refresh navigation status",
+        "Prepare world backup",
+        "",
+        "Review imported world",
+        "Reset demo world"
+      ]
+    },
+    {
+      "action": "before clicking Demo settings",
+      "seconds": 15.782,
+      "buttons": [
+        "My collection · 4 memories",
+        "Demo settings",
+        "Show whole world",
+        "Zoom in",
+        "Zoom out",
+        "Find a little adventure"
+      ]
+    },
+    {
+      "action": "before clicking Review imported world",
+      "seconds": 15.843,
+      "buttons": [
+        "My collection · 4 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Switch to daytime",
+        "Mute sound",
+        "Reduce motionOn",
+        "Refresh navigation status",
+        "Prepare world backup",
+        "",
+        "Review imported world",
+        "Reset demo world"
+      ]
+    },
+    {
+      "action": "before clicking Prepare world backup",
+      "seconds": 31.488,
+      "buttons": [
+        "My collection · 4 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Switch to daytime",
+        "Mute sound",
+        "Reduce motionOn",
+        "Refresh navigation status",
+        "Prepare world backup",
+        "",
+        "Review imported world",
+        "Reset demo world"
+      ]
+    },
+    {
+      "action": "before clicking Review imported world",
+      "seconds": 31.551,
+      "buttons": [
+        "My collection · 4 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Switch to daytime",
+        "Mute sound",
+        "Reduce motionOn",
+        "Refresh navigation status",
+        "Prepare world backup",
+        "Copy complete backup",
+        "",
+        "Review imported world",
+        "Reset demo world"
+      ]
+    },
+    {
+      "action": "before clicking Keep current data",
+      "seconds": 47.373,
+      "buttons": [
+        "My collection · 4 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Switch to daytime",
+        "Mute sound",
+        "Reduce motionOn",
+        "Refresh navigation status",
+        "Prepare world backup",
+        "Copy complete backup",
+        "",
+        "Review imported world",
+        "Keep current data",
+        "Confirm replace world",
+        "Reset demo world"
+      ]
+    },
+    {
+      "action": "before clicking Close panel",
+      "seconds": 47.406,
+      "buttons": [
+        "My collection · 4 memories",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Switch to daytime",
+        "Mute sound",
+        "Reduce motionOn",
+        "Refresh navigation status",
+        "Prepare world backup",
+        "Copy complete backup",
+        "",
+        "Review imported world",
+        "Reset demo world"
+      ]
+    }
+  ],
+  "errors": []
+}
