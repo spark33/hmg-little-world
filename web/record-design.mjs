@@ -30,6 +30,7 @@ let observations = [];
 let productionAssets = [];
 let bundledNotices;
 let backupText = "";
+let recordingMotion;
 const errors = [];
 const manifest = () => ({
   run,
@@ -39,6 +40,7 @@ const manifest = () => ({
   browser: browser.version(),
   environment: "Cloud Chromium; software WebGL; browser development preview",
   videoAudio: "Playwright screen recording has no audio track",
+  systemReducedMotion: recordingMotion,
   completionMethod:
     "UI interaction only; no injected completed world or fabricated parked signal",
   safetyTestMethod:
@@ -126,6 +128,7 @@ async function begin(name, width, height, reducedMotion) {
   if (context)
     throw Error("Finish the active recording before starting another.");
   run = name;
+  recordingMotion = reducedMotion;
   started = Date.now();
   steps = [];
   observations = [];
@@ -231,8 +234,13 @@ async function command(input) {
   if (steps.at(-1)?.accepted === false)
     throw Error("Inspect and accept the latest screenshot before advancing.");
   switch (action) {
+    case "collection-fix-start":
+      await begin("short-collection-fix", 960, 480, "reduce");
+      await click(/My collection/);
+      await command({ action: "ui-step", name: "initial-collection", description: "Initial short collection exposes its first illustration without scrolling.", operations: [{ type: "assert-first-card" }] });
+      break;
     case "refinement-start":
-      await begin("journey-refinement", input.width || 1440, input.height || 900, "no-preference");
+      await begin(input.run || "journey-refinement", input.width || 1440, input.height || 900, input.reducedMotion || "no-preference");
       await screenshot("start", "Clean context for the current journey refinement; no saved state injected.");
       break;
     case "ui-step":
@@ -253,6 +261,17 @@ async function command(input) {
           await expect(page.locator("canvas")).toBeVisible();
         } else if (operation.type === "wait-text") {
           await expect(page.getByText(operation.text, { exact: !operation.contains })).toBeVisible({ timeout: 20000 });
+        } else if (operation.type === "assert-first-card") {
+          const first = page.locator(".panel .album button").first();
+          await expect(first).toBeVisible();
+          const geometry = await first.evaluate((element) => {
+            const box = element.getBoundingClientRect();
+            const target = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+            return { bottom: box.bottom, reachable: target !== null && element.contains(target) };
+          });
+          expect(geometry.bottom).toBeLessThanOrEqual(page.viewportSize().height);
+          expect(geometry.reachable).toBe(true);
+          observations.push({ action: "first collection card reachable without scrolling", seconds: (Date.now() - started) / 1000, geometry });
         } else if (operation.type === "focus") {
           await page.getByRole(operation.role, { name: operation.name, exact: true }).focus();
         } else if (operation.type === "scroll-text") {

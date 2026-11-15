@@ -1,0 +1,233 @@
+{
+  "run": "short-collection-fix",
+  "base": "http://localhost:5174",
+  "viewport": {
+    "width": 960,
+    "height": 480
+  },
+  "started": 1794742319141,
+  "browser": "156.0.8078.79",
+  "environment": "Cloud Chromium; software WebGL; browser development preview",
+  "videoAudio": "Playwright screen recording has no audio track",
+  "systemReducedMotion": "reduce",
+  "completionMethod": "UI interaction only; no injected completed world or fabricated parked signal",
+  "safetyTestMethod": "No safety state injected",
+  "steps": [
+    {
+      "number": 1,
+      "name": "initial-collection",
+      "description": "Initial short collection exposes its first illustration without scrolling.",
+      "file": "short-collection-fix-01-initial-collection.png",
+      "videoSeconds": 3.468,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n0 demos\n·\n4 illustrations\nOur little corner of Seoul\n0 confirmed demos · 4 illustrations. More chapters await.\nYour little world\nMy collection\nConfirmed demo keepsakes\n\nNo demo confirmations yet. Demos are not verified visits.\n\nSeeded illustrations\n\nExamples, not places you have visited.\n\nGwangjang Market flavors\n2026-06-14 · illustration\nNamsan evening lights\n2026-06-16 · illustration\nSeokchon Lake blossoms\n2026-04-19 · illustration\nSeongsu slow morning\n2026-05-02 · illustration\nBrowse all keepsakes\n\nSaved locally on this device. No account needed.",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "At960×480 both provenance groups remain explicit and first seeded card is fully visible, hit-test reachable, without scrolling."
+    },
+    {
+      "number": 2,
+      "name": "selected-memory",
+      "description": "The exposed first illustration can be opened normally, with contextual collection return.",
+      "file": "short-collection-fix-02-selected-memory.png",
+      "videoSeconds": 15.489,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n0 demos\n·\n4 illustrations\nOur little corner of Seoul\n0 confirmed demos · 4 illustrations. More chapters await.\nMy collection\nA MOMENT\nTO KEEP\nRegional foods · ILLUSTRATIVE MEMORY\nGwangjang Market flavors\n\n“A market afternoon full of little discoveries.”\n\nCURATED NEXT CHAPTER\nMangwon Market picnic\n\nExplore a second market-food chapter with a Mangwon picnic. Curated demo inspiration.\n\nPLACE\nIllustrative Gwangjang Market memory\nLOCATION\nJongno, Seoul · illustrative\nVISIT DATE\n2026-06-14 · illustrative date\nEdit memory note\nDiscover Mangwon Market picnic\n\nIllustrative Seoul demo data. A memory, never a score.",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Exposed card opens the intended illustration; memory retains its named discovery action and My collection Back."
+    },
+    {
+      "number": 3,
+      "name": "collection-back",
+      "description": "Contextual Back restores the initial compact collection without scrolling past headings.",
+      "file": "short-collection-fix-03-collection-back.png",
+      "videoSeconds": 25.107,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n0 demos\n·\n4 illustrations\nOur little corner of Seoul\n0 confirmed demos · 4 illustrations. More chapters await.\nYour little world\nMy collection\nConfirmed demo keepsakes\n\nNo demo confirmations yet. Demos are not verified visits.\n\nSeeded illustrations\n\nExamples, not places you have visited.\n\nGwangjang Market flavors\n2026-06-14 · illustration\nNamsan evening lights\n2026-06-16 · illustration\nSeokchon Lake blossoms\n2026-04-19 · illustration\nSeongsu slow morning\n2026-05-02 · illustration\nBrowse all keepsakes\n\nSaved locally on this device. No account needed.",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Returning from memory resets to compact heading and groups; first seeded card stays visible and hit-test reachable without scrolling."
+    },
+    {
+      "number": 4,
+      "name": "confirmed-first-card",
+      "description": "Actual UI confirmation makes the new first confirmed card immediately reachable on the short screen.",
+      "file": "short-collection-fix-04-confirmed-first-card.png",
+      "videoSeconds": 40.599,
+      "dom": "ROAMY\nBrowser development preview\nMy collection\n1 demo\n·\n4 illustrations\nOur little corner of Seoul\n1 confirmed demo · 4 illustrations. More chapters await.\nYour little world\nMy collection\nConfirmed demo keepsakes\n\nNewest first · not verified visits.\n\nMangwon Market picnic\n2026-11-15 · confirmed demo\nSeeded illustrations\n\nExamples, not places you have visited.\n\nGwangjang Market flavors\n2026-06-14 · illustration\nNamsan evening lights\n2026-06-16 · illustration\nSeokchon Lake blossoms\n2026-04-19 · illustration\nSeongsu slow morning\n2026-05-02 · illustration\nBrowse all keepsakes\n\nSaved locally on this device. No account needed.",
+      "accepted": true,
+      "health": "healthy",
+      "inspectionNote": "Actual confirmed Mangwon card is first, fully visible and hit-test reachable; confirmed-demo date and seed group provenance remain clear."
+    }
+  ],
+  "productionAssets": [
+    {
+      "url": "http://localhost:5174/assets/index-DXWuR4Xv.js",
+      "bytes": 1225936,
+      "sha256": "5855bfcfd2ee98f385e81e45e9d263b7bf2527fd277817d13e0b3aa9320b57f8"
+    },
+    {
+      "url": "http://localhost:5174/assets/index-CBa8XcW_.css",
+      "bytes": 33170,
+      "sha256": "5f962ee9f25945dbc6c911c9d69c8a844de58505f03f63b41219a6aa432f95f6"
+    }
+  ],
+  "bundledNotices": {
+    "url": "http://localhost:5174/third-party-notices.txt",
+    "bytes": 101857,
+    "sha256": "c022b59652eb7764c4e0535ed65cc6a85839d959b66d950c2fca782568aca37e"
+  },
+  "observations": [
+    {
+      "action": "before clicking /My collection/",
+      "seconds": 2.661,
+      "buttons": [
+        "My collection · 0 confirmed demos · 4 illustrations",
+        "Demo settings",
+        "Show whole world",
+        "Zoom in",
+        "Zoom out",
+        "Find a little adventure"
+      ]
+    },
+    {
+      "action": "first collection card reachable without scrolling",
+      "seconds": 2.836,
+      "geometry": {
+        "bottom": 465.296875,
+        "reachable": true
+      }
+    },
+    {
+      "action": "before clicking /Gwangjang Market flavors/",
+      "seconds": 14.765,
+      "buttons": [
+        "My collection · 0 confirmed demos · 4 illustrations",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Gwangjang Market flavors2026-06-14 · illustration",
+        "Namsan evening lights2026-06-16 · illustration",
+        "Seokchon Lake blossoms2026-04-19 · illustration",
+        "Seongsu slow morning2026-05-02 · illustration",
+        "Browse all keepsakes"
+      ]
+    },
+    {
+      "action": "before clicking My collection",
+      "seconds": 24.609,
+      "buttons": [
+        "My collection · 0 confirmed demos · 4 illustrations",
+        "Demo settings",
+        "My collection",
+        "Close panel",
+        "Edit memory note",
+        "Discover Mangwon Market picnic"
+      ]
+    },
+    {
+      "action": "first collection card reachable without scrolling",
+      "seconds": 24.653,
+      "geometry": {
+        "bottom": 465.296875,
+        "reachable": true
+      }
+    },
+    {
+      "action": "before clicking /Gwangjang Market flavors/",
+      "seconds": 37.089,
+      "buttons": [
+        "My collection · 0 confirmed demos · 4 illustrations",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Gwangjang Market flavors2026-06-14 · illustration",
+        "Namsan evening lights2026-06-16 · illustration",
+        "Seokchon Lake blossoms2026-04-19 · illustration",
+        "Seongsu slow morning2026-05-02 · illustration",
+        "Browse all keepsakes"
+      ]
+    },
+    {
+      "action": "before clicking Discover Mangwon Market picnic",
+      "seconds": 37.165,
+      "buttons": [
+        "My collection · 0 confirmed demos · 4 illustrations",
+        "Demo settings",
+        "My collection",
+        "Close panel",
+        "Edit memory note",
+        "Discover Mangwon Market picnic"
+      ]
+    },
+    {
+      "action": "before clicking Find a Mangwon picnic",
+      "seconds": 37.4,
+      "buttons": [
+        "My collection · 0 confirmed demos · 4 illustrations",
+        "Demo settings",
+        "Source memory",
+        "Close panel",
+        "Find a Mangwon picnic",
+        "Browse all keepsakes"
+      ]
+    },
+    {
+      "action": "before clicking Let’s go",
+      "seconds": 38.253,
+      "buttons": [
+        "My collection · 0 confirmed demos · 4 illustrations",
+        "Demo settings",
+        "The next keepsake",
+        "Close panel",
+        "01Nearby Seoul possibilityMangwon picnic cornerSample destination · Mapo, SeoulImagine a little market picnic, close to home.2 kmsample",
+        "02A little farther in SeoulHan River picnic pauseSample destination · Seoul riversideMake a little room for a slower city afternoon.6 kmsample",
+        "03A Seoul day outMapo market afternoonSample destination · SeoulA sample chapter for your Seoul keepsake story.11 kmsample",
+        "Let’s go"
+      ]
+    },
+    {
+      "action": "before clicking Simulate journey",
+      "seconds": 38.496,
+      "buttons": [
+        "My collection · 0 confirmed demos · 4 illustrations",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Simulate journey"
+      ]
+    },
+    {
+      "action": "before clicking Add to my world",
+      "seconds": 38.684,
+      "buttons": [
+        "My collection · 0 confirmed demos · 4 illustrations",
+        "Demo settings",
+        "Your little world",
+        "Close panel",
+        "Add to my world",
+        "Not yet"
+      ]
+    },
+    {
+      "action": "before clicking /My collection/",
+      "seconds": 38.989,
+      "buttons": [
+        "My collection · 1 confirmed demo · 4 illustrations",
+        "Demo settings",
+        "Show whole world",
+        "Zoom in",
+        "Zoom out",
+        "Find a little adventure",
+        "Dismiss message"
+      ]
+    },
+    {
+      "action": "first collection card reachable without scrolling",
+      "seconds": 39.432,
+      "geometry": {
+        "bottom": 359.46875,
+        "reachable": true
+      }
+    }
+  ],
+  "errors": []
+}

@@ -4,7 +4,24 @@ Cloud production-browser audits, 2026-11-15. This reviews the actual Seoul appli
 
 Final capture acceptance and media verification are recorded in the adjacent evidence manifests. Browser evidence does not establish Pleos runtime compatibility, native safety behavior, physical touch-target size, speaker/audio behavior, or full accessibility compliance.
 
-## Current journey refinement
+## Latest source: short-screen collection correction
+
+The final 960×480 regression exposed a real collection issue after the journey refinement below: long introductory and empty-state copy put the first card below the viewport. The UI now uses a direct **My collection** heading, concise group provenance and tighter short-screen spacing. Confirmed demos, seeded illustrations, their dates and their counts remain distinct. The existing regression assertion is unchanged.
+
+[Watch the current compact collection](../artifacts/roamy-seoul/design/short-collection-fix/short-collection-fix-walkthrough.mp4): **51.73s, 960×480, 0.31 MB**, frozen source `e3ca04b`. This is the authoritative collection-layout evidence; the longer journey recording below predates this final compaction. The silent continuous recording explicitly uses system reduced motion, actual UI confirmation and no injected world or parked state. Inspection pauses remain; playback speed is unchanged.
+
+| Step | Inspected current result | Screenshot |
+| --- | --- | --- |
+| 1. Open initial collection | Empty confirmed group and seeded provenance remain explicit; first illustration is visible and hit-test reachable without scrolling. | [Initial collection](../artifacts/roamy-seoul/design/short-collection-fix/short-collection-fix-01-initial-collection.png) |
+| 2. Select first memory | The exposed card opens the intended Gwangjang illustration and names its collection return. | [Memory](../artifacts/roamy-seoul/design/short-collection-fix/short-collection-fix-02-selected-memory.png) |
+| 3. Return to collection | Back restores the compact heading and groups; the first illustration remains reachable without scrolling. | [Back](../artifacts/roamy-seoul/design/short-collection-fix/short-collection-fix-03-collection-back.png) |
+| 4. Confirm a demo | A real simulated journey and explicit confirmation place the new demo first, with its date and readable provenance. Its first card is immediately reachable. | [Confirmed first](../artifacts/roamy-seoul/design/short-collection-fix/short-collection-fix-04-confirmed-first-card.png) |
+
+All four screenshots and all four decoded video frames were visually inspected. Full-video decoding and generic read-only media verification pass. The [step manifest](../artifacts/roamy-seoul/design/short-collection-fix/short-collection-fix-manifest.json) records hit-test success and card bottoms of **465.30px** initially/after Back and **359.47px** after confirmation, within the 480px viewport; no scroll operation occurs before those assertions. [Media verification](../artifacts/roamy-seoul/design/short-collection-fix/media-validation.json) retains hashes, timestamps and frame notes.
+
+[Seven targeted browser checks passed](../artifacts/roamy-seoul/design/short-collection-fix/targeted-tests.log) in 30.5s on the built production fix: the unchanged short collection regression, three viewport layout/readability checks, collection grouping/order, contextual recommendation returns and chosen-stop/note persistence. Current assets: `index-DXWuR4Xv.js` and `index-CBa8XcW_.css`; exact hashes are in the manifest. Earlier captures are retained with their original identities. This browser correction does not establish Pleos runtime capability.
+
+## Journey refinement before final collection compaction
 
 [Watch the current-source journey](../artifacts/roamy-seoul/design/journey-refinement/journey-refinement-walkthrough.mp4): **3m30s, 1440×900, 2.84 MB**, captured from frozen source `9f389af` at the root production preview. All **16 sequential screenshots plus two responsive screenshots** were individually inspected; seven decoded video frames were also inspected. The full MP4 decodes successfully. This silent continuous recording uses actual UI actions, a nondefault sample-stop choice, normal motion and a full timed reveal. No completed world, verified visit or parked state was injected. It retains inspection pauses and one recorder exact-toast lookup retry after the application had completed normally; there were no application page errors.
 
