@@ -9,6 +9,12 @@ on:
 permissions:
   contents: read
 
+# An explicit bash shell makes GitHub invoke bash with -eo pipefail, so tee
+# preserves test/build failures instead of making a failed command look green.
+defaults:
+  run:
+    shell: bash
+
 concurrency:
   group: roamy-validation-${{ github.ref }}
   cancel-in-progress: true
@@ -19,6 +25,13 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+      - name: Verify logged pipeline failure propagation
+        run: |
+          if (false | tee /dev/null); then
+            echo 'Logging masked a failed pipeline command.' >&2
+            exit 1
+          fi
+          echo 'Logged pipeline failures correctly propagate.'
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
