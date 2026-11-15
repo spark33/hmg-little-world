@@ -1,0 +1,14 @@
+test_bundle_inventory_must_match_lock_and_exact_paths (test_generate_notices.NoticeGenerationTests.test_bundle_inventory_must_match_lock_and_exact_paths) ... ok
+test_changed_runtime_inventory_and_wrong_installed_version_fail (test_generate_notices.NoticeGenerationTests.test_changed_runtime_inventory_and_wrong_installed_version_fail) ... ok
+test_crlf_license_input_remains_checkable_after_lf_checkout (test_generate_notices.NoticeGenerationTests.test_crlf_license_input_remains_checkable_after_lf_checkout) ... ok
+test_deterministic_outputs_keep_full_license_and_notice_content (test_generate_notices.NoticeGenerationTests.test_deterministic_outputs_keep_full_license_and_notice_content) ... ok
+test_missing_full_shipped_license_fails_instead_of_using_metadata_only (test_generate_notices.NoticeGenerationTests.test_missing_full_shipped_license_fails_instead_of_using_metadata_only) ... ok
+test_nested_duplicate_versions_have_separate_notices (test_generate_notices.NoticeGenerationTests.test_nested_duplicate_versions_have_separate_notices) ... ok
+test_pinned_fallback_notice_hash_is_verified (test_generate_notices.NoticeGenerationTests.test_pinned_fallback_notice_hash_is_verified) ... ok
+test_tampered_license_or_generated_text_is_detected (test_generate_notices.NoticeGenerationTests.test_tampered_license_or_generated_text_is_detected) ... ok
+test_unused_unresolved_package_is_audited_but_cannot_be_shipped (test_generate_notices.NoticeGenerationTests.test_unused_unresolved_package_is_audited_but_cannot_be_shipped) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.921s
+
+OK

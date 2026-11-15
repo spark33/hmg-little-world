@@ -1,0 +1,115 @@
+
+> roamy@0.2.0 test:e2e
+> playwright test
+
+
+Running 44 tests using 1 worker
+
+(node:37425) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   1 e2e/demo.spec.ts:3:1 › complete Gwangjang → Mangwon flow, explicit consent, seven-second reveal, reload and reset (1.0m)
+(node:38407) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 e2e/demo.spec.ts:78:1 › driving and unknown vehicle state remove all interactive content (818ms)
+  ✓   3 e2e/demo.spec.ts:101:1 › safety interruption cancels collection animation (16.0s)
+  ✓   4 e2e/demo.spec.ts:127:1 › automotive display sizes keep large touch targets and the primary action clear (43.8s)
+  ✓   5 e2e/demo.spec.ts:183:1 › a building can be selected directly on the 3D canvas (3.8s)
+  ✓   6 e2e/design-validation.spec.ts:58:1 › memory illustrations fit inside their visible frame and facts retain readable contrast (2.8s)
+  ✓   7 e2e/design-validation.spec.ts:100:1 › evening mode retains normal-text contrast on wide and narrow surfaces (4.1s)
+  ✓   8 e2e/design-validation.spec.ts:150:1 › day and evening discovery labels remain readable and destination selection is announced (8.2s)
+  ✓   9 e2e/design-validation.spec.ts:206:1 › the real reveal caption and progress indicators have readable contrast (16.9s)
+  ✓  10 e2e/design-validation.spec.ts:276:1 › all eight UI-collected keepsakes expose the right details and an uncropped illustration (27.1s)
+  ✘  11 e2e/design-validation.spec.ts:334:1 › confirmed memory editing enforces the typed 500-character limit without changing visit provenance (5.9s)
+(node:39613) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  12 e2e/design-validation.spec.ts:366:1 › manual clipboard fallback selects the complete backup and invalid input leaves the world unchanged (2.8s)
+  ✓  13 e2e/design-validation.spec.ts:411:1 › a browser driving event dismisses an unconfirmed backup replacement without writing it (3.9s)
+  ✓  14 e2e/design-validation.spec.ts:465:1 › bundled licenses are keyboard-readable locally on short and narrow displays (2.7s)
+  ✓  15 e2e/gameplay.spec.ts:3:1 › all four new keepsakes are playable, persistent, and reach a complete collection (17.1s)
+  ✓  16 e2e/gameplay.spec.ts:65:1 › category browsing and memory recommendations open their own adventure (5.5s)
+  ✓  17 e2e/gameplay.spec.ts:110:1 › memory notes can be canceled, edited, and reloaded without changing their source (9.9s)
+  ✓  18 e2e/gameplay.spec.ts:148:1 › an earlier Chicago confirmation stays in the archive and never becomes a Seoul visit (5.6s)
+  ✓  19 e2e/gameplay.spec.ts:220:1 › Seoul confirmations use the device's calendar date across the UTC boundary (3.7s)
+  ✓  20 e2e/gameplay.spec.ts:253:1 › a collected Seoul adventure can be replayed without duplicating or rewriting the memory (3.8s)
+  ✓  21 e2e/gameplay.spec.ts:298:1 › a successful explicit reset resolves an unreadable startup before the next confirmed save (4.5s)
+  ✓  22 e2e/panel-regressions.spec.ts:3:1 › changing a scrolled collection panel reveals the next heading (2.2s)
+  ✓  23 e2e/panel-regressions.spec.ts:35:1 › unavailable bundled licenses can be retried without leaving settings (4.1s)
+  ✓  24 e2e/persistence.spec.ts:29:1 › world backup import is previewed and cancelable before a durable replacement (5.0s)
+  ✓  25 e2e/persistence.spec.ts:91:1 › legacy Chicago data is preserved as legacy while the Seoul world is initialized (2.2s)
+  ✓  26 e2e/persistence.spec.ts:132:1 › a failed import save keeps the current world and offers retry without false success (2.6s)
+  ✓  27 e2e/persistence.spec.ts:189:1 › clearing recovery copies is deliberate and retains the active world (2.9s)
+  ✓  28 e2e/persistence.spec.ts:243:1 › a delayed file read cannot overwrite newer pasted backup text (2.4s)
+  ✓  29 e2e/persistence.spec.ts:288:1 › retry after an unreadable startup never overwrites the existing world with fallback seeds (2.8s)
+  ✓  30 e2e/preferences.spec.ts:3:1 › ROAMY preferences persist, panels take focus, Escape returns to the opener (7.7s)
+  ✓  31 e2e/preferences.spec.ts:29:1 › system reduced motion skips reveal and saves a confirmed memory immediately (5.1s)
+  ✓  32 e2e/preferences.spec.ts:58:1 › narrow screens retain preview disclosure and the collection accessible name (338ms)
+  ✓  33 e2e/reliability.spec.ts:4:3 › a delayed navigation response cannot reopen a journey after safety (15.2s)
+  ✓  34 e2e/reliability.spec.ts:4:3 › a delayed navigation response cannot reopen a journey after close (16.2s)
+  ✓  35 e2e/reliability.spec.ts:4:3 › a delayed navigation response cannot reopen a journey after background (12.9s)
+  ✓  36 e2e/reliability.spec.ts:70:3 › preserves an unreadable save (corrupt) until explicit reset (6.2s)
+  ✓  37 e2e/reliability.spec.ts:70:3 › preserves an unreadable save (future version) until explicit reset (5.1s)
+  ✓  38 e2e/reliability.spec.ts:103:1 › failed storage shows a visible warning and can be retried (2.1s)
+  ✓  39 e2e/ux.spec.ts:23:1 › secondary guidance and safety text retain readable contrast (3.5s)
+  ✓  40 e2e/ux.spec.ts:70:1 › short landscape settings controls scroll into a clear touchable position (2.4s)
+  ✓  41 e2e/ux.spec.ts:111:1 › narrow settings retain preview disclosure and actionable storage warnings (5.0s)
+  ✓  42 e2e/ux.spec.ts:147:1 › narrow camera and header controls keep 56px touch targets (1.7s)
+  ✓  43 e2e/ux.spec.ts:167:1 › short landscape collection exposes a keepsake without an empty footer gap (2.2s)
+  ✓  44 e2e/ux.spec.ts:190:1 › memory editing keeps Save and Cancel clear of discovery actions (2.7s)
+
+
+  1) e2e/demo.spec.ts:3:1 › complete Gwangjang → Mangwon flow, explicit consent, seven-second reveal, reload and reset 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Confirm reset', exact: true })
+        - locator resolved to <button class="secondary reset-button">Confirm reset</button>
+
+
+      69 |   await page
+      70 |     .getByRole("button", { name: "Confirm reset", exact: true })
+    > 71 |     .click();
+         |      ^
+      72 |   await page.reload();
+      73 |   await expect(
+      74 |     page.getByText("4 memories made. So many more to come."),
+        at /workspace/hmg-little-world/web/e2e/demo.spec.ts:71:6
+
+    Error Context: test-results/demo-complete-Gwangjang-→--c7ceb-ond-reveal-reload-and-reset/error-context.md
+
+  2) e2e/design-validation.spec.ts:334:1 › confirmed memory editing enforces the typed 500-character limit without changing visit provenance 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+        "memory": "서울의 오후 🌿
+    - mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm A longer ",
+    + mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm A longer",
+        "provenance": "confirmed-demo",
+        "visitDate": "2026-11-15",
+      }
+
+      360 |       JSON.parse(localStorage.getItem("little-world:v1")!).collected.mangwon,
+      361 |   );
+    > 362 |   expect(actual).toEqual({ ...previous, memory: expected });
+          |                  ^
+      363 |   expect(actual.provenance).toBe("confirmed-demo");
+      364 | });
+      365 |
+        at /workspace/hmg-little-world/web/e2e/design-validation.spec.ts:362:18
+
+    Error Context: test-results/design-validation-confirme-a5e99-t-changing-visit-provenance/error-context.md
+
+  2 failed
+    e2e/demo.spec.ts:3:1 › complete Gwangjang → Mangwon flow, explicit consent, seven-second reveal, reload and reset 
+    e2e/design-validation.spec.ts:334:1 › confirmed memory editing enforces the typed 500-character limit without changing visit provenance 
+  42 passed (6.1m)
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

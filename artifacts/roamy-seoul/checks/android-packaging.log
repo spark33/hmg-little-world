@@ -1,0 +1,154 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.10.2/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+Unable to initialize metrics, ensure /home/agent/.android is writable, details: /home/agent/.android/analytics.settings (No such file or directory)
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+
+> Task :app:bundleWeb
+> Task :app:preBuild
+> Task :app:prePreviewDebugBuild
+> Task :app:mergePreviewDebugNativeDebugMetadata NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generatePreviewDebugBuildConfig UP-TO-DATE
+> Task :app:checkPreviewDebugAarMetadata UP-TO-DATE
+> Task :app:generatePreviewDebugResValues UP-TO-DATE
+> Task :app:mapPreviewDebugSourceSetPaths UP-TO-DATE
+> Task :app:generatePreviewDebugResources UP-TO-DATE
+> Task :app:mergePreviewDebugResources UP-TO-DATE
+> Task :app:packagePreviewDebugResources UP-TO-DATE
+> Task :app:parsePreviewDebugLocalResources UP-TO-DATE
+> Task :app:createPreviewDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksPreviewDebug UP-TO-DATE
+> Task :app:processPreviewDebugMainManifest UP-TO-DATE
+> Task :app:processPreviewDebugManifest UP-TO-DATE
+> Task :app:processPreviewDebugManifestForPackage UP-TO-DATE
+> Task :app:processPreviewDebugResources UP-TO-DATE
+> Task :app:compilePreviewDebugKotlin UP-TO-DATE
+> Task :app:javaPreCompilePreviewDebug UP-TO-DATE
+> Task :app:compilePreviewDebugJavaWithJavac UP-TO-DATE
+> Task :app:mergePreviewDebugShaders UP-TO-DATE
+> Task :app:compilePreviewDebugShaders NO-SOURCE
+> Task :app:generatePreviewDebugAssets UP-TO-DATE
+> Task :app:mergePreviewDebugAssets
+> Task :app:checkPreviewDebugDuplicateClasses UP-TO-DATE
+> Task :app:compressPreviewDebugAssets
+> Task :app:desugarPreviewDebugFileDependencies UP-TO-DATE
+> Task :app:mergeExtDexPreviewDebug UP-TO-DATE
+> Task :app:mergeLibDexPreviewDebug UP-TO-DATE
+> Task :app:dexBuilderPreviewDebug UP-TO-DATE
+> Task :app:mergePreviewDebugGlobalSynthetics UP-TO-DATE
+> Task :app:processPreviewDebugJavaRes UP-TO-DATE
+> Task :app:mergePreviewDebugJavaResource UP-TO-DATE
+> Task :app:mergeProjectDexPreviewDebug UP-TO-DATE
+> Task :app:mergePreviewDebugJniLibFolders UP-TO-DATE
+> Task :app:mergePreviewDebugNativeLibs NO-SOURCE
+> Task :app:stripPreviewDebugDebugSymbols NO-SOURCE
+> Task :app:validateSigningPreviewDebug UP-TO-DATE
+> Task :app:writePreviewDebugAppMetadata UP-TO-DATE
+> Task :app:writePreviewDebugSigningConfigVersions UP-TO-DATE
+> Task :app:preVehicleDebugBuild
+> Task :app:mergeVehicleDebugNativeDebugMetadata NO-SOURCE
+> Task :app:generateVehicleDebugBuildConfig UP-TO-DATE
+> Task :app:checkVehicleDebugAarMetadata UP-TO-DATE
+> Task :app:generateVehicleDebugResValues UP-TO-DATE
+> Task :app:mapVehicleDebugSourceSetPaths UP-TO-DATE
+> Task :app:generateVehicleDebugResources UP-TO-DATE
+> Task :app:mergeVehicleDebugResources UP-TO-DATE
+> Task :app:packageVehicleDebugResources UP-TO-DATE
+> Task :app:parseVehicleDebugLocalResources UP-TO-DATE
+> Task :app:createVehicleDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksVehicleDebug UP-TO-DATE
+> Task :app:processVehicleDebugMainManifest UP-TO-DATE
+> Task :app:processVehicleDebugManifest UP-TO-DATE
+> Task :app:processVehicleDebugManifestForPackage UP-TO-DATE
+> Task :app:processVehicleDebugResources UP-TO-DATE
+> Task :app:compileVehicleDebugKotlin UP-TO-DATE
+> Task :app:javaPreCompileVehicleDebug UP-TO-DATE
+> Task :app:compileVehicleDebugJavaWithJavac UP-TO-DATE
+> Task :app:mergeVehicleDebugShaders UP-TO-DATE
+> Task :app:compileVehicleDebugShaders NO-SOURCE
+> Task :app:generateVehicleDebugAssets UP-TO-DATE
+> Task :app:mergeVehicleDebugAssets
+> Task :app:compressVehicleDebugAssets
+> Task :app:checkVehicleDebugDuplicateClasses UP-TO-DATE
+> Task :app:desugarVehicleDebugFileDependencies UP-TO-DATE
+> Task :app:mergeExtDexVehicleDebug UP-TO-DATE
+> Task :app:mergeLibDexVehicleDebug UP-TO-DATE
+> Task :app:dexBuilderVehicleDebug UP-TO-DATE
+> Task :app:mergeProjectDexVehicleDebug UP-TO-DATE
+> Task :app:mergeVehicleDebugGlobalSynthetics UP-TO-DATE
+> Task :app:processVehicleDebugJavaRes UP-TO-DATE
+> Task :app:mergeVehicleDebugJavaResource UP-TO-DATE
+> Task :app:mergeVehicleDebugJniLibFolders UP-TO-DATE
+> Task :app:mergeVehicleDebugNativeLibs NO-SOURCE
+> Task :app:stripVehicleDebugDebugSymbols NO-SOURCE
+> Task :app:validateSigningVehicleDebug UP-TO-DATE
+> Task :app:writeVehicleDebugAppMetadata UP-TO-DATE
+> Task :app:writeVehicleDebugSigningConfigVersions UP-TO-DATE
+> Task :app:packagePreviewDebug
+> Task :app:createPreviewDebugApkListingFileRedirect UP-TO-DATE
+> Task :app:assemblePreviewDebug
+> Task :app:buildKotlinToolingMetadata UP-TO-DATE
+> Task :app:preVehicleReleaseBuild
+> Task :app:generateVehicleReleaseBuildConfig UP-TO-DATE
+> Task :app:packageVehicleDebug
+> Task :app:createVehicleDebugApkListingFileRedirect UP-TO-DATE
+> Task :app:assembleVehicleDebug
+> Task :app:checkVehicleReleaseAarMetadata UP-TO-DATE
+> Task :app:generateVehicleReleaseResValues UP-TO-DATE
+> Task :app:mapVehicleReleaseSourceSetPaths UP-TO-DATE
+> Task :app:generateVehicleReleaseResources UP-TO-DATE
+> Task :app:mergeVehicleReleaseResources UP-TO-DATE
+> Task :app:packageVehicleReleaseResources UP-TO-DATE
+> Task :app:parseVehicleReleaseLocalResources UP-TO-DATE
+> Task :app:createVehicleReleaseCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksVehicleRelease UP-TO-DATE
+> Task :app:processVehicleReleaseMainManifest UP-TO-DATE
+> Task :app:processVehicleReleaseManifest UP-TO-DATE
+> Task :app:processVehicleReleaseManifestForPackage UP-TO-DATE
+> Task :app:processVehicleReleaseResources UP-TO-DATE
+> Task :app:compileVehicleReleaseKotlin UP-TO-DATE
+> Task :app:javaPreCompileVehicleRelease UP-TO-DATE
+> Task :app:compileVehicleReleaseJavaWithJavac UP-TO-DATE
+> Task :app:extractProguardFiles UP-TO-DATE
+> Task :app:generateVehicleReleaseLintVitalReportModel
+> Task :app:mergeVehicleReleaseJniLibFolders UP-TO-DATE
+> Task :app:mergeVehicleReleaseNativeLibs NO-SOURCE
+> Task :app:stripVehicleReleaseDebugSymbols NO-SOURCE
+> Task :app:extractVehicleReleaseNativeSymbolTables NO-SOURCE
+> Task :app:mergeVehicleReleaseNativeDebugMetadata NO-SOURCE
+> Task :app:checkVehicleReleaseDuplicateClasses UP-TO-DATE
+> Task :app:dexBuilderVehicleRelease UP-TO-DATE
+> Task :app:desugarVehicleReleaseFileDependencies UP-TO-DATE
+> Task :app:mergeVehicleReleaseStartupProfile UP-TO-DATE
+> Task :app:mergeExtDexVehicleRelease UP-TO-DATE
+> Task :app:mergeDexVehicleRelease UP-TO-DATE
+> Task :app:mergeVehicleReleaseArtProfile UP-TO-DATE
+> Task :app:mergeVehicleReleaseGlobalSynthetics UP-TO-DATE
+> Task :app:compileVehicleReleaseArtProfile UP-TO-DATE
+> Task :app:mergeVehicleReleaseShaders UP-TO-DATE
+> Task :app:compileVehicleReleaseShaders NO-SOURCE
+> Task :app:generateVehicleReleaseAssets UP-TO-DATE
+> Task :app:mergeVehicleReleaseAssets
+> Task :app:compressVehicleReleaseAssets
+> Task :app:extractVehicleReleaseVersionControlInfo UP-TO-DATE
+> Task :app:processVehicleReleaseJavaRes UP-TO-DATE
+> Task :app:mergeVehicleReleaseJavaResource UP-TO-DATE
+> Task :app:optimizeVehicleReleaseResources UP-TO-DATE
+> Task :app:collectVehicleReleaseDependencies UP-TO-DATE
+> Task :app:sdkVehicleReleaseDependencyData UP-TO-DATE
+> Task :app:writeVehicleReleaseAppMetadata UP-TO-DATE
+> Task :app:writeVehicleReleaseSigningConfigVersions UP-TO-DATE
+> Task :app:packageVehicleRelease
+> Task :app:createVehicleReleaseApkListingFileRedirect UP-TO-DATE
+
+> Task :app:lintVitalAnalyzeVehicleRelease
+Warning: Unable to initialize metrics, ensure /home/agent/.android is writable, details: /home/agent/.android/analytics.settings (No such file or directory)
+
+> Task :app:lintVitalReportVehicleRelease UP-TO-DATE
+> Task :app:lintVitalVehicleRelease
+> Task :app:assembleVehicleRelease
+
+BUILD SUCCESSFUL in 25s
+117 actionable tasks: 13 executed, 104 up-to-date

@@ -1,0 +1,16 @@
+test_bytes_changing_after_verification_are_rejected (test_stage_competition_apk.StagingTest.test_bytes_changing_after_verification_are_rejected) ... ok
+test_debug_unsigned_and_stale_assets_fail_before_output_is_created (test_stage_competition_apk.StagingTest.test_debug_unsigned_and_stale_assets_fail_before_output_is_created) ... ok
+test_existing_artifacts_are_never_overwritten (test_stage_competition_apk.StagingTest.test_existing_artifacts_are_never_overwritten) ... ok
+test_immutable_verified_snapshot_is_the_only_staged_copy (test_stage_competition_apk.StagingTest.test_immutable_verified_snapshot_is_the_only_staged_copy) ... ok
+test_missing_apk_is_rejected_without_verification_or_output (test_stage_competition_apk.StagingTest.test_missing_apk_is_rejected_without_verification_or_output) ... ok
+test_missing_or_malformed_owner_fingerprint_never_stages (test_stage_competition_apk.StagingTest.test_missing_or_malformed_owner_fingerprint_never_stages) ... ok
+test_partial_publication_failure_rolls_back_only_new_files (test_stage_competition_apk.StagingTest.test_partial_publication_failure_rolls_back_only_new_files) ... ok
+test_static_verifier_is_always_called_in_release_mode (test_stage_competition_apk.StagingTest.test_static_verifier_is_always_called_in_release_mode) ... ok
+test_unsigned_preview_and_unattested_verifier_results_are_rejected (test_stage_competition_apk.StagingTest.test_unsigned_preview_and_unattested_verifier_results_are_rejected) ... ok
+test_verifier_failure_does_not_print_private_tool_output (test_stage_competition_apk.StagingTest.test_verifier_failure_does_not_print_private_tool_output) ... ok
+test_wrong_or_multiple_signers_are_rejected_without_exposing_identity (test_stage_competition_apk.StagingTest.test_wrong_or_multiple_signers_are_rejected_without_exposing_identity) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.012s
+
+OK

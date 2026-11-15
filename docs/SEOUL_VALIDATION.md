@@ -10,6 +10,13 @@ Production vehicle entertainment remains disabled by the unvalidated-platform ga
 
 ## Checks
 
+- Web unit tests: **80 passed**.
+- Production browser E2E: **44 cases validated**. The initial combined run passed 42; the two rerun cases passed after serializing graphics work and correcting an assertion to respect the established whitespace-trimming contract. The original long-flow timeout and assertion failure remain in the saved logs; no product behavior was weakened.
+- Native JVM tests: **41 per flavor**, 82 executions.
+- Attribution generator: **9 tests passed**; strict generated-material check passed for 13 emitted web packages and six native OSS groups.
+- Release staging: **11 policy tests passed**, including unauthorized signer, preview/debug, stale assets and overwrite protection.
+- Android packaging and APK policy/asset verification passed for both debug flavors and the unsigned vehicle release.
+
 Final test results, exact artifact integrity reports and browser evidence are recorded under [the Seoul artifact directory](../artifacts/roamy-seoul/). The integration PR links its cloud CI run as an additional independent build/regression record. See the [design review](DESIGN_VALIDATION.md) for screenshots, actual UI videos, inspection notes and remaining visual limitations.
 
 The native checks produced 41 passing unit tests in each flavor (82 executions), zero failures/errors and zero lint errors. Four warnings remain in each lint variant: the documented target API baseline, dependency freshness, fixed landscape orientation and JavaScript enablement needed by the bundled application. These are not Pleos review approval. The unsigned release is an inspection artifact; debug APK signatures are development signatures.

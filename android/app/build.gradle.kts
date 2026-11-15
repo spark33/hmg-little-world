@@ -40,6 +40,11 @@ android {
     testOptions { unitTests.isReturnDefaultValues = true }
 }
 val buildWeb by tasks.registering(Exec::class) { workingDir("../../web"); commandLine("npm", "run", "build"); inputs.dir("../../web/src"); inputs.dir("../../web/public"); inputs.files("../../web/package-lock.json", "../../web/package.json", "../../web/index.html", "../../web/vite.config.ts", "../../web/tsconfig.json"); outputs.dir("../../web/dist") }
-val bundleWeb by tasks.registering(Sync::class) { dependsOn(buildWeb); from("../../web/dist"); into("src/main/assets/web") }
+val verifyWebAttribution by tasks.registering(Exec::class) {
+    dependsOn(buildWeb)
+    workingDir("../..")
+    commandLine("python3", "scripts/generate-notices.py", "--check", "--bundle-inventory", "web/dist/bundle-dependencies.json")
+}
+val bundleWeb by tasks.registering(Sync::class) { dependsOn(verifyWebAttribution); from("../../web/dist"); into("src/main/assets/web") }
 tasks.named("preBuild") { dependsOn(bundleWeb) }
 dependencies { "vehicleImplementation"("ai.pleos.playground:NaviHelper:3.0.5"); implementation("androidx.webkit:webkit:1.12.1"); implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1"); testImplementation("junit:junit:4.13.2"); testImplementation("org.json:json:20240303") }

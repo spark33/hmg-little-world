@@ -1,0 +1,25 @@
+{
+  "os": "Linux",
+  "architecture": "x86_64",
+  "cpuVirtualizationFlagsExposed": false,
+  "kvmUsable": false,
+  "gpuDeviceExposed": false,
+  "blockers": [
+    "Usable KVM is unavailable; provision nested virtualization and /dev/kvm access",
+    "No GPU device is exposed; provision a Pleos-supported GPU and driver"
+  ],
+  "graphicsRequirementsVerified": false,
+  "officialEmulatorBooted": false,
+  "note": "A passed host preflight still requires GPU model/driver verification and an official Pleos cold boot.",
+  "officialImage": {
+    "manifest": "https://nexus-playground.pleos.ai/repository/raw-releases/connect-avd/2.x/crp-sys-img.xml",
+    "package": "system-images;android-34;pleos_car_emulator;x86_64",
+    "archive": "https://nexus-playground.pleos.ai/repository/raw-releases/connect-avd/2.x/crp_car_emulator.zip",
+    "declaredBytes": 4087751964,
+    "publishedSha1": "b4f858d5bcc6c71506d7edfc872bcb9e5a11acaa",
+    "archiveHeadStatus": 200,
+    "downloaded": false,
+    "checksumVerified": false,
+    "crnRequiredForPleos210": false
+  }
+}

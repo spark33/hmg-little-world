@@ -1,0 +1,73 @@
+{
+  "officialPleosRuntimeValidated": false,
+  "unitFlavors": {
+    "PreviewDebug": {
+      "tests": 41,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "VehicleDebug": {
+      "tests": 41,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "lint": {
+    "lint-results-vehicleDebug.xml": [
+      {
+        "id": "OldTargetApi",
+        "severity": "Warning"
+      },
+      {
+        "id": "GradleDependency",
+        "severity": "Warning"
+      },
+      {
+        "id": "DiscouragedApi",
+        "severity": "Warning"
+      },
+      {
+        "id": "SetJavaScriptEnabled",
+        "severity": "Warning"
+      }
+    ],
+    "lint-results-previewDebug.xml": [
+      {
+        "id": "OldTargetApi",
+        "severity": "Warning"
+      },
+      {
+        "id": "GradleDependency",
+        "severity": "Warning"
+      },
+      {
+        "id": "DiscouragedApi",
+        "severity": "Warning"
+      },
+      {
+        "id": "SetJavaScriptEnabled",
+        "severity": "Warning"
+      }
+    ],
+    "lint-results-vehicleRelease.xml": [
+      {
+        "id": "OldTargetApi",
+        "severity": "Warning"
+      },
+      {
+        "id": "GradleDependency",
+        "severity": "Warning"
+      },
+      {
+        "id": "DiscouragedApi",
+        "severity": "Warning"
+      },
+      {
+        "id": "SetJavaScriptEnabled",
+        "severity": "Warning"
+      }
+    ]
+  }
+}
