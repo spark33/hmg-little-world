@@ -94,6 +94,16 @@ for (const viewport of [
     await expect(recommendation.getByRole("heading", { level: 3 })).toHaveText(
       "Mangwon Market picnic",
     );
+    expect(
+      await recommendation.evaluate((card) => {
+        const quote = card.closest("aside")!.querySelector(".memory-quote")!;
+        return Boolean(
+          quote.compareDocumentPosition(card) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+        );
+      }),
+      "The selected memory is read before its next-outing recommendation",
+    ).toBe(true);
     for (const selector of [".eyebrow", "h3", "p"]) {
       const text = recommendation.locator(selector);
       await text.scrollIntoViewIfNeeded();
