@@ -2,6 +2,7 @@
 """Verify a built APK and its bundled web output without logging signing identities."""
 import argparse
 import hashlib
+import html
 import json
 import os
 from pathlib import Path
@@ -52,8 +53,8 @@ def verify(apk: Path, web_dir: Path, tools: Path, release: bool, unsigned: bool 
         for name, source in expected.items():
             if archive.read(name) != source.read_bytes():
                 raise ValueError("A bundled web asset differs from production output")
-        html = archive.read("assets/web/index.html").decode("utf-8")
-        if "Content-Security-Policy" not in html or "script-src 'self'" not in html:
+        document = html.unescape(archive.read("assets/web/index.html").decode("utf-8"))
+        if "Content-Security-Policy" not in document or "script-src 'self'" not in document:
             raise ValueError("Production content policy is missing")
     return {
         "package": package[1], "sha256": hashlib.sha256(apk.read_bytes()).hexdigest(),

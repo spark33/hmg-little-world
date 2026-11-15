@@ -55,7 +55,17 @@ jobs:
         run: npm run test:e2e 2>&1 | tee ../artifacts/ci-cloud/browser.log
       - name: Build both APKs, native tests, Android lint
         working-directory: android
-        run: ./gradlew --no-daemon :app:assemblePreviewDebug :app:assembleVehicleDebug :app:testPreviewDebugUnitTest :app:testVehicleDebugUnitTest :app:lintPreviewDebug :app:lintVehicleDebug 2>&1 | tee ../artifacts/ci-cloud/android.log
+        run: ./gradlew --no-daemon :app:assemblePreviewDebug :app:assembleVehicleDebug :app:assembleVehicleRelease :app:testPreviewDebugUnitTest :app:testVehicleDebugUnitTest :app:lintPreviewDebug :app:lintVehicleDebug :app:lintVehicleRelease 2>&1 | tee ../artifacts/ci-cloud/android.log
+      - name: Verify APK signatures, policy and bundled asset integrity
+        run: |
+          python3 scripts/verify-apk.py android/app/build/outputs/apk/preview/debug/app-preview-debug.apk > artifacts/ci-cloud/preview-integrity.json
+          python3 scripts/verify-apk.py android/app/build/outputs/apk/vehicle/debug/app-vehicle-debug.apk > artifacts/ci-cloud/vehicle-integrity.json
+          python3 scripts/verify-apk.py android/app/build/outputs/apk/vehicle/release/app-vehicle-release-unsigned.apk --unsigned > artifacts/ci-cloud/unsigned-release-integrity.json
+          if python3 scripts/verify-apk.py android/app/build/outputs/apk/vehicle/debug/app-vehicle-debug.apk --release > /tmp/roamy-debug-release-check.log 2>&1; then
+            echo 'Release gate incorrectly accepted a debug APK.' >&2
+            exit 1
+          fi
+          echo 'Release gate rejected the debug APK as expected.'
       - name: Production rendering and WebGL fallback
         working-directory: web
         env:
@@ -79,6 +89,7 @@ jobs:
             artifacts/ci-cloud/
             web/test-results/
             android/app/build/outputs/apk/*/debug/*.apk
+            android/app/build/outputs/apk/vehicle/release/*.apk
             android/app/build/test-results/
             android/app/build/reports/
 
