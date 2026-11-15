@@ -29,6 +29,10 @@ jobs:
           distribution: temurin
           java-version: "17"
       - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+          cmdline-tools-version: "16111833"
+          log-accepted-android-sdk-licenses: false
       - name: Install build SDK
         run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
       - name: Install web dependencies and browser
