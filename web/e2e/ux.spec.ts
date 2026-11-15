@@ -163,3 +163,26 @@ test("narrow camera and header controls keep 56px touch targets", async ({
     expect(box!.x + box!.width).toBeLessThanOrEqual(360);
   }
 });
+
+test("short landscape collection exposes a keepsake without an empty footer gap", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 960, height: 480 });
+  await page.goto("/");
+  await page.getByRole("button", { name: /My collection/ }).click();
+  const firstMemory = page.locator(".panel .album button").first();
+  await expect(firstMemory).toBeVisible();
+  const geometry = await firstMemory.evaluate((element) => {
+    const box = element.getBoundingClientRect();
+    const target = document.elementFromPoint(
+      box.x + box.width / 2,
+      box.y + box.height / 2,
+    );
+    return {
+      bottom: box.bottom,
+      reachable: target !== null && element.contains(target),
+    };
+  });
+  expect(geometry.bottom).toBeLessThanOrEqual(480);
+  expect(geometry.reachable).toBe(true);
+});

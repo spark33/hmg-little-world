@@ -624,6 +624,10 @@ dd {
 .panel-open .explore-button {
   visibility: hidden;
 }
+.panel-open .panel {
+  /* The hidden explore action no longer needs a reserved footer below details. */
+  bottom: 16px;
+}
 .save-warning {
   position: absolute;
   z-index: 6;
@@ -934,6 +938,10 @@ dd {
   color: #435f40;
   font-size: 16px;
   line-height: 1.5;
+}
+.backup-confirmation:focus-visible {
+  outline: 3px solid #85552f;
+  outline-offset: 4px;
 }
 .navigation-status [role="status"] {
   margin-block: 14px;
