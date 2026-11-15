@@ -253,6 +253,45 @@ function Table({ p }: { p: V3 }) {
     </group>
   );
 }
+const ROOF_RIBS = Array.from({ length: 12 }, (_, i) =>
+  [-1, 1].map((side) => ({
+    p: [-1.22 + i * 0.22, 1.99, side * 0.39] as V3,
+    rotation: [side * 0.47, 0, 0] as V3,
+    c: side === 1 ? "#cf9275" : "#c2856b",
+  })),
+).flat();
+function RoofRibs() {
+  const mesh = useRef<THREE.InstancedMesh>(null);
+  const invalidate = useThree((state) => state.invalidate);
+  useEffect(() => {
+    if (!mesh.current) return;
+    const rib = new THREE.Object3D();
+    ROOF_RIBS.forEach(({ p, rotation, c }, i) => {
+      rib.position.set(...p);
+      rib.rotation.set(...rotation);
+      rib.scale.set(0.028, 0.035, 1.05);
+      rib.updateMatrix();
+      mesh.current!.setMatrixAt(i, rib.matrix);
+      mesh.current!.setColorAt(i, new THREE.Color(c));
+    });
+    mesh.current.instanceMatrix.needsUpdate = true;
+    mesh.current.computeBoundingSphere();
+    if (mesh.current.instanceColor)
+      mesh.current.instanceColor.needsUpdate = true;
+    invalidate();
+  }, [invalidate]);
+  return (
+    <instancedMesh
+      ref={mesh}
+      args={[undefined, undefined, 24]}
+      castShadow
+      receiveShadow
+    >
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial roughness={0.85} />
+    </instancedMesh>
+  );
+}
 function Roof({ color = C.roof }: { color?: string }) {
   return (
     <group>
@@ -270,22 +309,7 @@ function Roof({ color = C.roof }: { color?: string }) {
         rotation={[0.47, 0, 0]}
       />
       <Box p={[0, 2.2, 0]} s={[2.72, 0.12, 0.12]} c="#c78d70" />
-      {Array.from({ length: 12 }, (_, i) => (
-        <group key={i}>
-          <Box
-            p={[-1.22 + i * 0.22, 1.99, 0.39]}
-            s={[0.028, 0.035, 1.05]}
-            c="#cf9275"
-            rotation={[0.47, 0, 0]}
-          />
-          <Box
-            p={[-1.22 + i * 0.22, 1.99, -0.39]}
-            s={[0.028, 0.035, 1.05]}
-            c="#c2856b"
-            rotation={[-0.47, 0, 0]}
-          />
-        </group>
-      ))}
+      <RoofRibs />
       <Box p={[0.78, 2.15, -0.4]} s={[0.27, 0.7, 0.27]} c="#efc19b" />
       <Box p={[0.78, 2.51, -0.4]} s={[0.36, 0.09, 0.36]} c={color} />
     </group>
@@ -472,6 +496,7 @@ function RoadMarkings() {
       mesh.current.setMatrixAt(i, marker.matrix);
     }
     mesh.current.instanceMatrix.needsUpdate = true;
+    mesh.current.computeBoundingSphere();
   }, []);
   return (
     <instancedMesh ref={mesh} args={[undefined, undefined, 42]} receiveShadow>
@@ -1322,6 +1347,14 @@ function Scene(props: WorldProps) {
   const { collecting, start, night, selected, onSelect } = props;
   const progress = worldProgress(props);
   const selectedAsset = assetForSelection(selected);
+  const gl = useThree((state) => state.gl);
+  const invalidate = useThree((state) => state.invalidate);
+  const collectionKey = [...progress.collected].sort().join(",");
+  useEffect(() => {
+    // Demand rendering must update baked shadows when a static keepsake arrives.
+    gl.shadowMap.needsUpdate = true;
+    invalidate();
+  }, [gl, invalidate, collectionKey, progress.collectingId]);
   function selectable(id: string) {
     return (e: ThreeEvent<MouseEvent>) => {
       e.stopPropagation();
