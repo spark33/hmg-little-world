@@ -1,12 +1,31 @@
 import type { Safety } from "./domain";
+
+export const NAVIGATION_STATUSES = [
+  "unavailable",
+  "disconnected",
+  "denied",
+  "ready",
+  "submitted",
+  "routing",
+  "route-ready",
+  "cancel-requested",
+  "error",
+  "closed",
+  "timeout",
+  "cancelled",
+] as const;
+export type NavigationStatus = (typeof NAVIGATION_STATUSES)[number];
 export type Request =
-  | { v: 1; id: string; type: "capabilities" }
   | {
       v: 1;
       id: string;
-      type: "navigate";
-      destinationId: "nearby" | "weekend" | "chicago";
-    };
+      type:
+        | "capabilities"
+        | "navigation-status"
+        | "navigation-retry"
+        | "navigation-cancel";
+    }
+  | { v: 1; id: string; type: "navigate"; destinationId: string };
 export type Reply = {
   v: 1;
   id: string;
@@ -14,6 +33,10 @@ export type Reply = {
   navigation?: boolean;
   lighting?: boolean;
   reason?: string;
+  navigationStatus?: NavigationStatus;
+  canRetry?: boolean;
+  destinationId?: string;
+  verifiedDestinationCount?: number;
 };
 declare global {
   interface Window {
@@ -27,7 +50,7 @@ export const nativeHost =
   typeof location !== "undefined" &&
   location.hostname === "appassets.androidplatform.net";
 export function parseReply(value: unknown): Reply | undefined {
-  if (!value || typeof value !== "object") return;
+  if (!value || typeof value !== "object" || Array.isArray(value)) return;
   const o = value as Record<string, unknown>;
   if (
     o.v !== 1 ||
@@ -35,9 +58,31 @@ export function parseReply(value: unknown): Reply | undefined {
     !/^[a-zA-Z0-9-]{1,64}$/.test(o.id)
   )
     return;
-  for (const key of ["available", "navigation", "lighting"])
+  for (const key of ["available", "navigation", "lighting", "canRetry"])
     if (o[key] !== undefined && typeof o[key] !== "boolean") return;
-  if (o.reason !== undefined && typeof o.reason !== "string") return;
+  if (
+    o.reason !== undefined &&
+    (typeof o.reason !== "string" || o.reason.length > 160)
+  )
+    return;
+  if (
+    o.navigationStatus !== undefined &&
+    !NAVIGATION_STATUSES.includes(o.navigationStatus as NavigationStatus)
+  )
+    return;
+  if (
+    o.destinationId !== undefined &&
+    (typeof o.destinationId !== "string" ||
+      !/^[a-z0-9][a-z0-9-]{0,63}$/.test(o.destinationId))
+  )
+    return;
+  if (
+    o.verifiedDestinationCount !== undefined &&
+    (!Number.isInteger(o.verifiedDestinationCount) ||
+      (o.verifiedDestinationCount as number) < 0 ||
+      (o.verifiedDestinationCount as number) > 100)
+  )
+    return;
   return o as Reply;
 }
 export function parseSafety(value: unknown): Safety | undefined {
@@ -51,20 +96,66 @@ export function parseSafety(value: unknown): Safety | undefined {
     return;
   return s as Safety;
 }
+
 export function requestNavigation(
-  destinationId: "nearby" | "weekend" | "chicago",
+  destinationId: string,
   signal?: AbortSignal,
 ): Promise<Reply> {
+  if (!/^[a-z0-9][a-z0-9-]{0,63}$/.test(destinationId))
+    return Promise.resolve({
+      v: 1,
+      id: crypto.randomUUID(),
+      available: false,
+      navigationStatus: "unavailable",
+      reason: "invalid-destination-id",
+    });
+  return request({ type: "navigate", destinationId }, signal);
+}
+export const requestCapabilities = (signal?: AbortSignal) =>
+  request({ type: "capabilities" }, signal);
+export const requestNavigationStatus = (signal?: AbortSignal) =>
+  request({ type: "navigation-status" }, signal);
+export const retryNavigationConnection = (signal?: AbortSignal) =>
+  request({ type: "navigation-retry" }, signal);
+export const cancelNavigation = (signal?: AbortSignal) =>
+  request({ type: "navigation-cancel" }, signal);
+
+type RequestBody =
+  | { type: "navigate"; destinationId: string }
+  | {
+      type:
+        | "capabilities"
+        | "navigation-status"
+        | "navigation-retry"
+        | "navigation-cancel";
+    };
+function request(body: RequestBody, signal?: AbortSignal): Promise<Reply> {
   const id = crypto.randomUUID();
-  const fallback: Reply = {
+  const fallback = (
+    navigationStatus: NavigationStatus,
+    reason: string,
+  ): Reply => ({
     v: 1,
     id,
     available: false,
-    reason: "Demo adapter · live navigation unavailable",
-  };
-  if (signal?.aborted) return Promise.resolve(fallback);
+    navigation: false,
+    lighting: false,
+    navigationStatus,
+    reason,
+    canRetry: navigationStatus === "timeout" || navigationStatus === "error",
+    verifiedDestinationCount: 0,
+  });
+  if (signal?.aborted)
+    return Promise.resolve(
+      fallback("cancelled", "navigation-request-cancelled"),
+    );
   const bridge = window.NativeBridge;
-  if (!bridge) return Promise.resolve(fallback);
+  if (!bridge)
+    return Promise.resolve(
+      fallback("unavailable", "navigation-service-unavailable"),
+    );
+  if ((pending.get(bridge)?.size ?? 0) >= 16)
+    return Promise.resolve(fallback("error", "too-many-navigation-requests"));
   return new Promise((resolve) => {
     const requests = pendingFor(bridge);
     let settled = false;
@@ -80,21 +171,20 @@ export function requestNavigation(
       }
       resolve(reply);
     };
-    const cancel = () => finish(fallback);
-    const timer = window.setTimeout(cancel, 1800);
+    const cancel = () =>
+      finish(fallback("cancelled", "navigation-request-cancelled"));
+    const timer = window.setTimeout(
+      () => finish(fallback("timeout", "navigation-response-timeout")),
+      1800,
+    );
     requests.set(id, finish);
     signal?.addEventListener("abort", cancel, { once: true });
     try {
       bridge.postMessage(
-        JSON.stringify({
-          v: 1,
-          id,
-          type: "navigate",
-          destinationId,
-        } satisfies Request),
+        JSON.stringify({ v: 1, id, ...body } satisfies Request),
       );
     } catch {
-      finish(fallback);
+      finish(fallback("error", "navigation-transport-error"));
     }
   });
 }
@@ -111,6 +201,7 @@ function pendingFor(bridge: NativeTransport) {
     pending.set(bridge, requests);
     bridge.onmessage = (event) => {
       try {
+        if (typeof event.data !== "string" || event.data.length > 4096) return;
         const reply = parseReply(JSON.parse(event.data));
         if (reply) pending.get(bridge)?.get(reply.id)?.(reply);
       } catch {
