@@ -1136,3 +1136,36 @@ dd {
     display: none;
   }
 }
+
+/* Opening a collection should expose a card, including on short head units. */
+.panel .collection-heading h2 {
+  margin-block: 0 16px;
+}
+.collection-heading + .collection-group {
+  margin-top: 0;
+}
+.panel .collection-provenance {
+  margin-block: 6px 12px;
+  line-height: 1.5;
+}
+@media (max-height: 600px) {
+  .panel .collection-heading h2 {
+    margin-bottom: 12px;
+    font-size: 27px;
+  }
+  .collection-group {
+    margin-block: 16px;
+  }
+  .panel .collection-group h3 {
+    margin-bottom: 4px;
+    font-size: 19px;
+  }
+  .panel .collection-provenance {
+    margin-block: 4px 8px;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .collection-group .album {
+    margin-top: 8px;
+  }
+}

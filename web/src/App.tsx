@@ -1124,22 +1124,14 @@ export default function App() {
           )}
           {panel === "album" && (
             <>
-              <div className="eyebrow">THE PLACES WE CARRY WITH US</div>
-              <h2>
-                A world of
-                <br />
-                little memories.
-              </h2>
-              <p>
-                Your confirmed demo chapters and the illustrations that started
-                this world, kept clearly separate.
-              </p>
+              <div className="collection-heading">
+                <h2>My collection</h2>
+              </div>
               {[
                 {
                   title: "Confirmed demo keepsakes",
                   items: confirmed,
-                  empty:
-                    "No demo confirmations yet. Choose an illustrative adventure to start your own demo chapter.",
+                  empty: "No demo confirmations yet. Demos are not verified visits.",
                 },
                 {
                   title: "Seeded illustrations",
@@ -1148,19 +1140,19 @@ export default function App() {
                 },
               ].map((group) => (
                 <section
-                  className="collection-group"
+                  className={`collection-group${group.items.length === 0 ? " collection-group-empty" : ""}`}
                   key={group.title}
                   aria-label={group.title}
                 >
                   <h3>{group.title}</h3>
-                  <p>
-                    {group.title === "Confirmed demo keepsakes"
-                      ? "Newest confirmation dates first. Demo confirmations are not verified visits."
-                      : "Examples supplied with the world, not places you have visited."}
+                  <p className="collection-provenance">
+                    {group.items.length === 0
+                      ? group.empty
+                      : group.title === "Confirmed demo keepsakes"
+                        ? "Newest first · not verified visits."
+                        : "Examples, not places you have visited."}
                   </p>
-                  {group.items.length === 0 ? (
-                    <p>{group.empty}</p>
-                  ) : (
+                  {group.items.length > 0 && (
                     <div className="album">
                       {group.items.map((item) => (
                         <button
