@@ -53,13 +53,15 @@ class NoticeGenerationTests(unittest.TestCase):
         path.write_text(json.dumps({"schemaVersion": 1, "lockfileSha256": hashlib.sha256((self.root / "web/package-lock.json").read_bytes()).hexdigest(), "packages": entries}))
         return str(path)
 
-    def test_deterministic_outputs_keep_full_license_and_notice_bytes(self):
+    def test_deterministic_outputs_keep_full_license_and_notice_content(self):
         notice = self.root / "web/node_modules/alpha/NOTICE.txt"
         notice.write_bytes(b"Supplementary attribution retained exactly.\r\n")
         self.command()
         before = (self.root / "web/public/third-party-notices.txt").read_bytes()
         self.assertIn(MIT, before)
-        self.assertIn(notice.read_bytes(), before)
+        self.assertIn(notice.read_bytes().replace(b"\r\n", b"\n"), before)
+        record = next(row for row in self.inventory()["packages"] if row["name"] == "alpha")
+        self.assertEqual(next(item for item in record["notices"] if item["path"] == "NOTICE.txt")["sha256"], hashlib.sha256(notice.read_bytes()).hexdigest())
         self.assertEqual(self.inventory()["runtimePackageCount"], 2)
         self.command("--check")
         self.command()

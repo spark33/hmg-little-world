@@ -250,7 +250,7 @@ def render(inventory: dict, material: dict) -> str:
         parts.extend(["\n" + "=" * 78 + "\n", "Proprietary SDKs — separate terms\n"])
         for sdk in inventory["proprietaryDependencies"]:
             parts.extend([f"{sdk['name']}: {', '.join(sdk['coordinates'])}\n", sdk["notice"] + "\n", "Official terms/documentation: " + sdk["sourceUrl"] + "\n"])
-    return "".join(parts)
+    return "".join(parts).replace("\r\n", "\n").replace("\r", "\n")
 
 
 def generate(root: Path, bundle_path: Path | None, check: bool = False):
