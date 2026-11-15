@@ -8,6 +8,7 @@ import {
   updateMemory,
   destinationsFor,
   initialState,
+  localVisitDate,
   loadWorld,
   readWorld,
   isVisitDate,
@@ -287,5 +288,12 @@ describe("Seoul theme and legacy archive", () => {
     expect(loadWorld(s).collected.chicago.memory).toBe(
       "Our original Chicago confirmation",
     );
+  });
+});
+
+describe("local confirmation dates", () => {
+  it("uses local calendar components, including month and day padding", () => {
+    expect(localVisitDate(new Date(2026, 0, 2, 0, 15))).toBe("2026-01-02");
+    expect(localVisitDate(new Date(2026, 10, 16, 0, 30))).toBe("2026-11-16");
   });
 });
