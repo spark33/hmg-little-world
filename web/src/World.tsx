@@ -1,4 +1,11 @@
-import { Suspense, useEffect, useMemo, useRef } from "react";
+import {
+  createContext,
+  Suspense,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+} from "react";
 import {
   Canvas,
   useFrame,
@@ -9,6 +16,7 @@ import { OrbitControls, RoundedBox } from "@react-three/drei";
 import * as THREE from "three";
 import type { OrbitControls as OrbitImpl } from "three-stdlib";
 type V3 = [number, number, number];
+const MotionContext = createContext(false);
 const C = {
   grass: "#a5bd82",
   edge: "#d2c8a3",
@@ -149,7 +157,9 @@ function Tree({
   scale?: number;
 }) {
   const crown = useRef<THREE.Group>(null);
+  const reducedMotion = useContext(MotionContext);
   useFrame(({ clock }) => {
+    if (reducedMotion) return;
     if (crown.current)
       crown.current.rotation.z =
         Math.sin(clock.elapsedTime * 0.8 + p[0]) * 0.025;
@@ -397,7 +407,9 @@ function Shop({
 }
 function Lighthouse({ night }: { night: boolean }) {
   const lamp = useRef<THREE.Group>(null);
+  const reducedMotion = useContext(MotionContext);
   useFrame(({ clock }) => {
+    if (reducedMotion) return;
     if (lamp.current) lamp.current.rotation.y = clock.elapsedTime * 0.25;
   });
   return (
@@ -452,7 +464,9 @@ function Person({
   walk?: boolean;
 }) {
   const ref = useRef<THREE.Group>(null);
+  const reducedMotion = useContext(MotionContext);
   useFrame(({ clock }) => {
+    if (reducedMotion) return;
     if (ref.current) {
       ref.current.position.y =
         p[1] + Math.sin(clock.elapsedTime * 2.5 + p[0]) * 0.018;
@@ -537,9 +551,10 @@ function Road() {
   );
 }
 function Car() {
+  const reducedMotion = useContext(MotionContext);
   const ref = useRef<THREE.Group>(null);
   useFrame(({ clock }) => {
-    const t = (clock.elapsedTime * 0.018 + 0.15) % 0.94;
+    const t = ((reducedMotion ? 0 : clock.elapsedTime) * 0.018 + 0.15) % 0.94;
     const p = roadCurve.getPoint(t);
     const d = roadCurve.getTangent(t);
     if (ref.current) {
@@ -570,7 +585,9 @@ function Car() {
 }
 function Water() {
   const ref = useRef<THREE.Mesh>(null);
+  const reducedMotion = useContext(MotionContext);
   useFrame(({ clock }) => {
+    if (reducedMotion) return;
     if (ref.current)
       ref.current.position.y =
         0.045 + Math.sin(clock.elapsedTime * 0.6) * 0.009;
@@ -739,7 +756,9 @@ function EmptyPlot({
   collecting: boolean;
 }) {
   const glow = useRef<THREE.Mesh>(null);
+  const reducedMotion = useContext(MotionContext);
   useFrame(({ clock }) => {
+    if (reducedMotion) return;
     if (glow.current) {
       const material = glow.current.material as THREE.MeshStandardMaterial;
       material.opacity = collecting
@@ -831,6 +850,7 @@ function CameraRig({
   zoom: number;
   selected: string | null;
 }) {
+  const reducedMotion = useContext(MotionContext);
   const { width, height } = useThree((state) => state.size);
   const wide = width / height > 2.1;
   const elevation = wide ? 10 : 13;
@@ -875,20 +895,26 @@ function CameraRig({
                 ? [-2.2, 0.5, -1.7]
                 : [0, 0, 0];
       targetPosition.set(...position);
-      controls.current.target.lerp(targetPosition, 1 - Math.exp(-delta * 2.5));
+      controls.current.target.lerp(
+        targetPosition,
+        reducedMotion ? 1 : 1 - Math.exp(-delta * 2.5),
+      );
       cameraPosition.set(
         14 + position[0],
         elevation + position[1],
         17 + position[2],
       );
-      camera.position.lerp(cameraPosition, 1 - Math.exp(-delta * 2.5));
+      camera.position.lerp(
+        cameraPosition,
+        reducedMotion ? 1 : 1 - Math.exp(-delta * 2.5),
+      );
       const desiredZoom = focus
         ? baseZoom * 1.13
         : THREE.MathUtils.clamp(baseZoom + zoom * 4, minZoom, maxZoom);
       camera.zoom = THREE.MathUtils.lerp(
         camera.zoom,
         desiredZoom,
-        1 - Math.exp(-delta * 2),
+        reducedMotion ? 1 : 1 - Math.exp(-delta * 2),
       );
       camera.updateProjectionMatrix();
       if (!collecting && camera.position.distanceTo(cameraPosition) < 0.03)
@@ -917,6 +943,7 @@ function CameraRig({
       makeDefault
       enabled={!collecting}
       enablePan
+      enableDamping={!reducedMotion}
       minPolarAngle={0.5}
       maxPolarAngle={1.18}
       minAzimuthAngle={-0.5}
@@ -930,6 +957,7 @@ function CameraRig({
   );
 }
 export interface WorldProps {
+  reducedMotion: boolean;
   collected: boolean;
   collecting: boolean;
   start: number;
@@ -1079,12 +1107,7 @@ function Scene(props: WorldProps) {
         <group position={[-0.1, 0, 4.7]}>
           <Cylinder p={[0, 0.45, 0]} r={0.04} h={0.9} c="#a98a64" />
           <Box p={[0, 0.73, 0]} s={[1.45, 0.38, 0.1]} c="#f0e3bd" />
-          <Label
-            text="LITTLE WORLD"
-            p={[0, 0.73, 0.06]}
-            width={1.35}
-            size={0.3}
-          />
+          <Label text="ROAMY" p={[0, 0.73, 0.06]} width={1.35} size={0.3} />
           <Plant p={[-0.85, 0, 0]} />
         </group>
       </group>
@@ -1104,6 +1127,7 @@ export default function World(props: WorldProps) {
   return (
     <Canvas
       shadows
+      frameloop={props.reducedMotion ? "demand" : "always"}
       orthographic
       camera={{ position: [14, 13, 17], zoom: 43, near: 0.1, far: 100 }}
       dpr={[1, 1.25]}
@@ -1119,7 +1143,9 @@ export default function World(props: WorldProps) {
       onPointerMissed={() => props.onSelect("")}
     >
       <Suspense fallback={null}>
-        <Scene {...props} />
+        <MotionContext.Provider value={props.reducedMotion}>
+          <Scene {...props} />
+        </MotionContext.Provider>
       </Suspense>
     </Canvas>
   );

@@ -35,6 +35,11 @@ import {
 } from "./domain";
 import { nativeHost, parseSafety, requestNavigation } from "./bridge";
 import { flourish, suspendSound, unlockSound } from "./sound";
+import {
+  loadPreferences,
+  savePreferences,
+  type Preferences,
+} from "./preferences";
 import "./styles.css";
 import "./vehicle.css";
 const storage = {
@@ -83,9 +88,15 @@ export default function App() {
   );
   const [panel, setPanel] = useState<Panel>(null),
     [selected, setSelected] = useState<string | null>(null);
-  const [night, setNight] = useState(false),
-    [muted, setMuted] = useState(false),
-    [zoom, setZoom] = useState(0);
+  const [preferences, setPreferences] = useState(() =>
+    loadPreferences(
+      storage,
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    ),
+  );
+  const { night, muted, reducedMotion } = preferences;
+  const [preferencesSaved, setPreferencesSaved] = useState(true);
+  const [zoom, setZoom] = useState(0);
   const [destination, setDestination] = useState<Destination>(destinations[0]);
   const [navigationStatus, setNavigationStatus] = useState(""),
     [pending, setPending] = useState(false);
@@ -103,6 +114,9 @@ export default function App() {
   const permitted = canInteract(safety) && active;
   const timers = useRef<number[]>([]);
   const navigationRequest = useRef<AbortController | null>(null);
+  const panelElement = useRef<HTMLElement | null>(null);
+  const panelOpener = useRef<HTMLElement | null>(null);
+  const wasPanelOpen = useRef(false);
   const chicago = Boolean(world.collected.chicago);
   const experience = catalog.find((x) => x.id === selected) ?? catalog[0];
   const count = Object.keys(world.collected).length;
@@ -149,6 +163,27 @@ export default function App() {
       setPending(false);
     }
   }, [panel, permitted]);
+  useEffect(() => {
+    if (panel && permitted) {
+      if (!wasPanelOpen.current)
+        panelOpener.current = document.activeElement as HTMLElement;
+      panelElement.current?.focus({ preventScroll: true });
+      wasPanelOpen.current = true;
+    } else {
+      if (wasPanelOpen.current && permitted && panelOpener.current?.isConnected)
+        panelOpener.current.focus({ preventScroll: true });
+      wasPanelOpen.current = false;
+    }
+    if (panel !== "settings") setConfirmReset(false);
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && panel) {
+        navigationRequest.current?.abort();
+        setPanel(null);
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [panel, permitted]);
   useEffect(
     () => () => {
       timers.current.forEach(clearTimeout);
@@ -184,6 +219,10 @@ export default function App() {
     setWorld(next);
     setPanel(null);
     setSelected(null);
+    if (reducedMotion) {
+      setToast("Your little world just got bigger!");
+      return;
+    }
     setStart(performance.now());
     setCollecting(true);
     timers.current.push(
@@ -195,6 +234,11 @@ export default function App() {
         setToast("Your little world just got bigger!");
       }, 7000),
     );
+  }
+  function updatePreferences(patch: Partial<Preferences>) {
+    const next = { ...preferences, ...patch };
+    setPreferencesSaved(savePreferences(storage, next));
+    setPreferences(next);
   }
   function reset() {
     timers.current.forEach(clearTimeout);
@@ -233,7 +277,7 @@ export default function App() {
         <div className="safe-symbol">
           <Leaf size={42} />
         </div>
-        <div className="eyebrow">LITTLE WORLD</div>
+        <div className="eyebrow">ROAMY</div>
         <h1>Your little world can wait.</h1>
         <p>
           {active
@@ -250,7 +294,7 @@ export default function App() {
     );
   return (
     <main
-      className={`app ${night ? "night" : ""} ${panel ? "panel-open" : ""} ${collecting ? "collecting" : ""}`}
+      className={`app ${night ? "night" : ""} ${panel ? "panel-open" : ""} ${collecting ? "collecting" : ""} ${reducedMotion ? "reduced-motion" : ""}`}
     >
       <div className="world" aria-label="Interactive miniature world">
         <RenderBoundary>
@@ -263,6 +307,7 @@ export default function App() {
             onSelect={select}
             resetToken={resetToken}
             zoom={zoom}
+            reducedMotion={reducedMotion}
           />
         </RenderBoundary>
       </div>
@@ -279,18 +324,21 @@ export default function App() {
             <Leaf size={25} strokeWidth={1.7} />
           </span>
           <span>
-            LITTLE WORLD<small>DRIVE THE REAL WORLD. BUILD YOUR OWN.</small>
+            ROAMY<small>DRIVE THE REAL WORLD. BUILD YOUR OWN.</small>
           </span>
         </a>
         <nav>
           <span className="preview-tag">
             <span />{" "}
             {nativeHost
-              ? "Non-vehicle development preview"
+              ? safety.preview
+                ? "Non-vehicle development preview"
+                : "Parked vehicle"
               : "Browser development preview"}
           </span>
           <button
             className={`nav-button ${panel === "album" ? "active" : ""}`}
+            aria-label={`My collection · ${count} memories`}
             onClick={() => setPanel(panel === "album" ? null : "album")}
           >
             <BookOpen size={18} /> My collection{" "}
@@ -379,6 +427,8 @@ export default function App() {
       )}
       {panel && (
         <aside
+          ref={panelElement}
+          tabIndex={-1}
           className={`panel ${panel === "destinations" ? "wide" : ""}`}
           aria-label="Adventure details"
         >
@@ -672,7 +722,7 @@ export default function App() {
           )}
           {panel === "settings" && (
             <>
-              <div className="eyebrow">BEHIND THE LITTLE WORLD</div>
+              <div className="eyebrow">BEHIND ROAMY</div>
               <h2>
                 A place to
                 <br />
@@ -687,7 +737,7 @@ export default function App() {
                 <button
                   className="secondary preference-button"
                   aria-label={night ? "Switch to daytime" : "Switch to evening"}
-                  onClick={() => setNight((n) => !n)}
+                  onClick={() => updatePreferences({ night: !night })}
                 >
                   {night ? <Sun size={22} /> : <Moon size={22} />}
                   <span>{night ? "Daytime world" : "Evening world"}</span>
@@ -696,7 +746,7 @@ export default function App() {
                   className="secondary preference-button"
                   aria-label={muted ? "Enable sound" : "Mute sound"}
                   onClick={() => {
-                    setMuted((m) => !m);
+                    updatePreferences({ muted: !muted });
                     if (muted) unlockSound();
                     else suspendSound();
                   }}
@@ -704,7 +754,24 @@ export default function App() {
                   {muted ? <VolumeX size={22} /> : <Volume2 size={22} />}
                   <span>{muted ? "Sound off" : "Sound on"}</span>
                 </button>
+                <button
+                  className="secondary preference-button"
+                  aria-pressed={reducedMotion}
+                  onClick={() =>
+                    updatePreferences({ reducedMotion: !reducedMotion })
+                  }
+                >
+                  <Leaf size={22} />
+                  <span>Reduce motion</span>
+                  <span>{reducedMotion ? "On" : "Off"}</span>
+                </button>
               </div>
+              {!preferencesSaved && (
+                <p role="status">
+                  Preferences could not be saved. These settings apply to this
+                  session.
+                </p>
+              )}
               <div className="settings-row">
                 <span>Navigation</span>
                 <span>Demo adapter</span>
