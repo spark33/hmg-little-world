@@ -1,0 +1,19 @@
+{
+  "verification": "passed",
+  "manifestUnchanged": true,
+  "rawCompared": false,
+  "videos": [
+    {
+      "file": "journey-refinement-walkthrough.mp4",
+      "bytes": 2835556,
+      "sha256": "7f6a57f8b7df555f7016f84047abe8626fff3ac46331a84d2b4e1f77ea65573e",
+      "codec": "h264",
+      "width": 1440,
+      "height": 900,
+      "frameRate": "15/1",
+      "durationSeconds": 209.733333,
+      "hasAudio": false,
+      "fullDecode": "passed"
+    }
+  ]
+}
