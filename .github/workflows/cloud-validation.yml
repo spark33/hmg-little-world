@@ -73,6 +73,7 @@ jobs:
           fi
           python3 web/verify-design-media.py 2>&1 | tee artifacts/ci-cloud/media-verification.log
           python3 web/verify-design-media.py --manifest artifacts/roamy-seoul/design/journey-refinement/media-validation.json 2>&1 | tee artifacts/ci-cloud/journey-media-verification.log
+          python3 web/verify-design-media.py --manifest artifacts/roamy-seoul/design/short-collection-fix/media-validation.json 2>&1 | tee artifacts/ci-cloud/short-collection-media-verification.log
       - name: Production browser E2E
         working-directory: web
         env:

@@ -1,0 +1,19 @@
+{
+  "verification": "passed",
+  "manifestUnchanged": true,
+  "rawCompared": false,
+  "videos": [
+    {
+      "file": "short-collection-fix-walkthrough.mp4",
+      "bytes": 308900,
+      "sha256": "e1c412c36958ebe0c184c5fc240da3d0834ac79c0ff3d7516d1ab43ee35a231f",
+      "codec": "h264",
+      "width": 960,
+      "height": 480,
+      "frameRate": "15/1",
+      "durationSeconds": 51.733333,
+      "hasAudio": false,
+      "fullDecode": "passed"
+    }
+  ]
+}
