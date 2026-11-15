@@ -1,109 +1,73 @@
-# ROAMY implementation roadmap
+# ROAMY roadmap — Seoul edition
 
-Audit baseline: commit `4879837`, reviewed 2026-11-15 (Asia/Seoul). This is a source audit of the complete tracked web, Android, domain, test, build, documentation, and evidence inventory. Existing artifacts describe an earlier run; they are not fresh runtime evidence. At baseline, ROAMY was branded LITTLE WORLD throughout the product. This roadmap describes the target, not a claim of completeness; the final section records this branch's completed increment.
-
-## Emulator feasibility
-
-See [EMULATOR_FEASIBILITY.md](EMULATOR_FEASIBILITY.md). The official Pleos 2.1.0 API 34 x86_64 image is available from the official published manifest without authentication. CRN is not required for this version. This cloud container has no `/dev/kvm`, no exposed CPU `vmx`/`svm`, and no GPU device. It cannot currently provide the documented accelerated Pleos validation environment. No Pleos boot, ADB connection, runtime APK validation, or head-unit performance result is claimed. Browser software rendering and native JVM tests are separate evidence.
-
-Minimum infrastructure action: provide a cloud development worker with usable nested virtualization/KVM and a supported exposed GPU. No local workstation is required. Credentials or a CRN will not fix the current host limitations.
+This is the current implementation plan after the cloud-readiness PR was merged. The original repository audit is preserved in Git history at `0c3eb4f`; historical artifacts directly under `artifacts/` describe that earlier proof of concept. The user redirected the product from the New York/US discovery theme to **Seoul**. Existing saved records remain truthful legacy data.
 
 ## Implemented features
 
-| Area | Source-backed behavior |
+| Area | Implemented behavior |
 | --- | --- |
-| Miniature world | `web/src/World.tsx`: original procedural island, Detroit shop, café, lighthouse, blossom tree, road, car, water, residents, plants; day/evening palette; bounded camera and direct selection. |
-| Collection | `App.tsx`, `domain.ts`: four seeded illustrative memories; Chicago confirmation and seven-second reveal; duplicate prevention; reload/reset; album as a 2D selection alternative. |
-| Discovery | Deterministic Detroit → Chicago → New York recommendations; three labeled sample deep-dish destinations; explicit simulated journey and confirmation; cancellation leaves collection unchanged. |
-| Local application | Bundled geometry/audio and restrictive production CSP; no runtime server/account; WebGL error boundary; storage failure message. |
-| Android shell | Two flavors, minSdk 28, targetSdk 34, compileSdk 35, Gradle 8.10.2; automatic web build/bundle; origin-restricted main-frame WebMessage bridge; WebViewAssetLoader; external requests/navigation blocked. |
-| Safety | Vehicle UNKNOWN/DRIVING locked by an opaque native cover plus web Canvas removal; pause/resume signals, audio suspension, animation interruption, resource cleanup. Preview explicitly separate. |
-| Navigation | Vehicle flavor compiles against official NaviHelper 3.0.5; initialization, permission check, listener cleanup, coordinate validation; sample destinations rejected. |
-| Existing checks | 17 web unit tests, five browser E2E tests, four native unit tests in each flavor, rendering script, Android lint/build scripts. Fresh results are recorded separately. |
+| Seoul collection | Four seeded illustrations: Gwangjang Market, Namsan, Seokchon Lake, Seongsu. Four complete new demo keepsakes: Mangwon Market, Gyeongbokgung, Bukhansan, Seoul museum. |
+| Gameplay | Category browsing, matching recommendations, destination choice, simulated journey, explicit confirmation/cancellation, all-four completion, duplicate-free replay, editable notes and local calendar visit dates. |
+| Original world | Dedicated Seoul-inspired market, tower, blossom, café, hanok/palace, hiking and museum assets; eight deterministic reserved sites; direct selection, bounded camera, day/evening and seven-second reveals. No downloaded 3D assets. |
+| Accessibility and layout | Vector keepsake illustrations, named controls, keyboard panel focus/Escape return, large touch targets, readable secondary text, short-display scrolling, visible narrow preview/storage warnings and reduced motion. |
+| Persistence | Version 1→2 migration, unchanged storage key, explicit illustration/confirmed-demo provenance, current/legacy archive separation, bounded validated backups/imports, prior-save recovery, protected future/corrupt data, deliberate reset/replacement/deletion and transient-read recovery. |
+| Android shell | Local-only hardened WebView, native cover before service/renderer initialization, current-frame bridge checks, renderer-loss failure cover, lifecycle cleanup and version 0.2.0 packaging. |
+| Restriction integration | Official CarUxRestrictions observer, monotonic observation freshness, foreground/subscription generations, disconnect/error invalidation and tested fail-closed policy. Production authorization remains deliberately disabled until official runtime validation. |
+| Navigation foundation | Official NaviHelper service lifecycle, validated native destination registry, strict versioned bridge, typed capabilities/status/retry/cancel, permission/state guards and no sample routes or invented arrival. |
+| Audio | Deliberate transient native game focus immediately before chime playback; silent priming, actual-grant checks, stale-reply/oscillator cleanup, screen/lifecycle loss and bounded focus leases. No automatic resume or fabricated grant. |
+| Attribution | In-app local license reader with loading/retry and keyboard support; production-bundle dependency inventory. Full generated notices and inventory checks accompany this increment. |
+| Competition readiness | Source-linked requirement matrix and unsigned official-template application draft for a solo General/startup entry. Owner signatures, eligibility/IP review and submission remain required. |
+| Release/build | Both debug flavors, unsigned vehicle release, optional secure environment signing, game category, automotive-only vehicle requirement, backup/device-transfer exclusions, APK integrity checks, cloud CI and repeatable host/image preflight. |
 
-## Partial features and mocked integrations
+## Partial features, mocks and missing capabilities
 
-| Feature | Actual limitation |
+| Feature | Precise remaining limitation |
 | --- | --- |
-| Gameplay progression | Only Chicago can be added. New York, mountain, and museum are catalog previews; recommendations from nature/culture have no playable action. Island and reserved plot are fixed. No automatic terrain expansion. |
-| Vehicle entertainment | No trusted parked-state provider. `PleosVehicleAdapter.safety` always UNKNOWN; vehicle entertainment is unusable by design until safely integrated and validated. |
-| Navigation | All UI destinations are fictitious and contain sample distances; no real POI search, location, route progress, cancellation, retry, or arrival integration. Success boolean means submission only. SDK errors permanently clear adapter availability. |
-| Location/lighting | Location flow always null. Lighting capabilities always unavailable and restoration is a no-op. No lighting controls are exposed. |
-| Persistence | v1 localStorage stores only Chicago in addition to seeded memories. Date validation checks shape only; initial load eagerly rewrites storage; save happens in a React effect. No migration/export/recovery or persistent preferences. Uninstall/clear-data loses the world. |
-| Bridge | One mutable `onmessage` callback; no concurrent requests or cancellation; synchronous transport failure is not recovered. Delayed results may reopen a dismissed panel after safety/visibility changes. |
-| Lifecycle | Source-level restrictions and JVM policy tests exist, but no Android instrumentation tests or fresh Pleos lifecycle/render-process-death validation. |
+| Official Pleos validation | Current worker has no usable KVM/nested CPU flags or exposed GPU. No official AVD boot, connected ADB device, on-device install/launch, native screenshot/logcat, instrumentation or head-unit profiling is claimed. |
+| Vehicle gameplay | Production `StationarySafetyGate(platformValidated=false)` keeps unrestricted observations UNKNOWN. A documented API and passing unit tests do not establish safe runtime authorization. No fake PARKED state or override exists. |
+| Real discovery/navigation | All user-facing journeys, destinations, distances and confirmations are labeled demo/illustrative. The production native POI registry is empty until an accurate authorized source is reviewed. No live POI search, GPS-based arrival or real visit detection is advertised. |
+| Sensitive data protection | Browser saves and exported backups are plaintext with explicit warnings. Approved encrypted native persistence is required before handling sensitive personal/vehicle information. Automatic backup exclusions and sandboxing do not provide encryption. |
+| Vehicle controls | Location remains unavailable, lighting capability/restoration is unsupported and no cabin controls are exposed. Voice features are absent. Do not add APIs/permissions without a supported, authorized use case. |
+| Release | No owner release certificate, published privacy/support materials, country/age-rating decisions, provider approval or Pleos review outcome has been supplied. Unsigned/debug APKs are development artifacts. |
 
-Mocked travel, venue availability, visit dates, memories, and distances must remain explicitly labeled. User confirmation records a demo keepsake, not proof of a real visit. PARKED, route completion, and permissions must never be fabricated.
+Seeded experiences and user-confirmed demonstrations are distinct. Old Detroit/Chicago dates, places and notes remain in an explicitly labeled archive; they never become Seoul visits. No time, distance or driving activity automatically awards a keepsake. The island stays fixed; confirming a memory fills a reserved plot.
 
-## Visual and UX deficiencies
+## Visual/UX and performance limits
 
-- ROAMY identity is absent from launcher labels, title, native safety screen, town sign, and web header. Keep package/storage identity stable when renaming to preserve upgrades.
-- Discovery becomes a dead end after Chicago. Other categories show recommendations without a working next step.
-- Panel is a scrolling complementary region with no focus transfer/return or Escape handling. Reset is immediate and destructive. Non-primary and sticky actions need short-display overlap checks.
-- Fine print and secondary labels are small/low contrast. Emoji appearance depends on host fonts. Narrow layout hides the development preview badge and the collection button's text, weakening mode disclosure and accessible naming.
-- Reduced-motion CSS covers only some transitions; 3D ambient motion, camera easing and reveal continue. Day/night and mute preferences reset on reload.
-- A large number of detailed meshes render continuously. DPR/shadow caps exist, but draw calls, memory, GPU time, long sessions and thermal behavior are unmeasured on Pleos.
-- Storage feedback is hidden in the normal vehicle footer and only inspectable in settings. Corrupt/unsupported saves silently reset; unavailable storage can make a completed animation look durable.
+Cloud browser checks exercise 960×480, 1024×600, 1280×720, 1920×720 and narrow fallback layouts. They cover focus, scrolling, text contrast for selected guidance, touch targets, recovery controls and overlap fixes. They do not certify physical head-unit density, all assistive technologies, every localization or automotive touch behavior.
 
-## Android / Pleos compatibility risks
+Repeated road markings and shop roof ribs are batched. Software GL interception measured complete-scene shadow-frame draw calls decreasing from 1,205 to 984 and ordinary-frame calls from 615 to 505. This is a rendering-work reduction, **not** a Pleos frame-rate claim. Contended SwiftShader timings are slow and are not an acceptable head-unit performance budget. The original scene still has detailed individual meshes and continuous ambient rendering outside reduced-motion mode; final optimization must follow measured official-runtime bottlenecks.
 
-- Official docs now expose Vehicle State as ready to use and Vehicle 2.3.2. The old README conflates unavailable Vehicle Control with state access. Investigate documented state/capability/error/listener APIs and the platform entertainment restriction contract; do not infer parked from a parking brake or zero speed alone.
-- Service binding, Navi permission grants, SDK callbacks, WebView WebGL/CSP/audio, native lifecycle, launcher presentation and automotive category eligibility remain runtime-unverified.
-- Background/foreground and service disconnect must invalidate any previous permission to interact. Native cover must work while JavaScript is stalled. A stale/disconnected source must become UNKNOWN.
-- Android target/market requirements, release signing, privacy/backup policy and automotive manifest requirements need current review. Debug APKs in `artifacts/` are historical development builds, not release candidates.
-- No CI workflows are present at baseline. Android SDK/JDK/browser installation and writable cache paths must be reproducible in cloud-only environments.
+## Milestones and explicit acceptance criteria
 
-## Prioritized milestones and acceptance criteria
+### P0 — Reliable cloud development and state handling
 
-### P0 — Reproducible evidence and lifecycle reliability (unblocked)
+Implementation complete; final combined checks are recorded with the integration PR. Acceptance: unit/build/browser/native/lint checks pass; delayed replies cannot reopen dismissed flows; confirmed saves survive interruption; failed reads/writes never silently replace the previous world; corrupt/future data stays recoverable. Production UNKNOWN/restricted states remain covered.
 
-1. Publish host/image/CRN evidence and this roadmap. Build and test both native flavors in cloud; record fresh logs separately from historical artifacts.
-2. Cancel bridge requests when panel/lifecycle/safety changes; correlate concurrent replies; recover unavailable/throwing transports. Late replies must never resurrect a journey.
-3. Persist confirmed collections synchronously before reveal. Validate actual calendar dates; preserve existing v1 data; surface failed storage with an accessible visible warning and retry. Do not overwrite unreadable/future-version saves at startup.
+### P1 — Seoul gameplay and demonstration quality
 
-Acceptance: baseline and added unit/E2E tests pass against the production bundle; both APKs and native tests/lint pass or their exact blockers are documented; safety interruption plus delayed native reply restores the world with no panel, animation or audio. UNKNOWN/DRIVING and native cover behavior remain fail-closed. Saved collection survives interruption/reload and duplicate confirmation; impossible dates are rejected.
+Implementation complete for the fixed eight-site illustrative game. Acceptance: all four new Seoul keepsakes have reachable, cancelable, persistent flows; categories and recommendations select the correct experience; completion/replay/editing work; legacy data remains original; system/user reduced motion suppresses nonessential movement; keyboard/touch/short-display checks pass; screenshots show the current Seoul product and are labeled browser evidence.
 
-### P1 — ROAMY identity and demonstration quality (unblocked)
+### P1 — Official vehicle restriction/runtime gate
 
-Apply ROAMY naming consistently while preserving package IDs and save compatibility; persist preferences; add safe reset confirmation, focus handling, accessible control names, persistent mode disclosure and reduced-motion behavior.
+**Blocked by cloud hardware and mandatory device validation.** Provision a cloud worker with usable `/dev/kvm`, nested CPU virtualization and a supported GPU/driver. Use the official published Pleos 2.1.0 API 34 image, cold boot and 4 GB AVD allocation; no CRN is required for this version.
 
-Acceptance: launch/header/safety/title/sign all say ROAMY; existing saves load unchanged; keyboard/touch and 960×480 through 1920×720 checks pass; reduced-motion setting suppresses nonessential animation; current screenshots accompany the PR and are labeled browser evidence.
+Acceptance: verify ADB connection and install/launch; startup UNKNOWN covered; actual platform restrictions lock immediately; a fresh authoritative allowed stationary condition is verified for the target category/display before production authorization is enabled. Missing permission, stale data, disconnect, background, delayed callbacks, process death and renderer failure remain locked. Stall JavaScript and independently prove the native cover works. Capture official screenshots and filtered non-sensitive logcat. No generic emulator or fabricated PARKED fixture substitutes for this gate.
 
-### P1 — Trusted vehicle safety and official runtime validation (infrastructure dependency)
+### P2 — Persistence and truthful navigation
 
-Research and implement only official, authorized state/UX restrictions with explicit freshness/disconnect handling and testable policy. Keep the vehicle world locked until this path is verified. On the upgraded cloud worker, install the manifest-provided image, cold boot the 4 GB API 34 AVD, verify `adb devices`, install/launch the vehicle APK and use the official Virtual Console.
+Persistence and the navigation contract are implemented; **live destination configuration and actual SDK behavior remain open**. Acceptance: current/legacy backups round-trip, unknown/oversized/malformed/future imports are rejected or preserved appropriately, replacement is explicit and recovery/deletion is deliberate. Only reviewed native-owned destinations reach NaviHelper; denied/unavailable/timeout/disconnect/retry/cancel outcomes are actionable; a submitted/search-finished route never means arrival. Configure an authorized accurate Seoul POI source, then test real service binding/permissions/callback order on official Pleos.
 
-Acceptance: startup UNKNOWN locked; trusted allowed stationary condition unlocks; driving, missing permission, stale signal, disconnect, background, rotation/recreation and stalled JS lock immediately. Reconnection requires fresh state. Save/process-death recovery passes. Capture Pleos screenshots, filtered logcat and device/image identity without sensitive identifiers. Measure rendering/memory and exercise navigation errors/lifecycle. No generic Android substitute and no fake PARKED state.
+### P3 — Performance, privacy and release gate
 
-### P2 — Complete gameplay progression (unblocked for clearly labeled preview)
+Build/signing preparation and cloud validation are implemented; **release acceptance remains open**. Acceptance: official runtime matrix passes, measured head-unit frame-time/draw-call/memory/long-session budgets are agreed and met, audio-focus/suspend/speaker behavior is verified, sensitive data is protected with approved encryption if handled, a valid owner-signed non-debuggable APK passes integrity checks, and accurate privacy/support/country/age-rating/permission materials pass Pleos review. Do not invent credentials, support contacts, legal ratings, certification or performance results.
 
-Generalize typed collectibles, recommendations and journey/confirmation state; implement New York, mountain and museum keepsakes with dedicated original assets and deterministic plots; category browsing, replayable discoveries, completion states and memory editing. Separate seeded illustrations from user-added records. Define growth rules before terrain expansion.
+## Next actions in priority order
 
-Acceptance: every advertised collectible has a reachable, cancelable and persistent collect flow; every recommendation opens its corresponding experience; repeated visits do not duplicate assets; a full catalog survives reload/migration/reset; interrupted reveals keep confirmed records; unknown IDs never enter saves. No real visit/arrival claims from simulated travel.
+1. Complete integrated cloud regression checks, screenshots/videos, bundled license verification and APK integrity for this Seoul increment; review the feature PR. The mandatory initial contest form needs owner review/signing/submission by 2026-11-15 23:59 KST; optional release evidence must remain truthful.
+2. Provision the cloud KVM/GPU environment and execute the official runtime acceptance matrix before enabling vehicle entertainment.
+3. Supply/review a licensed accurate Seoul destination provider, validate native navigation on Pleos, and implement approved encrypted storage before advertising sensitive personal memories.
+4. Profile real hardware, resolve measured bottlenecks and perform accessibility/touch/localization review on the target display.
+5. Provide secure release signing and reviewed market materials; publish only after explicit approval and successful platform review.
 
-### P2 — Production navigation and persistence
-
-Add verified POI/destination source with provenance, explicit permission/capability UI and typed asynchronous navigation states/recovery. Keep sample routing rejected. Add versioned migrations and local export/import recovery with size/schema limits and deliberate confirmation; privacy controls and tested data-retention behavior.
-
-Acceptance: only verified destinations reach native navigation; denied/unavailable/timeout/disconnect paths are actionable; route submission is never labeled arrival; user confirmation is required for a memory. Migration preserves valid v1 records, corrupt data is recoverable, future versions are not overwritten, and storage loss is clearly explained.
-
-### P3 — Release and performance gate
-
-Automate cloud unit/production-browser/build/native lint checks and attach evidence; optimize measured rendering bottlenecks; review contrast/touch/accessibility, market eligibility, offline behavior, release signing and submission checklist.
-
-Acceptance: official Pleos runtime matrix completed with screenshots/logcat, zero fatal exceptions, verified native cover under JS failure, stable measured frame-time/memory budget agreed for target hardware, signed release APK and reproducible build, all checks green. Unsupported lighting/voice/location features stay absent or explicitly unavailable. Any introduced vehicle control requires approved permissions, deliberate user intent, capability checks and verified restoration.
-
-## Delivery policy
-
-Use small feature-branch commits and reviewed pull requests. Each PR lists exact checks, screenshot provenance, unmet acceptance criteria and remaining runtime limitations. Do not describe this proof of concept as feature-complete or Pleos-validated until the runtime and release gates pass.
-
-## First implementation increment
-
-The audit tables above retain the baseline to make the gaps reviewable. This branch addresses these items:
-
-- P0: correlated/cancelable bridge requests, transport error fallback, actual string validation for safety events, and regression coverage for delayed replies after safety, backgrounding and panel dismissal.
-- P0: synchronous confirmed saves, real calendar validation, bounded memories, preservation of corrupt/future saves, visible failed-save feedback/retry, and deliberate reset confirmation.
-- P1: ROAMY header/title/native launcher/safety/sign identity with stable package IDs and legacy save key; persistent day/evening, mute and motion preferences; system reduced-motion default, demand-rendered static world and instant confirmed keepsakes; panel keyboard focus/Escape return; narrow-screen preview disclosure and collection accessible name.
-- P3 foundation: a cloud CI workflow for production-browser E2E, unit tests, both APKs, native tests/lint and downloadable evidence. CI configuration is not itself proof of a successful hosted run.
-
-Gameplay expansion, live navigation, trusted parked integration, Pleos runtime and release certification remain open. See [CLOUD_VALIDATION.md](CLOUD_VALIDATION.md) for measured checks and limitations.
+Detailed evidence and implementation boundaries: [emulator feasibility](EMULATOR_FEASIBILITY.md), [native safety](VEHICLE_SAFETY.md), [navigation](NAVIGATION.md), [release/signing/privacy](RELEASE.md). Browser or JVM evidence must never be described as official Pleos validation.

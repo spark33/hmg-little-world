@@ -47,6 +47,11 @@ jobs:
           mkdir -p ../artifacts/ci-cloud
           npm test 2>&1 | tee ../artifacts/ci-cloud/web-unit.log
           npm run build 2>&1 | tee ../artifacts/ci-cloud/web-build.log
+      - name: Verify attribution and release staging policy
+        run: |
+          python3 scripts/generate-notices.py --check --bundle-inventory web/dist/bundle-dependencies.json
+          python3 -m unittest discover -s docs/licenses -p 'test_generate_notices.py' -v 2>&1 | tee artifacts/ci-cloud/notice-tests.log
+          python3 -m unittest discover -s scripts/tests -v 2>&1 | tee artifacts/ci-cloud/staging-tests.log
       - name: Production browser E2E
         working-directory: web
         env:
