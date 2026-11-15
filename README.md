@@ -50,6 +50,8 @@ cd android
   :app:lintPreviewDebug :app:lintVehicleDebug
 ```
 
+Official emulator attempt: **Pleos Connect 2.1.0 / Android API 34**, using the included **2560×1440, 160 dpi** profile with **4 GB RAM and cold boot**. The official image was installed and checksum-verified. This cloud host lacks KVM and a supported GPU; the software fallback reached ADB but did not finish Android boot, so ROAMY was not successfully installed/launched and emulator smoothness is unvalidated. See the [installation and boot diagnostics](docs/PLEOS_INSTALL_ATTEMPT.md). Browser screenshots/videos remain explicitly separate evidence.
+
 Every build bundles the production Vite output with WebViewAssetLoader.
 
 | Flavor | Stable package | Behavior |
