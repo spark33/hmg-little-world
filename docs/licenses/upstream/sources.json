@@ -1,0 +1,211 @@
+{
+  "androidLibraries": [
+    {
+      "coordinates": [
+        "androidx.annotation:annotation:1.8.1",
+        "androidx.annotation:annotation-experimental:1.4.1",
+        "androidx.annotation:annotation-jvm:1.8.1",
+        "androidx.arch.core:core-common:2.1.0",
+        "androidx.arch.core:core-runtime:2.1.0",
+        "androidx.collection:collection:1.0.0",
+        "androidx.concurrent:concurrent-futures:1.0.0",
+        "androidx.core:core:1.8.0",
+        "androidx.core:core-ktx:1.8.0",
+        "androidx.lifecycle:lifecycle-common:2.3.1",
+        "androidx.lifecycle:lifecycle-runtime:2.3.1",
+        "androidx.versionedparcelable:versionedparcelable:1.1.1",
+        "androidx.webkit:webkit:1.12.1"
+      ],
+      "declaredLicense": "Apache-2.0",
+      "files": [
+        {
+          "path": "docs/licenses/upstream/androidx-webkit-1.12.1-LICENSE.txt",
+          "sha256": "809fa1ed21450f59827d1e9aec720bbc4b687434fa22283c6cb5dd82a47ab9c0",
+          "sourceRef": "1.12.1",
+          "sourceUrl": "https://dl.google.com/dl/android/maven2/androidx/webkit/webkit/1.12.1/webkit-1.12.1.aar",
+          "versionProvenance": "Exact webkit AAR META-INF/androidx/webkit/webkit/LICENSE.txt; AndroidX coordinates declare Apache-2.0 in their published POMs."
+        }
+      ],
+      "name": "AndroidX"
+    },
+    {
+      "coordinates": [
+        "org.jetbrains.kotlin:kotlin-stdlib:2.1.10",
+        "org.jetbrains.kotlin:kotlin-stdlib-common:2.1.10"
+      ],
+      "declaredLicense": "Apache-2.0",
+      "files": [
+        {
+          "path": "docs/licenses/upstream/kotlin-2.1.10-LICENSE.txt",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "sourceRef": "v2.1.10",
+          "sourceUrl": "https://github.com/JetBrains/kotlin/blob/v2.1.10/license/LICENSE.txt",
+          "versionProvenance": "Exact Kotlin version tag."
+        }
+      ],
+      "name": "Kotlin standard library"
+    },
+    {
+      "coordinates": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1",
+        "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.1",
+        "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1",
+        "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.1"
+      ],
+      "declaredLicense": "Apache-2.0",
+      "files": [
+        {
+          "path": "docs/licenses/upstream/kotlinx-coroutines-1.10.1-LICENSE.txt",
+          "sha256": "b1febe6399dffb10d19d35e7663ab16300c93cb0476a94115df1cc0097a8ffd8",
+          "sourceRef": "1.10.1",
+          "sourceUrl": "https://github.com/Kotlin/kotlinx.coroutines/blob/1.10.1/LICENSE.txt",
+          "versionProvenance": "Exact coroutines version tag."
+        }
+      ],
+      "name": "Kotlin coroutines"
+    },
+    {
+      "coordinates": [
+        "org.jetbrains.kotlinx:kotlinx-serialization-bom:1.6.3",
+        "org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.3",
+        "org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.6.3",
+        "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3",
+        "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.6.3"
+      ],
+      "declaredLicense": "Apache-2.0",
+      "files": [
+        {
+          "path": "docs/licenses/upstream/kotlinx-serialization-1.6.3-LICENSE.txt",
+          "sha256": "c5accbbd8546e94c34aed24afe689a617627d18eed5a6c48277e48db57c23851",
+          "sourceRef": "v1.6.3",
+          "sourceUrl": "https://github.com/Kotlin/kotlinx.serialization/blob/v1.6.3/LICENSE.txt",
+          "versionProvenance": "Exact serialization version tag."
+        }
+      ],
+      "name": "Kotlin serialization"
+    },
+    {
+      "coordinates": [
+        "org.jetbrains:annotations:23.0.0"
+      ],
+      "declaredLicense": "Apache-2.0",
+      "files": [
+        {
+          "path": "docs/licenses/upstream/jetbrains-annotations-23.0.0-LICENSE.txt",
+          "sha256": "8c1e966c7855fb54027bcaf6ebe7a43abe4785791e8cf9148c363761d493d097",
+          "sourceRef": "23.0.0",
+          "sourceUrl": "https://github.com/JetBrains/java-annotations/blob/23.0.0/LICENSE.txt",
+          "versionProvenance": "Exact annotation version tag."
+        }
+      ],
+      "name": "JetBrains annotations"
+    },
+    {
+      "coordinates": [
+        "com.google.guava:listenablefuture:1.0"
+      ],
+      "declaredLicense": "Apache-2.0",
+      "files": [
+        {
+          "path": "docs/licenses/upstream/Apache-2.0.txt",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "sourceRef": "Apache-2.0",
+          "sourceUrl": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+          "versionProvenance": "Canonical Apache license text. Artifact POM inherits guava-parent 26.0-android; license metadata reviewed separately."
+        }
+      ],
+      "name": "Guava ListenableFuture"
+    }
+  ],
+  "npmPackages": {
+    "@mediapipe/tasks-vision@0.10.17": {
+      "completeLicense": true,
+      "embedded": [
+        {
+          "marker": "Copyright",
+          "path": "vision.d.ts",
+          "sha256": "fc8a3cf4a55f7d1ae3f2efdda84bbeaeea605a92e535ac52b99deed6366917d5"
+        }
+      ],
+      "files": [
+        {
+          "path": "docs/licenses/upstream/mediapipe-Apache-2.0.txt",
+          "sha256": "8707eef0533987efc5b155d64761eeb6e20793f50b9bd1a68dad1cf4719d0ed8",
+          "sourceRef": "02ca022d573c004c463d8c61eb3f8ce17e95a7fc",
+          "sourceUrl": "https://github.com/google-ai-edge/mediapipe/blob/02ca022d573c004c463d8c61eb3f8ce17e95a7fc/LICENSE",
+          "versionProvenance": "Official upstream Apache 2.0 license pinned by commit; no matching JS package v0.10.17 Git tag was available."
+        }
+      ],
+      "reviewNotes": [
+        "Package metadata declares Apache-2.0; package files omit full license text.",
+        "Actual 2022 and 2023 MediaPipe Authors notice comments from the installed package are preserved separately."
+      ]
+    },
+    "@react-three/fiber@9.8.2": {
+      "completeLicense": true,
+      "files": [
+        {
+          "path": "docs/licenses/upstream/react-three-fiber-9.8.2-LICENSE.txt",
+          "sha256": "9c35b5de7b7493a707fffe4eb23bd2f7f449153c1911f7c6eefb4e591fd5349a",
+          "sourceRef": "v9.8.2",
+          "sourceUrl": "https://github.com/pmndrs/react-three-fiber/blob/v9.8.2/LICENSE",
+          "versionProvenance": "Exact installed package version tag; npm gitHead was unavailable."
+        }
+      ],
+      "reviewNotes": [
+        "npm package omits LICENSE; exact-version upstream tag supplies full MIT license."
+      ]
+    },
+    "draco3d@1.5.9": {
+      "completeLicense": true,
+      "files": [
+        {
+          "path": "docs/licenses/upstream/draco3d-1.5.9-LICENSE.txt",
+          "sha256": "d3709b0fb4b8a94bbb1d02b8a2e484f258b0d9c5c5a01f940391f3fe662cd1a4",
+          "sourceRef": "1.5.9",
+          "sourceUrl": "https://github.com/google/draco/blob/1.5.9/LICENSE",
+          "versionProvenance": "Exact version ref linked by the installed package README."
+        }
+      ],
+      "reviewNotes": [
+        "Entire upstream LICENSE preserved, including additional third-party notices."
+      ]
+    },
+    "maath@0.10.8": {
+      "completeLicense": false,
+      "embedded": [
+        {
+          "marker": "Copyright 2016 Max Kaufmann",
+          "path": "dist/easing-0f4db1c0.esm.js",
+          "sha256": "bd5a967021588fd1977049a98aac328252471cea131bd4b1d7edfcdf060c4b95"
+        }
+      ],
+      "reviewNotes": [
+        "MIT declared in package metadata; release https://github.com/pmndrs/math/tree/maath%400.10.8 supplies no package-level LICENSE.",
+        "Bundled easing code contains a full Max Kaufmann third-party MIT notice, preserved for audit; it does not establish missing package-level attribution.",
+        "The new 2026 project LICENSE was not applied to this older package. Shipping this package requires completing upstream license review."
+      ]
+    },
+    "stats-gl@2.4.2": {
+      "completeLicense": false,
+      "reviewNotes": [
+        "Package metadata and README declare MIT, but no full package-level license file was found in the package or official upstream https://github.com/RenaudRohlinger/stats-gl .",
+        "npm gitHead c12b2e391d5a88616e0b30f3c7f0577966426239 points to source package version 2.3.1; it was not treated as exact 2.4.2 provenance.",
+        "No copyright holder or year was invented. Shipping this package requires completing upstream license review."
+      ]
+    }
+  },
+  "proprietaryDependencies": [
+    {
+      "coordinates": [
+        "ai.pleos.playground:NaviHelper:3.0.5",
+        "ai.pleos.playground:navi-aidl:3.0.1",
+        "ai.pleos.playground:navi-data:3.0.4"
+      ],
+      "name": "Pleos NaviHelper and supporting SDK artifacts",
+      "notice": "These are proprietary Pleos SDK artifacts, not represented as open-source. Official SDK terms, redistribution conditions and competition/market eligibility require separate review; Apache/MIT notices do not grant rights to the Pleos SDK.",
+      "sourceUrl": "https://document.pleos.ai/en/docs/pleos-only/connect-sdk-pleos/NaviHelper/importing-sdk"
+    }
+  ],
+  "schemaVersion": 1
+}

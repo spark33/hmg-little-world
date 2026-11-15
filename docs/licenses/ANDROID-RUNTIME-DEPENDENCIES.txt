@@ -1,0 +1,68 @@
+vehicleDebugRuntimeClasspath - Runtime classpath of '/vehicleDebug'.
++--- org.jetbrains.kotlin:kotlin-stdlib:2.1.10
+|    +--- org.jetbrains:annotations:13.0 -> 23.0.0
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-common:2.1.10 (c)
++--- androidx.webkit:webkit:1.12.1
+|    +--- androidx.annotation:annotation:1.8.1
+|    |    \--- androidx.annotation:annotation-jvm:1.8.1
+|    |         \--- org.jetbrains.kotlin:kotlin-stdlib:1.7.10 -> 2.1.10 (*)
+|    +--- androidx.annotation:annotation-experimental:1.4.1
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.7.10 -> 2.1.10 (*)
+|    \--- androidx.core:core:1.1.0 -> 1.8.0
+|         +--- androidx.annotation:annotation:1.2.0 -> 1.8.1 (*)
+|         +--- androidx.annotation:annotation-experimental:1.1.0 -> 1.4.1 (*)
+|         +--- androidx.collection:collection:1.0.0
+|         |    \--- androidx.annotation:annotation:1.0.0 -> 1.8.1 (*)
+|         +--- androidx.concurrent:concurrent-futures:1.0.0
+|         |    +--- com.google.guava:listenablefuture:1.0
+|         |    \--- androidx.annotation:annotation:1.1.0 -> 1.8.1 (*)
+|         +--- androidx.lifecycle:lifecycle-runtime:2.3.1
+|         |    +--- androidx.arch.core:core-runtime:2.1.0
+|         |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.8.1 (*)
+|         |    |    \--- androidx.arch.core:core-common:2.1.0
+|         |    |         \--- androidx.annotation:annotation:1.1.0 -> 1.8.1 (*)
+|         |    +--- androidx.lifecycle:lifecycle-common:2.3.1
+|         |    |    \--- androidx.annotation:annotation:1.1.0 -> 1.8.1 (*)
+|         |    +--- androidx.arch.core:core-common:2.1.0 (*)
+|         |    \--- androidx.annotation:annotation:1.1.0 -> 1.8.1 (*)
+|         \--- androidx.versionedparcelable:versionedparcelable:1.1.1
+|              +--- androidx.annotation:annotation:1.1.0 -> 1.8.1 (*)
+|              \--- androidx.collection:collection:1.0.0 (*)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1
+|    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1
+|    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.1
+|    |         +--- org.jetbrains:annotations:23.0.0
+|    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.1
+|    |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1 (c)
+|    |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1 (c)
+|    |         |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.1 (c)
+|    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.1.0 -> 2.1.10 (*)
+|    +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.1 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.1.0 -> 2.1.10 (*)
+\--- ai.pleos.playground:NaviHelper:3.0.5
+     +--- ai.pleos.playground:navi-aidl:3.0.1
+     |    \--- androidx.core:core-ktx:1.8.0
+     |         +--- androidx.annotation:annotation:1.1.0 -> 1.8.1 (*)
+     |         +--- androidx.core:core:1.8.0 (*)
+     |         \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.21 -> 2.1.10 (*)
+     +--- ai.pleos.playground:navi-data:3.0.4
+     |    +--- androidx.core:core-ktx:1.8.0 (*)
+     |    \--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3
+     |         \--- org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.6.3
+     |              +--- org.jetbrains.kotlin:kotlin-stdlib:1.9.22 -> 2.1.10 (*)
+     |              +--- org.jetbrains.kotlinx:kotlinx-serialization-bom:1.6.3
+     |              |    +--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.3 (c)
+     |              |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.6.3 (c)
+     |              |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3 (c)
+     |              |    \--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.6.3 (c)
+     |              +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.9.22 -> 2.1.10
+     |              |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.1.10 (*)
+     |              \--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.3
+     |                   \--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.6.3
+     |                        +--- org.jetbrains.kotlin:kotlin-stdlib:1.9.22 -> 2.1.10 (*)
+     |                        +--- org.jetbrains.kotlinx:kotlinx-serialization-bom:1.6.3 (*)
+     |                        \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.9.22 -> 2.1.10 (*)
+     +--- androidx.core:core-ktx:1.8.0 (*)
+     +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.3 -> 1.10.1 (*)
+     \--- org.jetbrains.kotlin:kotlin-stdlib:1.9.25 -> 2.1.10 (*)
+

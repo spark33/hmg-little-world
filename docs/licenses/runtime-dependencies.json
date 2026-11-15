@@ -1,0 +1,1756 @@
+{
+  "androidLibraries": [
+    {
+      "coordinates": [
+        "androidx.annotation:annotation:1.8.1",
+        "androidx.annotation:annotation-experimental:1.4.1",
+        "androidx.annotation:annotation-jvm:1.8.1",
+        "androidx.arch.core:core-common:2.1.0",
+        "androidx.arch.core:core-runtime:2.1.0",
+        "androidx.collection:collection:1.0.0",
+        "androidx.concurrent:concurrent-futures:1.0.0",
+        "androidx.core:core:1.8.0",
+        "androidx.core:core-ktx:1.8.0",
+        "androidx.lifecycle:lifecycle-common:2.3.1",
+        "androidx.lifecycle:lifecycle-runtime:2.3.1",
+        "androidx.versionedparcelable:versionedparcelable:1.1.1",
+        "androidx.webkit:webkit:1.12.1"
+      ],
+      "declaredLicense": "Apache-2.0",
+      "name": "AndroidX",
+      "notices": [
+        {
+          "origin": "pinned-upstream",
+          "path": "docs/licenses/upstream/androidx-webkit-1.12.1-LICENSE.txt",
+          "sha256": "809fa1ed21450f59827d1e9aec720bbc4b687434fa22283c6cb5dd82a47ab9c0",
+          "sourceRef": "1.12.1",
+          "sourceUrl": "https://dl.google.com/dl/android/maven2/androidx/webkit/webkit/1.12.1/webkit-1.12.1.aar",
+          "versionProvenance": "Exact webkit AAR META-INF/androidx/webkit/webkit/LICENSE.txt; AndroidX coordinates declare Apache-2.0 in their published POMs."
+        }
+      ]
+    },
+    {
+      "coordinates": [
+        "org.jetbrains.kotlin:kotlin-stdlib:2.1.10",
+        "org.jetbrains.kotlin:kotlin-stdlib-common:2.1.10"
+      ],
+      "declaredLicense": "Apache-2.0",
+      "name": "Kotlin standard library",
+      "notices": [
+        {
+          "origin": "pinned-upstream",
+          "path": "docs/licenses/upstream/kotlin-2.1.10-LICENSE.txt",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "sourceRef": "v2.1.10",
+          "sourceUrl": "https://github.com/JetBrains/kotlin/blob/v2.1.10/license/LICENSE.txt",
+          "versionProvenance": "Exact Kotlin version tag."
+        }
+      ]
+    },
+    {
+      "coordinates": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1",
+        "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.1",
+        "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1",
+        "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.1"
+      ],
+      "declaredLicense": "Apache-2.0",
+      "name": "Kotlin coroutines",
+      "notices": [
+        {
+          "origin": "pinned-upstream",
+          "path": "docs/licenses/upstream/kotlinx-coroutines-1.10.1-LICENSE.txt",
+          "sha256": "b1febe6399dffb10d19d35e7663ab16300c93cb0476a94115df1cc0097a8ffd8",
+          "sourceRef": "1.10.1",
+          "sourceUrl": "https://github.com/Kotlin/kotlinx.coroutines/blob/1.10.1/LICENSE.txt",
+          "versionProvenance": "Exact coroutines version tag."
+        }
+      ]
+    },
+    {
+      "coordinates": [
+        "org.jetbrains.kotlinx:kotlinx-serialization-bom:1.6.3",
+        "org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.3",
+        "org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.6.3",
+        "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3",
+        "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.6.3"
+      ],
+      "declaredLicense": "Apache-2.0",
+      "name": "Kotlin serialization",
+      "notices": [
+        {
+          "origin": "pinned-upstream",
+          "path": "docs/licenses/upstream/kotlinx-serialization-1.6.3-LICENSE.txt",
+          "sha256": "c5accbbd8546e94c34aed24afe689a617627d18eed5a6c48277e48db57c23851",
+          "sourceRef": "v1.6.3",
+          "sourceUrl": "https://github.com/Kotlin/kotlinx.serialization/blob/v1.6.3/LICENSE.txt",
+          "versionProvenance": "Exact serialization version tag."
+        }
+      ]
+    },
+    {
+      "coordinates": [
+        "org.jetbrains:annotations:23.0.0"
+      ],
+      "declaredLicense": "Apache-2.0",
+      "name": "JetBrains annotations",
+      "notices": [
+        {
+          "origin": "pinned-upstream",
+          "path": "docs/licenses/upstream/jetbrains-annotations-23.0.0-LICENSE.txt",
+          "sha256": "8c1e966c7855fb54027bcaf6ebe7a43abe4785791e8cf9148c363761d493d097",
+          "sourceRef": "23.0.0",
+          "sourceUrl": "https://github.com/JetBrains/java-annotations/blob/23.0.0/LICENSE.txt",
+          "versionProvenance": "Exact annotation version tag."
+        }
+      ]
+    },
+    {
+      "coordinates": [
+        "com.google.guava:listenablefuture:1.0"
+      ],
+      "declaredLicense": "Apache-2.0",
+      "name": "Guava ListenableFuture",
+      "notices": [
+        {
+          "origin": "pinned-upstream",
+          "path": "docs/licenses/upstream/Apache-2.0.txt",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "sourceRef": "Apache-2.0",
+          "sourceUrl": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+          "versionProvenance": "Canonical Apache license text. Artifact POM inherits guava-parent 26.0-android; license metadata reviewed separately."
+        }
+      ]
+    }
+  ],
+  "lockfileSha256": "d135fc6545c02e6d2f741a1a8213c962affaffb1848201471fb257ae0ba3770f",
+  "omittedOptionalPackages": [],
+  "packages": [
+    {
+      "authorMetadata": "The Babel Team (https://babel.dev/team)",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-Y5tqevQaUAZhhj82BpYMNC1ssvLQTVAfwKdm8iy8qwmhvC2/CpcAu8OC+QEtjM7pMk7knx83u1Qj8gzkicyelw==",
+      "name": "@babel/runtime",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "117da2af0d4ce0fe1c8e19b5cff9dcd806adf973d328d27b11d4448c4ff24f76"
+        }
+      ],
+      "path": "node_modules/@babel/runtime",
+      "repository": {
+        "directory": "packages/babel-runtime",
+        "type": "git",
+        "url": "https://github.com/babel/babel.git"
+      },
+      "resolved": "https://registry.npmjs.org/@babel/runtime/-/runtime-7.29.14.tgz",
+      "reviewNotes": [],
+      "shipped": true,
+      "version": "7.29.14"
+    },
+    {
+      "authorMetadata": null,
+      "declaredLicense": "Apache-2.0",
+      "integrity": "sha512-uekIGetywIgopfD97oDL5PfeezkFpNhwlzlaEYNOA0N6ghdsOvh/HYjSMek5Q2O1PYvRSDFcqFVJl4r4ZBwOow==",
+      "name": "@dimforge/rapier3d-compat",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "4c05555705e3efde601fb1252ae48f1d63992af8a8fb8947745b7fa834e8f519"
+        }
+      ],
+      "path": "node_modules/@dimforge/rapier3d-compat",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/dimforge/rapier.js"
+      },
+      "resolved": "https://registry.npmjs.org/@dimforge/rapier3d-compat/-/rapier3d-compat-0.12.0.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "0.12.0"
+    },
+    {
+      "authorMetadata": "mediapipe@google.com",
+      "declaredLicense": "Apache-2.0",
+      "integrity": "sha512-CZWV/q6TTe8ta61cZXjfnnHsfWIdFhms03M9T7Cnd5y2mdpylJM0rF1qRq+wsQVRMLz1OYPVEBU9ph2Bx8cxrg==",
+      "name": "@mediapipe/tasks-vision",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "pinned-upstream",
+          "path": "docs/licenses/upstream/mediapipe-Apache-2.0.txt",
+          "sha256": "8707eef0533987efc5b155d64761eeb6e20793f50b9bd1a68dad1cf4719d0ed8",
+          "sourceRef": "02ca022d573c004c463d8c61eb3f8ce17e95a7fc",
+          "sourceUrl": "https://github.com/google-ai-edge/mediapipe/blob/02ca022d573c004c463d8c61eb3f8ce17e95a7fc/LICENSE",
+          "versionProvenance": "Official upstream Apache 2.0 license pinned by commit; no matching JS package v0.10.17 Git tag was available."
+        },
+        {
+          "noticeIndex": 1,
+          "origin": "installed-source-comment",
+          "path": "vision.d.ts",
+          "sha256": "79bdafb4a72eef6f3f609492fd1c0571bcb21d109e10aa2a43fb7bff95e64935",
+          "sourceSha256": "fc8a3cf4a55f7d1ae3f2efdda84bbeaeea605a92e535ac52b99deed6366917d5"
+        },
+        {
+          "noticeIndex": 2,
+          "origin": "installed-source-comment",
+          "path": "vision.d.ts",
+          "sha256": "dab84798947a4629aa2d54d7bdc8b2c38479238e721cd788549c4d74ede8826e",
+          "sourceSha256": "fc8a3cf4a55f7d1ae3f2efdda84bbeaeea605a92e535ac52b99deed6366917d5"
+        }
+      ],
+      "path": "node_modules/@mediapipe/tasks-vision",
+      "repository": null,
+      "resolved": "https://registry.npmjs.org/@mediapipe/tasks-vision/-/tasks-vision-0.10.17.tgz",
+      "reviewNotes": [
+        "Package metadata declares Apache-2.0; package files omit full license text.",
+        "Actual 2022 and 2023 MediaPipe Authors notice comments from the installed package are preserved separately."
+      ],
+      "shipped": false,
+      "version": "0.10.17"
+    },
+    {
+      "authorMetadata": "MONOGRID <gainmap@monogrid.com>",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-YjgdH65wZ9lQnzkVWerrR9FJR0JYhn3ahV7DJqDZVtIvR/kWv7XzFbMSIOFS/47+nWbZ5zFTRxsFhq0OX//SuA==",
+      "name": "@monogrid/gainmap-js",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "7fb8f722609c6669a9c9a4865e2a86205c7760e7dc7a039b0fb9913c3e62c6cc"
+        }
+      ],
+      "path": "node_modules/@monogrid/gainmap-js",
+      "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/MONOGRID/gainmap-js.git"
+      },
+      "resolved": "https://registry.npmjs.org/@monogrid/gainmap-js/-/gainmap-js-3.7.3.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "3.7.3"
+    },
+    {
+      "authorMetadata": null,
+      "declaredLicense": "MIT",
+      "integrity": "sha512-wP4Y6o58KFi+hT1zCfjJarRtPCT6WW/lo53WMiA/aCORuUvBzW916XsCtadnIB1KB+3IQNcDU5JeVh/gYb8MYw==",
+      "name": "@react-three/drei",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "2e36b208b403882158daf95cae207087bbb830db4d434a79ebafffca177244c8"
+        }
+      ],
+      "path": "node_modules/@react-three/drei",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/pmndrs/drei.git"
+      },
+      "resolved": "https://registry.npmjs.org/@react-three/drei/-/drei-10.7.9.tgz",
+      "reviewNotes": [],
+      "shipped": true,
+      "version": "10.7.9"
+    },
+    {
+      "authorMetadata": "Paul Henschel (https://github.com/drcmda)",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-6s0ejw0bT1myQ/aLLugcil8/zBmNnnHw/AISWF1yfDLOxfX3yYaTS+0IkpJITEnm/SSMLtxje6CJDt0i5Wu1Sw==",
+      "name": "@react-three/fiber",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "pinned-upstream",
+          "path": "docs/licenses/upstream/react-three-fiber-9.8.2-LICENSE.txt",
+          "sha256": "9c35b5de7b7493a707fffe4eb23bd2f7f449153c1911f7c6eefb4e591fd5349a",
+          "sourceRef": "v9.8.2",
+          "sourceUrl": "https://github.com/pmndrs/react-three-fiber/blob/v9.8.2/LICENSE",
+          "versionProvenance": "Exact installed package version tag; npm gitHead was unavailable."
+        }
+      ],
+      "path": "node_modules/@react-three/fiber",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/pmndrs/react-three-fiber.git"
+      },
+      "resolved": "https://registry.npmjs.org/@react-three/fiber/-/fiber-9.8.2.tgz",
+      "reviewNotes": [
+        "npm package omits LICENSE; exact-version upstream tag supplies full MIT license."
+      ],
+      "shipped": true,
+      "version": "9.8.2"
+    },
+    {
+      "authorMetadata": "tween.js contributors (https://github.com/tweenjs/tween.js/graphs/contributors)",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-vJmvvwFxYuGnF2axRtPYocag6Clbb5YS7kLL+SO/TeVFzHqDIWrNKYtcsPMibjDx9O+bu+psAy9NKfWklassUA==",
+      "name": "@tweenjs/tween.js",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "c95fecd88f2709bfc34e4d1f1ccc36d17048990e6ba26c283cfecdef0432936b"
+        }
+      ],
+      "path": "node_modules/@tweenjs/tween.js",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/tweenjs/tween.js.git"
+      },
+      "resolved": "https://registry.npmjs.org/@tweenjs/tween.js/-/tween.js-23.1.3.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "23.1.3"
+    },
+    {
+      "authorMetadata": null,
+      "declaredLicense": "MIT",
+      "integrity": "sha512-AX22jp8Y7wwaBgAixaSvkoG4M/+PlAcm3Qs4OW8yT9DM4xUpWKeFhLueTAyZF39pviAdcDdeJoACapiAceqNcw==",
+      "name": "@types/draco3d",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "path": "node_modules/@types/draco3d",
+      "repository": {
+        "directory": "types/draco3d",
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+      },
+      "resolved": "https://registry.npmjs.org/@types/draco3d/-/draco3d-1.4.10.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "1.4.10"
+    },
+    {
+      "authorMetadata": null,
+      "declaredLicense": "MIT",
+      "integrity": "sha512-ieXiYmgSRXUDeOntE1InxjWyvEelZGP63M+cGuquuRLuIKKT1osnkXjxev9B7d1nXSug5vpunx+gNlbVxMlC9A==",
+      "name": "@types/offscreencanvas",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "path": "node_modules/@types/offscreencanvas",
+      "repository": {
+        "directory": "types/offscreencanvas",
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+      },
+      "resolved": "https://registry.npmjs.org/@types/offscreencanvas/-/offscreencanvas-2019.7.3.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "2019.7.3"
+    },
+    {
+      "authorMetadata": null,
+      "declaredLicense": "MIT",
+      "integrity": "sha512-N0rFCuH9YoxG9/m61l9MfpJKfmLOVU0em7ipIz6TRgSSkvReLB9vL85GB+yr8Bs5leqpvg96JSwF4ZS1s4viQg==",
+      "name": "@types/react",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "path": "node_modules/@types/react",
+      "repository": {
+        "directory": "types/react",
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+      },
+      "resolved": "https://registry.npmjs.org/@types/react/-/react-19.3.0.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "19.3.0"
+    },
+    {
+      "authorMetadata": null,
+      "declaredLicense": "MIT",
+      "integrity": "sha512-HHM3nxyUZ3zAylX8ZEyrDNd2XZOnQ0D5XfunJF5FLQnZbHHYq4UWvW1QfelQNXv1ICNkwYhfxjwfnqivYB6bFg==",
+      "name": "@types/react-reconciler",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "path": "node_modules/@types/react-reconciler",
+      "repository": {
+        "directory": "types/react-reconciler",
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+      },
+      "resolved": "https://registry.npmjs.org/@types/react-reconciler/-/react-reconciler-0.28.9.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "0.28.9"
+    },
+    {
+      "authorMetadata": null,
+      "declaredLicense": "MIT",
+      "integrity": "sha512-jIBvWWShCvlBqBNIZt0KAshWpvSjhkwkEu4ZUcASoAvhmrgAUI2t1dXrjSL4xXVLB4FznPrIsX3nKXFl/Dt4vA==",
+      "name": "@types/stats.js",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "path": "node_modules/@types/stats.js",
+      "repository": {
+        "directory": "types/stats.js",
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+      },
+      "resolved": "https://registry.npmjs.org/@types/stats.js/-/stats.js-0.17.4.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "0.17.4"
+    },
+    {
+      "authorMetadata": null,
+      "declaredLicense": "MIT",
+      "integrity": "sha512-ykFtgCqNnY0IPvDro7h+9ZeLY+qjgUWv+qEvUt84grhenO60Hqd4hScHE7VTB9nOQ/3QM8lkbNE+4vKjEpUxKg==",
+      "name": "@types/three",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "path": "node_modules/@types/three",
+      "repository": {
+        "directory": "types/three",
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+      },
+      "resolved": "https://registry.npmjs.org/@types/three/-/three-0.180.0.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "0.180.0"
+    },
+    {
+      "authorMetadata": null,
+      "declaredLicense": "MIT",
+      "integrity": "sha512-h8fgEd/DpoS9CBrjEQXR+dIDraopAEfu4wYVNY2tEPwk60stPWhvZMf4Foo5FakuQ7HFZoa8WceaWFervK2Ovg==",
+      "name": "@types/webxr",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "path": "node_modules/@types/webxr",
+      "repository": {
+        "directory": "types/webxr",
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+      },
+      "resolved": "https://registry.npmjs.org/@types/webxr/-/webxr-0.5.24.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "0.5.24"
+    },
+    {
+      "authorMetadata": "Paul Henschel",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-WcINiDt8WjqBdUXye25anHiNxPc0VOrlT8F6LLkU6cycrOGUDyY/yyFmsg3k8i5OLvv25llc0QC45GhR/C8llw==",
+      "name": "@use-gesture/core",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "b99672ef9af57432e6d025a66d34f8b968564e4e0a1e2005ea9018457a7e38dc"
+        }
+      ],
+      "path": "node_modules/@use-gesture/core",
+      "repository": {
+        "directory": "packages/core",
+        "type": "git",
+        "url": "git+https://github.com/pmndrs/use-gesture.git"
+      },
+      "resolved": "https://registry.npmjs.org/@use-gesture/core/-/core-10.3.1.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "10.3.1"
+    },
+    {
+      "authorMetadata": "Paul Henschel",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-Yy19y6O2GJq8f7CHf7L0nxL8bf4PZCPaVOCgJrusOeFHY1LvHgYXnmnXg6N5iwAnbgbZCDjo60SiM6IPJi9C5g==",
+      "name": "@use-gesture/react",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "b99672ef9af57432e6d025a66d34f8b968564e4e0a1e2005ea9018457a7e38dc"
+        }
+      ],
+      "path": "node_modules/@use-gesture/react",
+      "repository": {
+        "directory": "packages/react",
+        "type": "git",
+        "url": "git+https://github.com/pmndrs/use-gesture.git"
+      },
+      "resolved": "https://registry.npmjs.org/@use-gesture/react/-/react-10.3.1.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "10.3.1"
+    },
+    {
+      "authorMetadata": null,
+      "declaredLicense": "BSD-3-Clause",
+      "integrity": "sha512-lgiI4hbuLcI9unnm2cL/tvCaQU45dp0xcLWJh5uB/9MBGvIA4F8XIk7nSiBeg+K4xWGYwgZKn80LmERI5CxoTA==",
+      "name": "@webgpu/types",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "ad88400fc55c2871ba2ed33930dc13001ef01907c2ddcbfa3caa8656e9142f05"
+        }
+      ],
+      "path": "node_modules/@webgpu/types",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/gpuweb/types.git"
+      },
+      "resolved": "https://registry.npmjs.org/@webgpu/types/-/types-0.1.74.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "0.1.74"
+    },
+    {
+      "authorMetadata": "T. Jameson Little <t.jameson.little@gmail.com>",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==",
+      "name": "base64-js",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "5b37224c080cdcc97c871ada971c224e9926370fe74f11b539aa1cf9f3b1aca1"
+        }
+      ],
+      "path": "node_modules/base64-js",
+      "repository": {
+        "type": "git",
+        "url": "git://github.com/beatgammit/base64-js.git"
+      },
+      "resolved": "https://registry.npmjs.org/base64-js/-/base64-js-1.5.1.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "1.5.1"
+    },
+    {
+      "authorMetadata": "Jason Johnston",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-fX1Onk0tdVPC7obPWB5EbJ1z7NVhLq4m2xZLq2YXBkxzMXIGRpNMU88n0EPgWseKl12J7zXs7qrDxPK4sRs2fg==",
+      "name": "bidi-js",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE.txt",
+          "sha256": "49d4d143fed599deb502a0fe6e02f49832f87e9a3a4cd0502e469596d50faa6d"
+        }
+      ],
+      "path": "node_modules/bidi-js",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/lojjic/bidi-js.git"
+      },
+      "resolved": "https://registry.npmjs.org/bidi-js/-/bidi-js-1.1.0.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "1.1.0"
+    },
+    {
+      "authorMetadata": {
+        "email": "feross@feross.org",
+        "name": "Feross Aboukhadijeh",
+        "url": "https://feross.org"
+      },
+      "declaredLicense": "MIT",
+      "integrity": "sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==",
+      "name": "buffer",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "06bafa45fdad2579ba0e43b0c9b2c6290287c99c4203c300254a462b38a307f6"
+        }
+      ],
+      "path": "node_modules/buffer",
+      "repository": {
+        "type": "git",
+        "url": "git://github.com/feross/buffer.git"
+      },
+      "resolved": "https://registry.npmjs.org/buffer/-/buffer-6.0.3.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "6.0.3"
+    },
+    {
+      "authorMetadata": "Yomotsu",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-xkxfpG2ECZ6Ww5/9+kf4mfg1VEYAoe9aDSY+IwF0UEs7qEzwy0aVRfs2grImIECs/PoBtWFrh7RXsQkwG922JA==",
+      "name": "camera-controls",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "d175c34ca3b4fb17d0568627ef8fd9363ae6f63f9ffdc97d4da71f0d7f3473ee"
+        }
+      ],
+      "path": "node_modules/camera-controls",
+      "repository": "yomotsu/camera-controls",
+      "resolved": "https://registry.npmjs.org/camera-controls/-/camera-controls-3.1.2.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "3.1.2"
+    },
+    {
+      "authorMetadata": "Kent C. Dodds <me@kentcdodds.com> (https://kentcdodds.com)",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==",
+      "name": "cross-env",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "bf8fd38056b7606deccfcadb4d8ca1c210082d8ef5513426d2650daedc30bed3"
+        }
+      ],
+      "path": "node_modules/cross-env",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/kentcdodds/cross-env.git"
+      },
+      "resolved": "https://registry.npmjs.org/cross-env/-/cross-env-7.0.3.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "7.0.3"
+    },
+    {
+      "authorMetadata": "André Cruz <andre@moxy.studio>",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==",
+      "name": "cross-spawn",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "aaa78451b6fecd1b9c4594c796c133c0e90cad100372ff8bc6de615e9ef9adf1"
+        }
+      ],
+      "path": "node_modules/cross-spawn",
+      "repository": {
+        "type": "git",
+        "url": "git@github.com:moxystudio/node-cross-spawn.git"
+      },
+      "resolved": "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.6.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "7.0.6"
+    },
+    {
+      "authorMetadata": "Fredrik Nicol <fredrik.nicol@gmail.com>",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==",
+      "name": "csstype",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "11d55bd4541c75ee7879547ac49089c489163dae49551389713c3d026cab383e"
+        }
+      ],
+      "path": "node_modules/csstype",
+      "repository": "https://github.com/frenic/csstype",
+      "resolved": "https://registry.npmjs.org/csstype/-/csstype-3.2.3.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "3.2.3"
+    },
+    {
+      "authorMetadata": "Tim van Scherpenzeel",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-bqerEP1Ese6nt3rFkwPnGbsUF9a4q+gMmpTVVOEzoCyeCc+y7/RvJnQZJx1JwhgQI5Ntg0Kgat8Uu7XpBqnz1w==",
+      "name": "detect-gpu",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "b7ec746220d05b353b6f05196599c50d0a8bf7b75eaf90de439d2152452d298e"
+        }
+      ],
+      "path": "node_modules/detect-gpu",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/pmndrs/detect-gpu.git"
+      },
+      "resolved": "https://registry.npmjs.org/detect-gpu/-/detect-gpu-5.0.70.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "5.0.70"
+    },
+    {
+      "authorMetadata": "Google Draco Team",
+      "declaredLicense": "Apache-2.0",
+      "integrity": "sha512-MqC0eAfW5gPATGY3GABIyFWpHwdDGAyewTdek5R/e+mhI9ZDUMKb2mTDkTMUW0+Vm7an+ThEMUop3+svS72Uug==",
+      "name": "draco3d",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "pinned-upstream",
+          "path": "docs/licenses/upstream/draco3d-1.5.9-LICENSE.txt",
+          "sha256": "d3709b0fb4b8a94bbb1d02b8a2e484f258b0d9c5c5a01f940391f3fe662cd1a4",
+          "sourceRef": "1.5.9",
+          "sourceUrl": "https://github.com/google/draco/blob/1.5.9/LICENSE",
+          "versionProvenance": "Exact version ref linked by the installed package README."
+        }
+      ],
+      "path": "node_modules/draco3d",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/google/draco.git"
+      },
+      "resolved": "https://registry.npmjs.org/draco3d/-/draco3d-1.5.9.tgz",
+      "reviewNotes": [
+        "Entire upstream LICENSE preserved, including additional third-party notices."
+      ],
+      "shipped": false,
+      "version": "1.5.9"
+    },
+    {
+      "authorMetadata": "Arjun Barrett <arjunbarrett@gmail.com>",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA==",
+      "name": "fflate",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "0a1df3a083d0c010560aa342e87959c8c1070e6fd54545741f083f22d0c8b551"
+        }
+      ],
+      "path": "node_modules/fflate",
+      "repository": "https://github.com/101arrowz/fflate",
+      "resolved": "https://registry.npmjs.org/fflate/-/fflate-0.8.3.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "0.8.3"
+    },
+    {
+      "authorMetadata": "Ian McEwan, Ashima Arts, Stefan Gustavson",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-b/ZCF6amfAUb7dJM/MxRs7AetQEahYzJ8PtgfrmEdtw6uyGOr+ZSGtgjFm6mfsBkxJ4d2W7kg+Nlqzqvn3Bc0w==",
+      "name": "glsl-noise",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "bce6c887104eda776ad5e3a2c0b249d1ef5adca91573b350e7147a59d65757f1"
+        }
+      ],
+      "path": "node_modules/glsl-noise",
+      "repository": {
+        "type": "git",
+        "url": "git://github.com/hughsk/glsl-noise.git"
+      },
+      "resolved": "https://registry.npmjs.org/glsl-noise/-/glsl-noise-0.0.0.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "0.0.0"
+    },
+    {
+      "authorMetadata": null,
+      "declaredLicense": "Apache-2.0",
+      "integrity": "sha512-3GlxGdPvT2YHvQYOt+yOzT/DEior/qJVNIylHA77kgeoBTdQQqi70GwefNEUmHQeNGyjC8U62+bruqW/Tpm+tg==",
+      "name": "hls.js",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "ca8773cf798c7ed997d4dd7c8e23c348699f8d5b7462636694cc14de6cda12db"
+        }
+      ],
+      "path": "node_modules/hls.js",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/video-dev/hls.js"
+      },
+      "resolved": "https://registry.npmjs.org/hls.js/-/hls.js-1.7.4.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "1.7.4"
+    },
+    {
+      "authorMetadata": {
+        "email": "feross@feross.org",
+        "name": "Feross Aboukhadijeh",
+        "url": "https://feross.org"
+      },
+      "declaredLicense": "BSD-3-Clause",
+      "integrity": "sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==",
+      "name": "ieee754",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "18d45466ba3253deae04667e267a91ea8de8548f18c1125264d1c9db28194cc1"
+        }
+      ],
+      "path": "node_modules/ieee754",
+      "repository": {
+        "type": "git",
+        "url": "git://github.com/feross/ieee754.git"
+      },
+      "resolved": "https://registry.npmjs.org/ieee754/-/ieee754-1.2.1.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "1.2.1"
+    },
+    {
+      "authorMetadata": null,
+      "declaredLicense": "MIT",
+      "integrity": "sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ==",
+      "name": "immediate",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE.txt",
+          "sha256": "809e66de579fb7d92503848bbe6d1f348f4f6521a71e5d294fe7cc0c87a3b4ff"
+        }
+      ],
+      "path": "node_modules/immediate",
+      "repository": {
+        "type": "git",
+        "url": "git://github.com/calvinmetcalf/immediate.git"
+      },
+      "resolved": "https://registry.npmjs.org/immediate/-/immediate-3.0.6.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "3.0.6"
+    },
+    {
+      "authorMetadata": "ForbesLindesay",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-+lP4/6lKUBfQjZ2pdxThZvLUAafmZb8OAxFb8XXtiQmS35INgr85hdOGoEs124ez1FCnZJt6jau/T+alh58QFQ==",
+      "name": "is-promise",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "44191656d296391e0ec97e32f5385f0d02b6f2992694082d22ea04ba0f66f9e4"
+        }
+      ],
+      "path": "node_modules/is-promise",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/then/is-promise.git"
+      },
+      "resolved": "https://registry.npmjs.org/is-promise/-/is-promise-2.2.2.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "2.2.2"
+    },
+    {
+      "authorMetadata": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)",
+      "declaredLicense": "ISC",
+      "integrity": "sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==",
+      "name": "isexe",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b"
+        }
+      ],
+      "path": "node_modules/isexe",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/isaacs/isexe.git"
+      },
+      "resolved": "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "2.0.0"
+    },
+    {
+      "authorMetadata": "Cody Bennett (https://github.com/codyjasonbennett)",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-C5ZoVkeqSt0Aje0tzESO+iT/EQpNFNL39GkP7mCACtoZUFD6GcyerFCr6kp0ZtiII4W9HoYkY48Soy5xE/uHKw==",
+      "name": "its-fine",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "643123eeb38f154d93cb8323e1289a648d3f343b411a9340453c010e325d0c82"
+        }
+      ],
+      "path": "node_modules/its-fine",
+      "repository": "https://github.com/pmndrs/its-fine",
+      "resolved": "https://registry.npmjs.org/its-fine/-/its-fine-2.1.1.tgz",
+      "reviewNotes": [],
+      "shipped": true,
+      "version": "2.1.1"
+    },
+    {
+      "authorMetadata": null,
+      "declaredLicense": "MIT",
+      "integrity": "sha512-UaiMJzeWRlEujzAuw5LokY1L5ecNQYZKfmyZ9L7wDHb/p5etKaxXhohBcrw0EYby+G/NA52vRSN4N39dxHAIwQ==",
+      "name": "lie",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "license.md",
+          "sha256": "5c81b0caa98593408b03125efa25efe622341ed87ae55561968828cd887d64a4"
+        }
+      ],
+      "path": "node_modules/lie",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/calvinmetcalf/lie.git"
+      },
+      "resolved": "https://registry.npmjs.org/lie/-/lie-3.3.0.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "3.3.0"
+    },
+    {
+      "authorMetadata": "Eric Fennis",
+      "declaredLicense": "ISC",
+      "integrity": "sha512-6koYRhnM2N0GGZIdXzSeiNwguv1gt/FAjZOiPl76roBi3xKEXa4WmfpxgQwTTL4KipXjefrnf3oV4IsYhi4JFA==",
+      "name": "lucide-react",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "1e7290b35280a048667bbf0ebabac1c7fd52a75300e8b2946ac165715997f2bc"
+        }
+      ],
+      "path": "node_modules/lucide-react",
+      "repository": {
+        "directory": "packages/lucide-react",
+        "type": "git",
+        "url": "https://github.com/lucide-icons/lucide.git"
+      },
+      "resolved": "https://registry.npmjs.org/lucide-react/-/lucide-react-0.468.0.tgz",
+      "reviewNotes": [],
+      "shipped": true,
+      "version": "0.468.0"
+    },
+    {
+      "authorMetadata": null,
+      "declaredLicense": "MIT",
+      "integrity": "sha512-tRvbDF0Pgqz+9XUa4jjfgAQ8/aPKmQdWXilFu2tMy4GWj4NOsx99HlULO4IeREfbO3a0sA145DZYyvXPkybm0g==",
+      "name": "maath",
+      "noticeStatus": "unresolved",
+      "notices": [
+        {
+          "noticeIndex": 1,
+          "origin": "installed-source-comment",
+          "path": "dist/easing-0f4db1c0.esm.js",
+          "sha256": "2fda481f5dc33e4f7d0e7c09d238796646adb689e7abaf47c61e262559c86a09",
+          "sourceSha256": "bd5a967021588fd1977049a98aac328252471cea131bd4b1d7edfcdf060c4b95"
+        }
+      ],
+      "path": "node_modules/maath",
+      "repository": null,
+      "resolved": "https://registry.npmjs.org/maath/-/maath-0.10.8.tgz",
+      "reviewNotes": [
+        "MIT declared in package metadata; release https://github.com/pmndrs/math/tree/maath%400.10.8 supplies no package-level LICENSE.",
+        "Bundled easing code contains a full Max Kaufmann third-party MIT notice, preserved for audit; it does not establish missing package-level attribution.",
+        "The new 2026 project LICENSE was not applied to this older package. Shipping this package requires completing upstream license review."
+      ],
+      "shipped": false,
+      "version": "0.10.8"
+    },
+    {
+      "authorMetadata": "Jaume Sanchez <the.spite@gmail.com> (https://www.clicktorelease.com)",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-/TQj+JdZkeSUOl5Mk2J7eLcYTLiQm2IDzmlSvYm7ov15anEcDJ92GHqqazxTSreeNgfnYu24kiEvvv0WlbCdFQ==",
+      "name": "meshline",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "60616aab1af71f2603d9d4ab3c29b5d80cc43cd9a62e2e8b3fa68c1c5597103f"
+        }
+      ],
+      "path": "node_modules/meshline",
+      "repository": null,
+      "resolved": "https://registry.npmjs.org/meshline/-/meshline-3.3.1.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "3.3.1"
+    },
+    {
+      "authorMetadata": "Arseny Kapoulkine",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-IebiK79sqIy+E4EgOr+CAw+Ke8hAspXKzBd0JdgEmPHiAwmvEj2S4h1rfvo+o/BnfEYd/jAOg5IeeIjzlzSnDg==",
+      "name": "meshoptimizer",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE.md",
+          "sha256": "d1bc307ff896c7fc65e3ff4823cc478194f7a5bc6436f99534ebede4d9e2017a"
+        }
+      ],
+      "path": "node_modules/meshoptimizer",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/zeux/meshoptimizer"
+      },
+      "resolved": "https://registry.npmjs.org/meshoptimizer/-/meshoptimizer-0.22.0.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "0.22.0"
+    },
+    {
+      "authorMetadata": {
+        "email": "sindresorhus@gmail.com",
+        "name": "Sindre Sorhus",
+        "url": "sindresorhus.com"
+      },
+      "declaredLicense": "MIT",
+      "integrity": "sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q==",
+      "name": "path-key",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "license",
+          "sha256": "48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0"
+        }
+      ],
+      "path": "node_modules/path-key",
+      "repository": "sindresorhus/path-key",
+      "resolved": "https://registry.npmjs.org/path-key/-/path-key-3.1.1.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "3.1.1"
+    },
+    {
+      "authorMetadata": "Vladimir Agafonkin",
+      "declaredLicense": "ISC",
+      "integrity": "sha512-choctRBIV9EMT9WGAZHn3V7t0Z2pMQyl0EZE6pFc/6ml3ssw7Dlf/oAOvFwjm1HVsqfQN8GfeFyJ+d8tRzqueQ==",
+      "name": "potpack",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "2c620eaf6c3ee3e33b07f3b6ef0dfd0a9e0a52c93a46aa4ccf7773dbb562daec"
+        }
+      ],
+      "path": "node_modules/potpack",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/mapbox/potpack.git"
+      },
+      "resolved": "https://registry.npmjs.org/potpack/-/potpack-1.0.2.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "1.0.2"
+    },
+    {
+      "authorMetadata": "Roman Viskin <npm@terikon.com>",
+      "declaredLicense": "Apache-2.0",
+      "integrity": "sha512-bN+0ehEnrXfxV2ZQvU2PetO0n4gqBD4ulq3MI1WOPLgr7/Mg9yRQkX5+0v1vagr74ZTsl7XtzlaYDo2EuCeYJw==",
+      "name": "promise-worker-transferable",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "0f0ba7a9d825b6cac29a3c949860dcfc0b87f2f0f57a078199520a3cd03896f6"
+        }
+      ],
+      "path": "node_modules/promise-worker-transferable",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/terikon/promise-worker-transferable.git"
+      },
+      "resolved": "https://registry.npmjs.org/promise-worker-transferable/-/promise-worker-transferable-1.0.4.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "1.0.4"
+    },
+    {
+      "authorMetadata": null,
+      "declaredLicense": "MIT",
+      "integrity": "sha512-QNhWdt7nrgVWWQG58QuGsAR3jv3Hbe4mb4vz7w2csnHavciZJgda1CPNaldF6eVxv90ud3jUXpKlHL69gO38yw==",
+      "name": "react",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93"
+        }
+      ],
+      "path": "node_modules/react",
+      "repository": {
+        "directory": "packages/react",
+        "type": "git",
+        "url": "https://github.com/react/react.git"
+      },
+      "resolved": "https://registry.npmjs.org/react/-/react-19.3.1.tgz",
+      "reviewNotes": [],
+      "shipped": true,
+      "version": "19.3.1"
+    },
+    {
+      "authorMetadata": null,
+      "declaredLicense": "MIT",
+      "integrity": "sha512-Y0bARz53lhEC1NMCASs0/j+faB/zqt3R8hpvg1e8+61ZVJ4UL0UdC4cBbXfZMcIuhrfgeILTLe+ZeBCavQPtKQ==",
+      "name": "react-dom",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93"
+        }
+      ],
+      "path": "node_modules/react-dom",
+      "repository": {
+        "directory": "packages/react-dom",
+        "type": "git",
+        "url": "https://github.com/react/react.git"
+      },
+      "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-19.3.1.tgz",
+      "reviewNotes": [],
+      "shipped": true,
+      "version": "19.3.1"
+    },
+    {
+      "authorMetadata": "Paul Henschel",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-KrvcAo13I/60HpwGO5jpW7E9DfusKyLPLvuHlUyP5zqnmAPhNc6qTRjUQrdTADl0lpPpDVU2/Gg51UlOGHXbdg==",
+      "name": "react-use-measure",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "1f9038eff8dbd6505a26f9d6830cc6da2b87ab1a9305d1100884986e9c11a31a"
+        }
+      ],
+      "path": "node_modules/react-use-measure",
+      "repository": "https://github.com/pmndrs/react-use-measure",
+      "resolved": "https://registry.npmjs.org/react-use-measure/-/react-use-measure-2.1.7.tgz",
+      "reviewNotes": [],
+      "shipped": true,
+      "version": "2.1.7"
+    },
+    {
+      "authorMetadata": {
+        "email": "floatdrop@gmail.com",
+        "name": "Vsevolod Strukchinsky",
+        "url": "github.com/floatdrop"
+      },
+      "declaredLicense": "MIT",
+      "integrity": "sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==",
+      "name": "require-from-string",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "license",
+          "sha256": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f"
+        }
+      ],
+      "path": "node_modules/require-from-string",
+      "repository": "floatdrop/require-from-string",
+      "resolved": "https://registry.npmjs.org/require-from-string/-/require-from-string-2.0.2.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "2.0.2"
+    },
+    {
+      "authorMetadata": null,
+      "declaredLicense": "MIT",
+      "integrity": "sha512-juorfCmIkIw8tT+p5BXSm6PJjQF/ycEYmKyzURCIt/RaZIhL+PulbQ9Yu2z1HdOJDdqDTlxA1+xKBmHXJsczAw==",
+      "name": "scheduler",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93"
+        }
+      ],
+      "path": "node_modules/scheduler",
+      "repository": {
+        "directory": "packages/scheduler",
+        "type": "git",
+        "url": "https://github.com/react/react.git"
+      },
+      "resolved": "https://registry.npmjs.org/scheduler/-/scheduler-0.28.0.tgz",
+      "reviewNotes": [],
+      "shipped": true,
+      "version": "0.28.0"
+    },
+    {
+      "authorMetadata": {
+        "email": "kevinmartensson@gmail.com",
+        "name": "Kevin Mårtensson",
+        "url": "github.com/kevva"
+      },
+      "declaredLicense": "MIT",
+      "integrity": "sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==",
+      "name": "shebang-command",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "license",
+          "sha256": "69dee148a2cc470554dfa7142e830662062394d0fe67cddd379aba90dc60d6b3"
+        }
+      ],
+      "path": "node_modules/shebang-command",
+      "repository": "kevva/shebang-command",
+      "resolved": "https://registry.npmjs.org/shebang-command/-/shebang-command-2.0.0.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "2.0.0"
+    },
+    {
+      "authorMetadata": {
+        "email": "sindresorhus@gmail.com",
+        "name": "Sindre Sorhus",
+        "url": "sindresorhus.com"
+      },
+      "declaredLicense": "MIT",
+      "integrity": "sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==",
+      "name": "shebang-regex",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "license",
+          "sha256": "48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0"
+        }
+      ],
+      "path": "node_modules/shebang-regex",
+      "repository": "sindresorhus/shebang-regex",
+      "resolved": "https://registry.npmjs.org/shebang-regex/-/shebang-regex-3.0.0.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "3.0.0"
+    },
+    {
+      "authorMetadata": "Renaud ROHLINGER (https://github.com/RenaudRohlinger)",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-g5O9B0hm9CvnM36+v7SFl39T7hmAlv541tU81ME8YeSb3i1CIP5/QdDeSB3A0la0bKNHpxpwxOVRo2wFTYEosQ==",
+      "name": "stats-gl",
+      "noticeStatus": "unresolved",
+      "notices": [],
+      "path": "node_modules/stats-gl",
+      "repository": "https://github.com/RenaudRohlinger/stats-gl",
+      "resolved": "https://registry.npmjs.org/stats-gl/-/stats-gl-2.4.2.tgz",
+      "reviewNotes": [
+        "Package metadata and README declare MIT, but no full package-level license file was found in the package or official upstream https://github.com/RenaudRohlinger/stats-gl .",
+        "npm gitHead c12b2e391d5a88616e0b30f3c7f0577966426239 points to source package version 2.3.1; it was not treated as exact 2.4.2 provenance.",
+        "No copyright holder or year was invented. Shipping this package requires completing upstream license review."
+      ],
+      "shipped": false,
+      "version": "2.4.2"
+    },
+    {
+      "authorMetadata": "mrdoob",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-FQK+LEpYc0fBD+J8g6oSEyyNzjp+Q7Ks1C568WWaoMRLW+TkNNWmenWeGgJjV105Gd+p/2ql1ZcjYvNiPZBhuQ==",
+      "name": "three",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "4c40a1ef62450b857c3b2aaf294936304cd552d965fbcd9d32d4c5bcf4ba4454"
+        },
+        {
+          "origin": "installed-package",
+          "path": "examples/fonts/LICENSE",
+          "sha256": "35e8279356d7890871c4fce804d157e3f21456a7311ef2caab5cb4705c71b6bd"
+        },
+        {
+          "origin": "installed-package",
+          "path": "examples/fonts/droid/NOTICE",
+          "sha256": "38751245389e1e23f73e6f5384b5cbe7fa972cc4410c5adc9c04b082a0b9561a"
+        }
+      ],
+      "path": "node_modules/stats-gl/node_modules/three",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/mrdoob/three.js"
+      },
+      "resolved": "https://registry.npmjs.org/three/-/three-0.170.0.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "0.170.0"
+    },
+    {
+      "authorMetadata": "mrdoob",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-hNKz8phvYLPEcRkeG1rsGmV5ChMjKDAWU7/OJJdDErPBNChQXxCo3WZurGpnWc6gZhAzEPFad1aVgyOANH1sMw==",
+      "name": "stats.js",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "9d23ed2d037cc4b97860dc61dc3787ca2c1faac8b11402064a6fa90e91360adc"
+        }
+      ],
+      "path": "node_modules/stats.js",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/mrdoob/stats.js.git"
+      },
+      "resolved": "https://registry.npmjs.org/stats.js/-/stats.js-0.17.0.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "0.17.0"
+    },
+    {
+      "authorMetadata": "Paul Henschel",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-aqldKgX9aZqpoDp3e8/BZ8Dm7x1pJl+qI3ZKxDN0i/IQTWUwBx/ManmlVJ3wowqbno6c2bmiIfs+Um6LbsjJyQ==",
+      "name": "suspend-react",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "997e79b828d8b85d6f18730c8dbf58074811360a199506bd84e1263e17c227a2"
+        }
+      ],
+      "path": "node_modules/suspend-react",
+      "repository": "pmndrs/suspend-react",
+      "resolved": "https://registry.npmjs.org/suspend-react/-/suspend-react-0.1.3.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "0.1.3"
+    },
+    {
+      "authorMetadata": "mrdoob",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-o+qycAMZrh+TsE01GqWUxUIKR1AL0S8pq7zDkYOQw8GqfX8b8VoCKYUoHbhiX5j+7hr8XsuHDVU6+gkQJQKg9w==",
+      "name": "three",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601"
+        },
+        {
+          "origin": "installed-package",
+          "path": "examples/fonts/LICENSE",
+          "sha256": "35e8279356d7890871c4fce804d157e3f21456a7311ef2caab5cb4705c71b6bd"
+        },
+        {
+          "origin": "installed-package",
+          "path": "examples/fonts/droid/NOTICE",
+          "sha256": "38751245389e1e23f73e6f5384b5cbe7fa972cc4410c5adc9c04b082a0b9561a"
+        }
+      ],
+      "path": "node_modules/three",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/mrdoob/three.js"
+      },
+      "resolved": "https://registry.npmjs.org/three/-/three-0.180.0.tgz",
+      "reviewNotes": [],
+      "shipped": true,
+      "version": "0.180.0"
+    },
+    {
+      "authorMetadata": "Garrett Johnson <garrett.kjohnson@gmail.com>",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-4G5lBaF+g2auKX3P0yqx+MJC6oVt6sB5k+CchS6Ob0qvH0YIhuUk1eYr7ktsIpY+albCqE80/FVQGV190PmiAg==",
+      "name": "three-mesh-bvh",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "b106ef6198a9862ed2b5b873e944ecf3583c631a84a7462d400ecc1910ce7fee"
+        }
+      ],
+      "path": "node_modules/three-mesh-bvh",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/gkjohnson/three-mesh-bvh.git"
+      },
+      "resolved": "https://registry.npmjs.org/three-mesh-bvh/-/three-mesh-bvh-0.8.3.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "0.8.3"
+    },
+    {
+      "authorMetadata": "Paul Henschel (https://github.com/drcmda)",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-XyGQrFmNQ5O/IoKm556ftwKsBg11TIb301MB5dWNicziQBEs2g3gtOYIf7pFiLa0zI2gUwhtCjv9fmjnxKZ1Cg==",
+      "name": "three-stdlib",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "28eb7edf059a39094aa3d169db1fec46ac4a6279c921a90f965828d92ec86e79"
+        }
+      ],
+      "path": "node_modules/three-stdlib",
+      "repository": "https://github.com/pmndrs/three-stdlib",
+      "resolved": "https://registry.npmjs.org/three-stdlib/-/three-stdlib-2.36.1.tgz",
+      "reviewNotes": [],
+      "shipped": true,
+      "version": "2.36.1"
+    },
+    {
+      "authorMetadata": "Arjun Barrett <arjunbarrett@gmail.com>",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-3JyEFWGjFn7zHmoa9+zG1BmW7X2okcmAB+0Cnu9UFbVs/jCBnl2A8o065ZlXiw145K3eBM3uLuzrYXC0RK7eDg==",
+      "name": "fflate",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "62249119bb7df6e54300f37a37145c26a6d4420410aac8881a119c5b427cf751"
+        }
+      ],
+      "path": "node_modules/three-stdlib/node_modules/fflate",
+      "repository": "https://github.com/101arrowz/fflate",
+      "resolved": "https://registry.npmjs.org/fflate/-/fflate-0.6.11.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "0.6.11"
+    },
+    {
+      "authorMetadata": "Jason Johnston <jason.johnston@protectwise.com>",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-Ry3jRhic9pzcY4JduSvRRyDmVOSqEW19gT4vtK+aCiPNVcDlmkxvGG0YbFd36RTDq1wExOupXnvNF/j1oiHHDA==",
+      "name": "troika-three-text",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "c514829145810d3bf5730a78b5054250bd1b711b2823f2fc58c2ba89930bce5c"
+        }
+      ],
+      "path": "node_modules/troika-three-text",
+      "repository": {
+        "directory": "packages/troika-three-text",
+        "type": "git",
+        "url": "https://github.com/protectwise/troika.git"
+      },
+      "resolved": "https://registry.npmjs.org/troika-three-text/-/troika-three-text-0.52.5.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "0.52.5"
+    },
+    {
+      "authorMetadata": "Jason Johnston <jason.johnston@protectwise.com>",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-WsePbcX8RtfidRfsxK1eCZCjF81ZDzAKHH/evLs0hdV2wpoCb0vArGZHdzdOJrSS3k4zfdtbKDaBh8+phkrYnw==",
+      "name": "troika-three-utils",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "c514829145810d3bf5730a78b5054250bd1b711b2823f2fc58c2ba89930bce5c"
+        }
+      ],
+      "path": "node_modules/troika-three-utils",
+      "repository": {
+        "directory": "packages/troika-three-utils",
+        "type": "git",
+        "url": "https://github.com/protectwise/troika.git"
+      },
+      "resolved": "https://registry.npmjs.org/troika-three-utils/-/troika-three-utils-0.52.5.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "0.52.5"
+    },
+    {
+      "authorMetadata": "Jason Johnston <jason.johnston@protectwise.com>",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-W1CpvTHykaPH5brv5VHLfQo9D1OYuo0cSBEUQFFT/nBUzM8iD6Lq2/tgG/f1OelbAS1WtaTPQzE5uM49egnngw==",
+      "name": "troika-worker-utils",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "c514829145810d3bf5730a78b5054250bd1b711b2823f2fc58c2ba89930bce5c"
+        }
+      ],
+      "path": "node_modules/troika-worker-utils",
+      "repository": {
+        "directory": "packages/troika-worker-utils",
+        "type": "git",
+        "url": "https://github.com/protectwise/troika.git"
+      },
+      "resolved": "https://registry.npmjs.org/troika-worker-utils/-/troika-worker-utils-0.52.0.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "0.52.0"
+    },
+    {
+      "authorMetadata": "Paul Henschel",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-lR5VHmkPhzdhrM092lI2nACsLO4QubF0/yoOhzX7c+wIpbN1GjHNzCc91QlpxBi+cnx8vVJ+Ur6vL5cEoQPFpQ==",
+      "name": "tunnel-rat",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "cd14add33d47bcecae9fed5559224ae135c5ec41e1d3a126601f5fbd82291834"
+        }
+      ],
+      "path": "node_modules/tunnel-rat",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/pmndrs/tunnel-rat.git"
+      },
+      "resolved": "https://registry.npmjs.org/tunnel-rat/-/tunnel-rat-0.1.2.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "0.1.2"
+    },
+    {
+      "authorMetadata": "Paul Henschel",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-CHOUy7mu3lbD6o6LJLfllpjkzhHXSBlX8B9+qPddUsIfeF5S/UZ5q0kmCsnRqT1UHFQZchNFDDzMbQsuesHWlw==",
+      "name": "zustand",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "c1e6e266563517467b1bf874817d23e426f3149252bd7d42758cd697514b8417"
+        }
+      ],
+      "path": "node_modules/tunnel-rat/node_modules/zustand",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/pmndrs/zustand.git"
+      },
+      "resolved": "https://registry.npmjs.org/zustand/-/zustand-4.5.7.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "4.5.7"
+    },
+    {
+      "authorMetadata": null,
+      "declaredLicense": "MIT",
+      "integrity": "sha512-6L+EeigHMQhdaIPNIFUKwfWJSwWFQ8gJbJ2DLOs5sDIegTwR9fRxvnM3uciHKjIZhFz+KAv2emhWMRvDmMcY8A==",
+      "name": "use-sync-external-store",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93"
+        }
+      ],
+      "path": "node_modules/use-sync-external-store",
+      "repository": {
+        "directory": "packages/use-sync-external-store",
+        "type": "git",
+        "url": "https://github.com/react/react.git"
+      },
+      "resolved": "https://registry.npmjs.org/use-sync-external-store/-/use-sync-external-store-1.7.0.tgz",
+      "reviewNotes": [],
+      "shipped": true,
+      "version": "1.7.0"
+    },
+    {
+      "authorMetadata": "Piotr Witek <piotrek.witek@gmail.com> (http://piotrwitek.github.io)",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-6Z7Ma2aVEWisaL6TvBCy7P8rm2LQoPv6dJ7ecIaIixHcwfbJ0x7mWdbcwlIM5IGQxPZSFYeqRCqlOOeKoJYMkw==",
+      "name": "utility-types",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "eba0c3a8b90636744cc57e1a90f2d87767a57cccc86578a8168130f96896c9a9"
+        }
+      ],
+      "path": "node_modules/utility-types",
+      "repository": "https://github.com/piotrwitek/utility-types",
+      "resolved": "https://registry.npmjs.org/utility-types/-/utility-types-3.11.0.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "3.11.0"
+    },
+    {
+      "authorMetadata": "Tim van Scherpenzeel",
+      "declaredLicense": null,
+      "integrity": "sha512-LkBXKjU5r9vAW7Gcu3T5u+5cvSvh5WwINdr0C+9jpzVB41cjQAP5ePArDtk/WHYdVj0GefCgM73BA7FlIiNtdg==",
+      "name": "webgl-constants",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "0969fa65680b694452c2c65981df14af5c192da24f2b1f87bdd51d8ed24efcfa"
+        }
+      ],
+      "path": "node_modules/webgl-constants",
+      "repository": null,
+      "resolved": "https://registry.npmjs.org/webgl-constants/-/webgl-constants-1.1.1.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "1.1.1"
+    },
+    {
+      "authorMetadata": "Jason Johnston",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-9Z0JcMTFxeE+b2x1LJTdnaT8rT8aEp7MVxkNwoycNmJWwPdzoXzMh0BjJSh/AEFP+KPYZUli814h8bJZFIZ2jA==",
+      "name": "webgl-sdf-generator",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE.txt",
+          "sha256": "49d4d143fed599deb502a0fe6e02f49832f87e9a3a4cd0502e469596d50faa6d"
+        }
+      ],
+      "path": "node_modules/webgl-sdf-generator",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/lojjic/webgl-sdf-generator.git"
+      },
+      "resolved": "https://registry.npmjs.org/webgl-sdf-generator/-/webgl-sdf-generator-1.1.1.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "1.1.1"
+    },
+    {
+      "authorMetadata": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me)",
+      "declaredLicense": "ISC",
+      "integrity": "sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==",
+      "name": "which",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b"
+        }
+      ],
+      "path": "node_modules/which",
+      "repository": {
+        "type": "git",
+        "url": "git://github.com/isaacs/node-which.git"
+      },
+      "resolved": "https://registry.npmjs.org/which/-/which-2.0.2.tgz",
+      "reviewNotes": [],
+      "shipped": false,
+      "version": "2.0.2"
+    },
+    {
+      "authorMetadata": "Paul Henschel",
+      "declaredLicense": "MIT",
+      "integrity": "sha512-ciJZlP48M1PTQbVQq81CGVFxHTLpZNrFjKqwjtCU34AWuXTZT/jrF3p9+fI84Cf1eSCMLapxqBy/SNTfwOBuqA==",
+      "name": "zustand",
+      "noticeStatus": "resolved",
+      "notices": [
+        {
+          "origin": "installed-package",
+          "path": "LICENSE",
+          "sha256": "c1e6e266563517467b1bf874817d23e426f3149252bd7d42758cd697514b8417"
+        }
+      ],
+      "path": "node_modules/zustand",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/pmndrs/zustand.git"
+      },
+      "resolved": "https://registry.npmjs.org/zustand/-/zustand-5.1.0.tgz",
+      "reviewNotes": [],
+      "shipped": true,
+      "version": "5.1.0"
+    }
+  ],
+  "proprietaryDependencies": [
+    {
+      "coordinates": [
+        "ai.pleos.playground:NaviHelper:3.0.5",
+        "ai.pleos.playground:navi-aidl:3.0.1",
+        "ai.pleos.playground:navi-data:3.0.4"
+      ],
+      "name": "Pleos NaviHelper and supporting SDK artifacts",
+      "notice": "These are proprietary Pleos SDK artifacts, not represented as open-source. Official SDK terms, redistribution conditions and competition/market eligibility require separate review; Apache/MIT notices do not grant rights to the Pleos SDK.",
+      "sourceUrl": "https://document.pleos.ai/en/docs/pleos-only/connect-sdk-pleos/NaviHelper/importing-sdk"
+    }
+  ],
+  "runtimePackageCount": 68,
+  "schemaVersion": 1,
+  "scope": {
+    "kind": "emitted-javascript-package-inventory",
+    "sha256": "73cd63477f96408b61761219d70c4a9fda8b0aed6071b7e77899411861f9efec"
+  },
+  "shippedPackageCount": 13,
+  "sourceManifestSha256": "41757e001d89d79c1c0d374096ad5b765d36cf767cc3f618aca228eb0cb01fbe"
+}
