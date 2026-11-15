@@ -9,6 +9,7 @@ class NativePresentationPolicy {
 
     fun foreground() { if (!destroyed) foreground = true }
     fun background() { foreground = false }
+    fun pageLoading() { pageReady = false }
     fun pageReady() { if (!destroyed && !rendererFailed) pageReady = true }
     fun contentFailed() { rendererFailed = true; pageReady = false }
     fun destroy() { destroyed = true; foreground = false; pageReady = false }

@@ -34,6 +34,18 @@ The official NaviHelper adapter now implements the optional typed navigation-ses
 
 Route search completion is never treated as guidance completion, physical arrival or a confirmed memory. Sample requests are rejected before SDK calls, verified-destination policy remains the navigation module's responsibility, and routing/cancellation still require trusted stationary authorization. The [official NaviHelper destination guide](https://document.pleos.ai/en/docs/pleos-only/connect-sdk-pleos/NaviHelper/destinations) documents route submission/cancellation; actual Pleos service behavior is still unverified.
 
+## Deliberate audio focus
+
+The native audio controller uses `AudioManager` with an API-28-compatible `AudioFocusRequest`, `USAGE_GAME`, sonification content and transient focus. It follows the [Pleos audio-focus guide](https://document.pleos.ai/en/docs/pleos-only/vehicle-app-developer-guide/audio-focus-development-guide/audio-focus-development): actual playback must first obtain the operating system's grant. The app does not invent a grant, enumerate other apps' focus holders, override the platform interaction matrix or request focus merely because it resumed. Delayed grants are disabled. Ducking is configured to pause this optional chime; loss invalidates the session rather than automatically resuming it later.
+
+The bridge's `audio-request` action is used only for a current deliberate playback intent. Silent Web Audio priming on selection/enable-sound does not own focus. `audio-release` and native lifecycle cleanup abandon focus. Safety lock, backgrounding, screen-off, renderer failure and teardown release any session; the request additionally requires an interactive display and the native presentation policy to remain allowed when the OS returns. A native eight-second lease bounds focus retention even if web cleanup fails. A bounded `roamy-audio-focus` event containing only `{granted:false}` tells web audio to stop scheduled nodes and suspend; later gain callbacks cannot restart it.
+
+The [Pleos suspend guide](https://document.pleos.ai/en/docs/pleos-only/vehicle-app-developer-guide/audio-focus-development-guide/suspend-mode-audio-focus) requires regular audio to stop and abandon focus on suspend without automatic focus recovery on resume. The code handles Android pause, display-off and focus-loss paths; the target vehicle's suspend-entry delivery/order still requires official device verification. No audio or head-unit routing result is claimed from JVM tests.
+
+Ten additional fake-port JVM tests cover OS denial/delayed grants, loss followed by gain, stale prior-session callbacks, unsafe/background conditions, lifecycle changes during a request, terminal close, failed OS calls and independent abandon failures. These are policy tests; real Android/AAOS audio focus, WebView audio routing, calls/emergency preemption and speaker behavior remain in the runtime matrix.
+
+The audio increment built both APKs, passed **41 JVM tests per flavor (82 executions)** with the typed audio-bridge tests included, and completed lint with zero errors and the same four existing warnings per flavor. No instrumentation or official vehicle audio test was possible on this worker.
+
 ## Checks and remaining runtime matrix
 
 New JVM tests cover production non-unlocking, startup/disconnect, bounded freshness/clock reversal, stale foreground callbacks, reconnect, terminal close, native page readiness, background restrictions, sticky renderer failure and independent cleanup failures. These tests exercise policy without fabricating a vehicle signal. Tests that explicitly construct a validated policy are isolated unit models; the production constructor is hard-coded to false.
@@ -47,7 +59,7 @@ The official emulator is still blocked by absent nested KVM and GPU exposure in 
 3. Test missing/changed permissions, disconnect/reconnect, delayed callbacks, background/foreground, suspend/resume, process death and activity recreation.
 4. Stall JavaScript and independently change vehicle restrictions; verify the native cover still hides the world. Kill the WebView renderer and verify no crash loop, unsafe uncovering or reuse of the dead WebView.
 5. Exercise verified navigation submission, asynchronous failures, explicit retry/cancellation and listener teardown without conflating any callback with arrival.
-6. Verify audio focus, suspend/resume and speaker behavior under the [Pleos audio policy](https://document.pleos.ai/en/docs/pleos-only/vehicle-app-developer-guide/intro). Vehicle audio remains unreachable while this production world is locked; native focus acquisition for deliberate sound playback remains a release gate.
+6. Verify deliberate native audio-focus requests, actual grants/denial, game/WebView routing, calls/emergency preemption, screen-off and vehicle suspend/resume ordering, and speaker behavior. Confirm every loss stops pending/current notes and neither resume nor a late gain restarts them. Vehicle audio remains unreachable while this production world is locked; the implemented focus path remains runtime-unverified.
 7. Verify backup/privacy behavior and any native encrypted persistence integration. A WebView application sandbox or disabled backup is not app-level encryption; freeform memory text can contain personal information.
 
 No source-only test can replace those device checks. Lighting, voice and location features remain unsupported until their platform APIs, permissions, deliberate interaction and recovery behavior are implemented and verified.

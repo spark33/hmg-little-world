@@ -1,7 +1,13 @@
 package ai.littleworld
 
 import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -29,6 +35,8 @@ class MainActivity : Activity() {
     private lateinit var root: FrameLayout
     private lateinit var safetyCover: TextView
     private lateinit var vehicle: VehicleIntegration
+    private var audioFocus: AudioFocusIntegration? = null
+    private var screenReceiverRegistered = false
     private val presentation = NativePresentationPolicy()
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private var destroyed = false
@@ -36,6 +44,14 @@ class MainActivity : Activity() {
     private var contentFailure = false
     private val origin = "https://appassets.androidplatform.net"
     private val entryPage = "$origin/assets/web/index.html"
+    private val screenOffReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == Intent.ACTION_SCREEN_OFF) {
+                audioFocus?.releaseAudioFocus()
+                publishAudioFocus(false)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +75,19 @@ class MainActivity : Activity() {
             DemoVehicleAdapter()
         } catch (_: LinkageError) {
             DemoVehicleAdapter()
+        }
+        audioFocus = AndroidAudioFocusController(this, {
+            !destroyed && !contentFailure && presentation.allowed(vehicle.safety.value, BuildConfig.DEVELOPMENT_PREVIEW)
+        }, ::publishAudioFocus)
+        try {
+            val filter = IntentFilter(Intent.ACTION_SCREEN_OFF)
+            if (Build.VERSION.SDK_INT >= 33) registerReceiver(screenOffReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+            else registerReceiver(screenOffReceiver, filter)
+            screenReceiverRegistered = true
+        } catch (_: Exception) {
+            // Lack of a screen-off observer cannot permit audio across suspend.
+            audioFocus?.close()
+            audioFocus = null
         }
         try {
             val created = WebView(this)
@@ -87,7 +116,7 @@ class MainActivity : Activity() {
             mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
             setSupportMultipleWindows(false)
         }
-        val bridge = PleosBridge(vehicle)
+        val bridge = PleosBridge(vehicle, audioFocus = audioFocus)
         if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
             WebViewCompat.addWebMessageListener(view, "NativeBridge", setOf(origin)) {
                     sender, message, source, mainFrame, proxy ->
@@ -111,6 +140,13 @@ class MainActivity : Activity() {
 
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest) =
                 request.url.toString() != entryPage
+
+            override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
+                if (!destroyed && view === web) {
+                    presentation.pageLoading()
+                    publishSafety()
+                }
+            }
 
             override fun onPageFinished(view: WebView, url: String) {
                 if (!destroyed && view === web && url == entryPage) {
@@ -139,6 +175,7 @@ class MainActivity : Activity() {
         // This opaque native gate does not depend on responsive or trustworthy JavaScript.
         view?.visibility = if (allowed) View.VISIBLE else View.INVISIBLE
         safetyCover.visibility = if (allowed) View.GONE else View.VISIBLE
+        if (!allowed) audioFocus?.releaseAudioFocus()
         if (view == null || contentFailure) return
         val payload = JSONObject()
             .put("state", if (allowed) vehicle.safety.value.name.lowercase() else "unknown")
@@ -158,8 +195,22 @@ class MainActivity : Activity() {
         web?.visibility = View.INVISIBLE
         safetyCover.visibility = View.VISIBLE
         safetyCover.setText(R.string.roamy_content_restart)
+        audioFocus?.releaseAudioFocus()
         if (::vehicle.isInitialized) {
             cleanupSafely({ vehicle.onBackground() }, { vehicle.restoreLighting() })
+        }
+    }
+
+    private fun publishAudioFocus(granted: Boolean) {
+        val view = web ?: return
+        if (destroyed) return
+        val payload = JSONObject().put("granted", granted)
+        try {
+            view.evaluateJavascript(
+                "window.dispatchEvent(new CustomEvent('roamy-audio-focus',{detail:$payload}));", null
+            )
+        } catch (_: Exception) {
+            // Focus has already been abandoned; renderer failure must not reacquire it.
         }
     }
 
@@ -202,9 +253,15 @@ class MainActivity : Activity() {
     }
 
     override fun onDestroy() {
+        cleanupSafely({ audioFocus?.close() })
+        audioFocus = null
         destroyed = true
         presentation.destroy()
         scope.cancel()
+        if (screenReceiverRegistered) {
+            cleanupSafely({ unregisterReceiver(screenOffReceiver) })
+            screenReceiverRegistered = false
+        }
         if (::vehicle.isInitialized) {
             cleanupSafely({ vehicle.onBackground() }, { vehicle.restoreLighting() }, { vehicle.close() })
         }

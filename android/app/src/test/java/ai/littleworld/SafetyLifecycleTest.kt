@@ -74,6 +74,10 @@ class SafetyLifecycleTest {
         assertFalse(policy.allowed(SafetyState.UNKNOWN, false))
         assertFalse(policy.allowed(SafetyState.DRIVING, false))
         assertFalse(policy.allowed(SafetyState.DRIVING, true))
+        policy.pageLoading()
+        assertFalse(policy.allowed(SafetyState.PARKED, false))
+        policy.pageReady()
+        assertTrue(policy.allowed(SafetyState.PARKED, false))
     }
 
     @Test fun nativeBackgroundGateCannotBeOverriddenByAStaleWebPage() {
