@@ -21,7 +21,6 @@ import {
   WORLD_LAYOUT,
   worldProgress,
   type CollectibleAssetId,
-  type WorldAssetId,
 } from "./world-layout";
 type V3 = [number, number, number];
 const MotionContext = createContext(false);
@@ -352,7 +351,7 @@ function Shop({
           <Label
             text={
               cafe
-                ? "SLOW MORNINGS"
+                ? "SEONGSU CAFE"
                 : chi
                   ? "DEEP DISH CLUB"
                   : "MOTOR CITY PIZZA"
@@ -413,55 +412,6 @@ function Shop({
     </group>
   );
 }
-function Lighthouse({ night }: { night: boolean }) {
-  const lamp = useRef<THREE.Group>(null);
-  const reducedMotion = useContext(MotionContext);
-  useFrame(({ clock }) => {
-    if (reducedMotion) return;
-    if (lamp.current) lamp.current.rotation.y = clock.elapsedTime * 0.25;
-  });
-  return (
-    <group>
-      <Cylinder p={[0, 0.12, 0]} r={0.95} h={0.24} c="#d6cbb0" />
-      <Cylinder p={[0, 1.28, 0]} r={0.5} r2={0.34} h={2.4} c="#fff0d3" />
-      <Cylinder p={[0, 1.36, 0]} r={0.443} r2={0.405} h={0.55} c="#d98570" />
-      <Cylinder p={[0, 2.51, 0]} r={0.61} h={0.13} c="#779295" />
-      <Cylinder
-        p={[0, 2.84, 0]}
-        r={0.34}
-        h={0.58}
-        c={night ? "#ffd385" : "#b4d3cb"}
-      />
-      {Array.from({ length: 8 }, (_, i) => {
-        const a = (i * Math.PI) / 4;
-        return (
-          <Box
-            key={i}
-            p={[Math.cos(a) * 0.4, 2.83, Math.sin(a) * 0.4]}
-            s={[0.045, 0.55, 0.045]}
-            c="#566f70"
-          />
-        );
-      })}
-      <mesh position={[0, 3.23, 0]} castShadow>
-        <coneGeometry args={[0.68, 0.5, 12]} />
-        <meshStandardMaterial color="#d67f68" />
-      </mesh>
-      <Ball p={[0, 3.5, 0]} s={0.07} c="#e2bd79" />
-      <Box p={[0, 0.4, 0.49]} s={[0.26, 0.58, 0.08]} c="#78918c" />
-      <group ref={lamp}>
-        {night && (
-          <pointLight
-            position={[0, 2.8, 0.3]}
-            intensity={2}
-            distance={4}
-            color="#ffcf83"
-          />
-        )}
-      </group>
-    </group>
-  );
-}
 function Person({
   p,
   color = "#e1a16e",
@@ -507,6 +457,29 @@ const roadPoints = [
   new THREE.Vector3(-1.1, 0.075, -2.3),
 ];
 const roadCurve = new THREE.CatmullRomCurve3(roadPoints);
+function RoadMarkings() {
+  const mesh = useRef<THREE.InstancedMesh>(null);
+  useEffect(() => {
+    if (!mesh.current) return;
+    const marker = new THREE.Object3D();
+    for (let i = 0; i < 42; i++) {
+      const point = roadCurve.getPoint(i / 43);
+      const tangent = roadCurve.getTangent(i / 43);
+      marker.position.set(point.x, 0.09, point.z);
+      marker.rotation.y = Math.atan2(tangent.x, tangent.z);
+      marker.scale.set(0.035, 0.012, 0.16);
+      marker.updateMatrix();
+      mesh.current.setMatrixAt(i, marker.matrix);
+    }
+    mesh.current.instanceMatrix.needsUpdate = true;
+  }, []);
+  return (
+    <instancedMesh ref={mesh} args={[undefined, undefined, 42]} receiveShadow>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color="#f8eacd" roughness={0.85} />
+    </instancedMesh>
+  );
+}
 function Road() {
   const geo = useMemo(() => {
     const points = roadCurve.getPoints(100);
@@ -541,20 +514,7 @@ function Road() {
       <mesh geometry={geo} receiveShadow>
         <meshStandardMaterial color={C.road} side={THREE.DoubleSide} />
       </mesh>
-      {Array.from({ length: 42 }, (_, i) => {
-        const p = roadCurve.getPoint(i / 43);
-        const t = roadCurve.getTangent(i / 43);
-        return (
-          <Box
-            key={i}
-            p={[p.x, 0.09, p.z]}
-            s={[0.035, 0.012, 0.16]}
-            c="#f8eacd"
-            r={0.005}
-            rotation={[0, Math.atan2(t.x, t.z), 0]}
-          />
-        );
-      })}
+      <RoadMarkings />
     </group>
   );
 }
@@ -620,11 +580,30 @@ function Water() {
           c="#c6dfd3"
         />
       ))}
-      <group position={[-5.6, 0.1, -0.7]} rotation={[0, -0.5, 0]}>
+      <group position={[-5.2, 0.2, -1.05]} rotation={[0, 0.28, 0]}>
+        <Box p={[0, 0.19, 0]} s={[3.15, 0.12, 0.58]} c="#e1cfab" />
+        {[-1.25, -0.62, 0, 0.62, 1.25].flatMap((x) =>
+          [-0.3, 0.3].map((z) => (
+            <Box
+              key={`${x}-${z}`}
+              p={[x, 0.42, z]}
+              s={[0.045, 0.4, 0.045]}
+              c="#7b9690"
+            />
+          )),
+        )}
+        {[-0.3, 0.3].map((z) => (
+          <Box key={z} p={[0, 0.61, z]} s={[3.15, 0.045, 0.045]} c="#7b9690" />
+        ))}
+        <Label text="HAN RIVER" p={[0, 0.43, 0.33]} width={0.95} size={0.22} />
+      </group>
+      <group position={[-6.1, 0.1, -3.3]} rotation={[0, -0.5, 0]}>
         <Box s={[0.55, 0.16, 0.9]} c="#e9cb9b" r={0.12} />
         <Cylinder p={[0, 0.45, 0]} r={0.025} h={0.9} c="#aa8966" />
         <mesh position={[0.17, 0.56, 0]}>
-          <bufferGeometry>
+          <bufferGeometry
+            onUpdate={(geometry) => geometry.computeVertexNormals()}
+          >
             <bufferAttribute
               attach="attributes-position"
               args={[
@@ -650,70 +629,152 @@ function Fence({ p }: { p: V3 }) {
     </group>
   );
 }
-const plot: V3 = WORLD_LAYOUT.chicago.position;
+const plot: V3 = WORLD_LAYOUT.mangwon.position;
 // Each new keepsake is built from local procedural geometry. Their scales fit
 // the reserved sites in world-layout.ts, so collecting never rearranges a town.
-function NewYorkShop({ night = false }: { night?: boolean }) {
+function HanokPavilion() {
   return (
     <group scale={0.8}>
-      <Box p={[0, 0.04, 0]} s={[2.7, 0.08, 2.2]} c="#ded0b4" />
-      <Box p={[0, 1.45, -0.12]} s={[2.1, 2.8, 1.55]} c="#b9826d" r={0.06} />
-      <Box p={[0, 2.9, -0.12]} s={[2.38, 0.16, 1.8]} c="#6c7f80" />
-      <Box p={[0, 2.72, 0.7]} s={[2.2, 0.1, 0.18]} c="#eed4aa" />
-      {[-0.63, 0.63].map((x) =>
-        [1.55, 2.25].map((y) => (
-          <group key={`${x}-${y}`}>
-            <Box p={[x, y, 0.67]} s={[0.55, 0.59, 0.08]} c="#f0d7ac" />
-            <Box
-              p={[x, y, 0.72]}
-              s={[0.39, 0.43, 0.04]}
-              c={night ? "#ffd17c" : "#92b2ae"}
-              glow={night}
-            />
-            <Box p={[x, y, 0.75]} s={[0.035, 0.43, 0.025]} c="#f7e2bc" />
+      <Box p={[0, 0.09, 0]} s={[2.7, 0.18, 2.1]} c="#d3c9b0" r={0.1} />
+      <Box p={[0, 0.25, 0]} s={[2.25, 0.15, 1.75]} c="#bc9471" />
+      {[-0.85, 0.85].flatMap((x) =>
+        [-0.6, 0.6].map((z) => (
+          <group key={`${x}-${z}`}>
+            <Cylinder p={[x, 0.84, z]} r={0.085} h={1.2} c="#9c6253" />
+            <Box p={[x, 1.39, z]} s={[0.3, 0.15, 0.26]} c="#507f79" />
           </group>
         )),
       )}
-      <Box p={[0, 0.5, 0.69]} s={[0.42, 0.88, 0.08]} c="#527a77" />
-      {[-0.7, 0.7].map((x) => (
-        <Box
-          key={x}
-          p={[x, 0.55, 0.71]}
-          s={[0.57, 0.66, 0.05]}
-          c={night ? "#ffd17c" : "#8cb1ab"}
-          glow={night}
-        />
-      ))}
-      <Box
-        p={[0, 1.06, 0.84]}
-        s={[2.3, 0.15, 0.6]}
-        c="#bc674e"
-        rotation={[0.15, 0, 0]}
-      />
-      <Label
-        text="CORNER SLICE"
-        p={[0, 1.13, 1.16]}
-        width={2.15}
-        size={0.27}
-        color="#a6624d"
-      />
-      <Box p={[0.04, 1.84, 0.83]} s={[0.05, 1.65, 0.06]} c="#5c6f6b" />
-      {[1.41, 2.08].map((y) => (
-        <group key={y}>
-          <Box p={[0.04, y, 0.89]} s={[0.95, 0.055, 0.35]} c="#5c6f6b" />
-          <Box p={[0.04, y + 0.2, 1.06]} s={[0.95, 0.035, 0.035]} c="#5c6f6b" />
-          {[-0.4, 0.4].map((x) => (
+      <Box p={[0, 1.39, 0]} s={[2.32, 0.15, 1.75]} c="#4e7e75" />
+      <Box p={[0, 1.51, 0]} s={[2.65, 0.12, 2.05]} c="#6c7b80" />
+      {[-1, 1].map((side) => (
+        <group key={side}>
+          <Box
+            p={[0, 1.77, side * 0.44]}
+            s={[2.7, 0.12, 1.12]}
+            c="#596d75"
+            rotation={[side * 0.42, 0, 0]}
+          />
+          <Box
+            p={[0, 1.62, side * 0.94]}
+            s={[2.85, 0.09, 0.25]}
+            c="#72898c"
+            rotation={[-side * 0.15, 0, 0]}
+          />
+          {Array.from({ length: 11 }, (_, i) => (
             <Box
-              key={x}
-              p={[x, y + 0.1, 1.06]}
-              s={[0.035, 0.22, 0.035]}
-              c="#5c6f6b"
+              key={i}
+              p={[-1.25 + i * 0.25, 1.82, side * 0.44]}
+              s={[0.035, 0.03, 1.08]}
+              c="#91a2a0"
+              rotation={[side * 0.42, 0, 0]}
             />
           ))}
         </group>
       ))}
-      <Plant p={[-1.18, 0, 0.75]} flowers />
-      <Cylinder p={[1.13, 0.26, 0.6]} r={0.18} h={0.52} c="#78918c" />
+      <Box p={[0, 2.02, 0]} s={[2.75, 0.11, 0.13]} c="#72898c" />
+      <Box p={[0, 1.16, 0.69]} s={[0.91, 0.26, 0.08]} c="#315f5b" />
+      <Label
+        text="GYEONGBOKGUNG"
+        p={[0, 1.16, 0.74]}
+        width={0.85}
+        size={0.19}
+        color="#eee0b5"
+        bg="#315f5b"
+      />
+      <Box p={[0, 0.23, 1.02]} s={[0.94, 0.15, 0.24]} c="#e1d8c1" />
+      <Plant p={[-1.16, 0.18, 0.65]} flowers />
+      <Plant p={[1.16, 0.18, 0.65]} flowers />
+    </group>
+  );
+}
+function SeoulMarket({
+  night = false,
+  detail = 1,
+  kind = "mangwon",
+}: {
+  night?: boolean;
+  detail?: number;
+  kind?: "gwangjang" | "mangwon";
+}) {
+  const accent = kind === "gwangjang" ? "#bd6e59" : "#698f80";
+  return (
+    <group>
+      <Box p={[0, 0.05, 0]} s={[3.15, 0.1, 2.65]} c="#ded2af" r={0.12} />
+      <Box p={[0, 0.6, -0.16]} s={[2.3, 1.1, 1.35]} c="#e7c798" />
+      <Box
+        p={[0, 0.74, 0.54]}
+        s={[2.05, 0.7, 0.06]}
+        c={night ? "#e8b979" : "#7d9f93"}
+        glow={night}
+      />
+      <Box p={[0, 0.57, 0.89]} s={[2.5, 0.16, 0.57]} c="#bb8a64" />
+      {[-0.78, 0, 0.78].map((x, i) => (
+        <group key={x}>
+          <Cylinder p={[x, 0.72, 0.9]} r={0.25} h={0.13} c="#758780" />
+          <Cylinder
+            p={[x, 0.8, 0.9]}
+            r={0.2}
+            h={0.045}
+            c={i === 1 ? "#d27850" : "#e9c891"}
+          />
+          {[0, 1, 2].map((n) => (
+            <Box
+              key={n}
+              p={[x - 0.11 + n * 0.1, 0.83, 0.9]}
+              s={[0.065, 0.035, 0.11]}
+              c={i === 1 ? "#edae79" : "#f3dfb9"}
+            />
+          ))}
+        </group>
+      ))}
+      <Box p={[-0.75, 0.28, 1.3]} s={[0.45, 0.38, 0.45]} c={accent} />
+      <Box p={[0.75, 0.28, 1.3]} s={[0.45, 0.38, 0.45]} c={accent} />
+      {detail > 0 && (
+        <>
+          <Roof color={accent} />
+          <Box p={[0, 1.48, 0.77]} s={[2.2, 0.4, 0.12]} c={accent} />
+          <Label
+            text={kind === "gwangjang" ? "GWANGJANG MARKET" : "MANGWON MARKET"}
+            p={[0, 1.48, 0.84]}
+            width={2.05}
+            size={0.3}
+          />
+          {Array.from({ length: 9 }, (_, i) => (
+            <Box
+              key={i}
+              p={[-1.08 + i * 0.27, 1.14, 0.9]}
+              s={[0.27, 0.07, 0.7]}
+              rotation={[0.16, 0, 0]}
+              c={i % 2 ? "#fff0cf" : accent}
+            />
+          ))}
+          <Plant p={[-1.4, 0, 0.8]} flowers />
+          <Plant p={[1.4, 0, 0.8]} flowers />
+        </>
+      )}
+    </group>
+  );
+}
+function NamsanTower({ night }: { night: boolean }) {
+  return (
+    <group scale={0.76}>
+      <Cylinder p={[0, 0.1, 0]} r={0.95} h={0.2} c="#c6c5a4" />
+      <Cylinder p={[0, 1.45, 0]} r={0.17} r2={0.13} h={2.7} c="#e9e2cb" />
+      <Cylinder p={[0, 2.65, 0]} r={0.58} h={0.22} c="#8b9f9f" />
+      <Cylinder
+        p={[0, 2.9, 0]}
+        r={0.49}
+        h={0.35}
+        c={night ? "#ecc88d" : "#acc4bd"}
+      />
+      <Cylinder p={[0, 3.12, 0]} r={0.56} h={0.1} c="#6d8c87" />
+      <Cylinder p={[0, 3.38, 0]} r={0.11} h={0.48} c="#d4d4bb" />
+      <Cylinder p={[0, 3.88, 0]} r={0.025} h={0.62} c="#839995" />
+      <Box p={[0, 0.58, 0.15]} s={[0.48, 0.09, 0.09]} c="#8b9f9f" />
+      <Label text="NAMSAN" p={[0, 0.48, 0.78]} width={1.05} size={0.25} />
+      <Plant p={[-0.66, 0.12, 0.35]} />
+      <Plant p={[0.66, 0.12, 0.35]} />
     </group>
   );
 }
@@ -743,7 +804,9 @@ function MountainCamp() {
       <Pine p={[1.31, 0.07, -0.25]} scale={0.62} />
       <group position={[0.35, 0.07, 0.7]}>
         <mesh castShadow>
-          <bufferGeometry>
+          <bufferGeometry
+            onUpdate={(geometry) => geometry.computeVertexNormals()}
+          >
             <bufferAttribute
               attach="attributes-position"
               args={[
@@ -767,7 +830,9 @@ function MountainCamp() {
           <meshStandardMaterial color="#d6aa6d" side={THREE.DoubleSide} />
         </mesh>
         <mesh position={[0, 0.01, 0.51]}>
-          <bufferGeometry>
+          <bufferGeometry
+            onUpdate={(geometry) => geometry.computeVertexNormals()}
+          >
             <bufferAttribute
               attach="attributes-position"
               args={[
@@ -819,7 +884,9 @@ function ArtMuseum({ night = false }: { night?: boolean }) {
       ))}
       <Box p={[0, 1.47, 1.04]} s={[2.75, 0.14, 0.48]} c="#e8dbc2" />
       <mesh position={[0, 1.53, 1.27]} castShadow>
-        <bufferGeometry>
+        <bufferGeometry
+          onUpdate={(geometry) => geometry.computeVertexNormals()}
+        >
           <bufferAttribute
             attach="attributes-position"
             args={[new Float32Array([-1.4, 0, 0, 1.4, 0, 0, 0, 0.65, 0]), 3]}
@@ -828,7 +895,7 @@ function ArtMuseum({ night = false }: { night?: boolean }) {
         <meshStandardMaterial color="#a59bb7" side={THREE.DoubleSide} />
       </mesh>
       <Label
-        text="LITTLE ART MUSEUM"
+        text="SEOUL ART MUSEUM"
         p={[0, 1.57, 1.28]}
         width={2.25}
         size={0.21}
@@ -853,10 +920,10 @@ function CollectibleAsset({
   id: CollectibleAssetId;
   night: boolean;
 }) {
-  if (id === "new-york") return <NewYorkShop night={night} />;
-  if (id === "mountain") return <MountainCamp />;
-  if (id === "museum") return <ArtMuseum night={night} />;
-  return <Shop kind="chicago" night={night} />;
+  if (id === "gyeongbokgung") return <HanokPavilion />;
+  if (id === "bukhansan") return <MountainCamp />;
+  if (id === "seoul-museum") return <ArtMuseum night={night} />;
+  return <SeoulMarket night={night} />;
 }
 function spring(t: number) {
   return t <= 0 ? 0 : t >= 1 ? 1 : 1 - Math.exp(-6 * t) * Math.cos(t * 9);
@@ -880,7 +947,11 @@ function PopIn({
     const k = spring(THREE.MathUtils.clamp((t - delay) / 0.85, 0, 1));
     ref.current.scale.setScalar(k);
   });
-  return <group ref={ref}>{children}</group>;
+  return (
+    <group ref={ref} scale={collecting ? 0 : 1}>
+      {children}
+    </group>
+  );
 }
 function NewShop({
   collecting,
@@ -917,11 +988,11 @@ function NewShop({
   });
   return (
     <group position={plot} rotation={[0, -0.12, 0]} scale={0.8}>
-      <group ref={foundation}>
+      <group ref={foundation} scale={collecting ? 0 : 1}>
         <Box p={[0, 0.025, 0]} s={[3.3, 0.05, 2.85]} c="#dfd2af" r={0.12} />
       </group>
-      <group ref={body}>
-        <Shop kind="chicago" night={night} detail={0} />
+      <group ref={body} scale={[1, collecting ? 0 : 1, 1]}>
+        <SeoulMarket night={night} detail={0} />
       </group>
       <PopIn collecting={collecting} start={start} delay={2.8}>
         <Roof color="#738897" />
@@ -931,7 +1002,7 @@ function NewShop({
       <PopIn collecting={collecting} start={start} delay={3.2}>
         <Box p={[0, 1.48, 0.95]} s={[1.98, 0.43, 0.16]} c="#6f8fa1" />
         <Label
-          text="DEEP DISH CLUB"
+          text="MANGWON MARKET"
           p={[0, 1.48, 1.04]}
           width={1.86}
           size={0.32}
@@ -956,17 +1027,61 @@ function NewShop({
         <Plant p={[-1.4, 0, 0.9]} flowers />
         <Plant p={[1.4, 0, 0.9]} flowers />
       </PopIn>
-      <group ref={visitors}>
-        <Person p={[-0.5, 0, 2.7]} walk color="#bd8aab" />
-        <Person p={[0.5, 0, 2.7]} walk />
+      <group ref={visitors} scale={collecting ? 0 : 1}>
+        <Person p={[-0.5, 0, 2.1]} walk color="#bd8aab" />
+        <Person p={[0.5, 0, 2.1]} walk />
       </group>
     </group>
   );
 }
+function CollectibleReveal({
+  id,
+  collecting,
+  start,
+  night,
+}: {
+  id: CollectibleAssetId;
+  collecting: boolean;
+  start: number;
+  night: boolean;
+}) {
+  if (id === "mangwon")
+    return <NewShop collecting={collecting} start={start} night={night} />;
+  return (
+    <group position={WORLD_LAYOUT[id].position} rotation={[0, -0.12, 0]}>
+      <PopIn collecting={collecting} start={start} delay={0.6}>
+        <Box p={[0, 0.015, 0]} s={[1.9, 0.03, 1.4]} c="#dfd2af" r={0.12} />
+      </PopIn>
+      <PopIn collecting={collecting} start={start} delay={1.4}>
+        <CollectibleAsset id={id} night={night} />
+      </PopIn>
+      <PopIn collecting={collecting} start={start} delay={3.4}>
+        <Box p={[0, 0.14, 0.77]} s={[0.72, 0.2, 0.07]} c="#f3e4bf" />
+        <Label
+          text={
+            id === "gyeongbokgung"
+              ? "SEOUL KEEPSAKE"
+              : id === "bukhansan"
+                ? "UNDER THE PINES"
+                : "A LITTLE WONDER"
+          }
+          p={[0, 0.14, 0.81]}
+          width={0.67}
+          size={0.15}
+        />
+      </PopIn>
+      <PopIn collecting={collecting} start={start} delay={4.3}>
+        <Person p={[0.65, 0.08, 0.64]} color="#be98b3" />
+      </PopIn>
+    </group>
+  );
+}
 function EmptyPlot({
+  id = "mangwon",
   onClick,
   collecting,
 }: {
+  id?: CollectibleAssetId;
   onClick: () => void;
   collecting: boolean;
 }) {
@@ -983,7 +1098,8 @@ function EmptyPlot({
   });
   return (
     <group
-      position={plot}
+      position={WORLD_LAYOUT[id].position}
+      scale={id === "mangwon" ? 1 : 0.72}
       onClick={(e) => {
         e.stopPropagation();
         onClick();
@@ -1016,7 +1132,15 @@ function EmptyPlot({
           <Box p={[0, 0.45, 0]} s={[0.06, 0.9, 0.06]} c="#ae8864" />
           <Box p={[0, 0.7, 0.02]} s={[1.25, 0.52, 0.1]} c="#f5e8c8" />
           <Label
-            text="ROOM TO GROW"
+            text={
+              id === "mangwon"
+                ? "ROOM TO GROW"
+                : id === "gyeongbokgung"
+                  ? "A PALACE MOMENT"
+                  : id === "bukhansan"
+                    ? "INTO THE PINES"
+                    : "SEOUL ART"
+            }
             p={[0, 0.7, 0.079]}
             width={1.15}
             size={0.32}
@@ -1054,12 +1178,14 @@ function Flowers() {
 }
 function CameraRig({
   collecting,
+  collectingId,
   start,
   resetToken,
   zoom,
   selected,
 }: {
   collecting: boolean;
+  collectingId?: string | null;
   start: number;
   resetToken: number;
   zoom: number;
@@ -1082,7 +1208,7 @@ function CameraRig({
     cameraPosition = useMemo(() => new THREE.Vector3(), []);
   useEffect(() => {
     transition.current = true;
-  }, [resetToken, selected, baseZoom]);
+  }, [resetToken, selected, baseZoom, collecting, collectingId]);
   useFrame(({ camera }, delta) => {
     if (!controls.current) return;
     if (prev.current !== zoom) {
@@ -1097,27 +1223,27 @@ function CameraRig({
     if (collecting || transition.current) {
       const t = (performance.now() - start) / 1000,
         focus = collecting && t < 5.2;
-      const chosen = !collecting && selected;
-      const position: V3 = focus
-        ? [2.6, 0.7, 0.6]
-        : chosen === "detroit"
-          ? [-1, 0.3, 0.7]
-          : chosen === "cafe"
-            ? [0.6, 0.3, -1.5]
-            : chosen === "chicago"
-              ? [2.2, 0.4, 0.4]
-              : chosen === "lighthouse"
-                ? [-2.2, 0.5, -1.7]
-                : [0, 0, 0];
+      const focusedAsset = assetForSelection(
+        focus ? (collectingId ?? "mangwon") : selected,
+      );
+      const site = focusedAsset
+        ? WORLD_LAYOUT[focusedAsset].position
+        : undefined;
+      const position: V3 =
+        focus && focusedAsset === "mangwon"
+          ? [2.6, 0.7, 0.6]
+          : site
+            ? [site[0] * 0.6, 0.4, site[2] * 0.6]
+            : [0, 0, 0];
       targetPosition.set(...position);
       controls.current.target.lerp(
         targetPosition,
         reducedMotion ? 1 : 1 - Math.exp(-delta * 2.5),
       );
       cameraPosition.set(
-        14 + position[0],
-        elevation + position[1],
-        17 + position[2],
+        (focusedAsset === "bukhansan" ? -8 : 14) + position[0],
+        elevation + position[1] + (focusedAsset === "bukhansan" ? 2 : 0),
+        (focusedAsset === "bukhansan" ? 19 : 17) + position[2],
       );
       camera.position.lerp(
         cameraPosition,
@@ -1193,7 +1319,9 @@ function Scene(props: WorldProps) {
       lastShadow.current = clock.elapsedTime;
     }
   });
-  const { collected, collecting, start, night, selected, onSelect } = props;
+  const { collecting, start, night, selected, onSelect } = props;
+  const progress = worldProgress(props);
+  const selectedAsset = assetForSelection(selected);
   function selectable(id: string) {
     return (e: ThreeEvent<MouseEvent>) => {
       e.stopPropagation();
@@ -1235,45 +1363,51 @@ function Scene(props: WorldProps) {
           position={[-2, 0.06, 0.7]}
           rotation={[0, 0.1, 0]}
           scale={0.88}
-          onClick={selectable("detroit")}
+          onClick={selectable("gwangjang")}
         >
-          <Shop night={night} />
+          <SeoulMarket kind="gwangjang" night={night} />
         </group>
         <group
           position={[1.1, 0.06, -2.7]}
           rotation={[0, 0.15, 0]}
           scale={0.78}
-          onClick={selectable("cafe")}
+          onClick={selectable("seongsu")}
         >
           <Shop kind="cafe" night={night} />
         </group>
-        <group position={[-4.2, 0.06, -3.3]} onClick={selectable("lighthouse")}>
-          <Lighthouse night={night} />
+        <group position={[-4.2, 0.06, -3.3]} onClick={selectable("namsan")}>
+          <NamsanTower night={night} />
         </group>
-        <group onClick={selectable("cherry")}>
+        <group onClick={selectable("seokchon")}>
           <Tree p={[0.25, 0.06, 1.35]} pink scale={1.25} />
         </group>
-        {(collected || collecting) && (
-          <group onClick={selectable("chicago")}>
-            <NewShop collecting={collecting} start={start} night={night} />
-          </group>
-        )}
-        {(!collected || collecting) && (
-          <EmptyPlot onClick={() => onSelect("plot")} collecting={collecting} />
-        )}
-        {selected && selected !== "plot" && (
+        {COLLECTIBLE_ASSET_IDS.map((id) => {
+          const revealing = progress.collectingId === id;
+          return progress.collected.has(id) || revealing ? (
+            <group key={id} onClick={selectable(id)}>
+              <CollectibleReveal
+                id={id}
+                collecting={revealing}
+                start={start}
+                night={night}
+              />
+            </group>
+          ) : (
+            <EmptyPlot
+              key={id}
+              id={id}
+              collecting={false}
+              onClick={() => onSelect(id === "mangwon" ? "plot" : `plot:${id}`)}
+            />
+          );
+        })}
+        {selectedAsset && !selected?.startsWith("plot") && (
           <mesh
-            position={
-              selected === "detroit"
-                ? [-2, 0.13, 0.7]
-                : selected === "chicago"
-                  ? plot
-                  : selected === "cafe"
-                    ? [1.1, 0.13, -2.7]
-                    : selected === "lighthouse"
-                      ? [-4.2, 0.13, -3.3]
-                      : [0.25, 0.13, 1.35]
-            }
+            position={[
+              WORLD_LAYOUT[selectedAsset].position[0],
+              0.13,
+              WORLD_LAYOUT[selectedAsset].position[2],
+            ]}
             rotation={[-Math.PI / 2, 0, 0]}
           >
             <ringGeometry args={[1.55, 1.6, 64]} />
@@ -1284,20 +1418,15 @@ function Scene(props: WorldProps) {
           [-6, 0, 2.7],
           [-4.7, 0, 4.3],
           [-1.8, 0, -3.5],
-          [3.6, 0, -3.9],
-          [5.5, 0, -2.9],
           [5.9, 0, 1],
           [2.3, 0, 5],
-          [-2, 0, 5],
         ].map((p, i) => (
           <Tree key={i} p={p as V3} scale={0.7 + (i % 3) * 0.16} />
         ))}
         {[
           [-2.6, 0, -4.5],
           [2.4, 0, -4.4],
-          [4.6, 0, -3.8],
           [-5.4, 0, 3.4],
-          [-0.6, 0, -4.9],
         ].map((p, i) => (
           <Pine key={i} p={p as V3} scale={0.8 + (i % 2) * 0.3} />
         ))}
@@ -1367,10 +1496,10 @@ export default function World(props: WorldProps) {
     </Canvas>
   );
 }
-export function ShopPreview({ asset = "chicago" }: { asset?: string } = {}) {
+export function ShopPreview({ asset = "mangwon" }: { asset?: string } = {}) {
   const id = COLLECTIBLE_ASSET_IDS.includes(asset as CollectibleAssetId)
     ? (asset as CollectibleAssetId)
-    : "chicago";
+    : "mangwon";
   return (
     <Canvas
       orthographic

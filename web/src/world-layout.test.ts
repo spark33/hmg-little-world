@@ -33,29 +33,30 @@ describe("fixed island keepsake layout", () => {
       expect(assetForSelection(id)).toBe(id);
     for (const id of COLLECTIBLE_ASSET_IDS)
       expect(assetForSelection(`plot:${id}`)).toBe(id);
-    expect(assetForSelection("plot")).toBe("chicago");
+    expect(assetForSelection("plot")).toBe("mangwon");
     expect(assetForSelection("unknown")).toBeUndefined();
     expect(assetForSelection("__proto__")).toBeUndefined();
   });
   it("renders confirmed additions once and animates only the current known collectible", () => {
     const progress = worldProgress({
-      collectedIds: ["chicago", "chicago", "museum", "unknown"],
+      collectedIds: ["mangwon", "mangwon", "seoul-museum", "unknown"],
       collecting: true,
-      collectingId: "museum",
+      collectingId: "seoul-museum",
     });
-    expect([...progress.collected]).toEqual(["chicago", "museum"]);
-    expect(progress.collectingId).toBe("museum");
+    expect([...progress.collected]).toEqual(["mangwon", "seoul-museum"]);
+    expect(progress.collectingId).toBe("seoul-museum");
     expect(
-      worldProgress({ collecting: false, collectingId: "museum" }).collectingId,
+      worldProgress({ collecting: false, collectingId: "seoul-museum" })
+        .collectingId,
     ).toBeNull();
     expect(
       worldProgress({ collecting: true, collectingId: "unknown" }).collectingId,
     ).toBeNull();
   });
-  it("preserves the legacy Chicago-only props while the app adopts the full catalog", () => {
+  it("preserves the single-collectible props while the app adopts the full catalog", () => {
     const progress = worldProgress({ collected: true, collecting: true });
-    expect(progress.collected.has("chicago")).toBe(true);
+    expect(progress.collected.has("mangwon")).toBe(true);
     expect(progress.collected.size).toBe(5);
-    expect(progress.collectingId).toBe("chicago");
+    expect(progress.collectingId).toBe("mangwon");
   });
 });

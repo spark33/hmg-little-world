@@ -1,17 +1,19 @@
 export type WorldAssetId =
-  | "detroit"
-  | "lighthouse"
-  | "cherry"
-  | "cafe"
-  | "chicago"
-  | "new-york"
-  | "mountain"
-  | "museum";
-export type CollectibleAssetId = "chicago" | "new-york" | "mountain" | "museum";
+  | "gwangjang"
+  | "namsan"
+  | "seokchon"
+  | "seongsu"
+  | "mangwon"
+  | "gyeongbokgung"
+  | "bukhansan"
+  | "seoul-museum";
+export type CollectibleAssetId =
+  "mangwon" | "gyeongbokgung" | "bukhansan" | "seoul-museum";
 export type WorldPosition = [number, number, number];
 
 // A fixed island has eight reserved keepsake sites. Confirming a memory fills
 // its existing site; neither time nor collection count expands the terrain.
+// These are Seoul-inspired illustrations, not maps or venue coordinates.
 export const WORLD_LAYOUT: Record<
   WorldAssetId,
   {
@@ -20,65 +22,65 @@ export const WORLD_LAYOUT: Record<
     label: string;
   }
 > = {
-  detroit: {
+  gwangjang: {
     position: [-2, 0.06, 0.7],
     footprint: [2.9, 2.5],
-    label: "Detroit pizza shop",
+    label: "Gwangjang market stall",
   },
-  lighthouse: {
+  namsan: {
     position: [-4.2, 0.06, -3.3],
     footprint: [1.9, 1.9],
-    label: "Lakeside lighthouse",
+    label: "Namsan tower",
   },
-  cherry: {
+  seokchon: {
     position: [0.25, 0.06, 1.35],
     footprint: [1.9, 1.9],
-    label: "Cherry blossom garden",
+    label: "Seokchon blossom garden",
   },
-  cafe: {
+  seongsu: {
     position: [1.1, 0.06, -2.7],
     footprint: [2.6, 2.2],
-    label: "Slow morning café",
+    label: "Seongsu café",
   },
-  chicago: {
+  mangwon: {
     position: [3.55, 0.06, 0.45],
     footprint: [2.7, 3.7],
-    label: "Deep dish club",
+    label: "Mangwon market picnic",
   },
-  "new-york": {
+  gyeongbokgung: {
     position: [-2.1, 0.06, 4.75],
-    footprint: [2.2, 1.8],
-    label: "New York slice shop",
+    footprint: [2.3, 1.8],
+    label: "Gyeongbokgung hanok pavilion",
   },
-  mountain: {
+  bukhansan: {
     position: [-0.75, 0.06, -5.25],
     footprint: [3.0, 2.4],
-    label: "Pine mountain campsite",
+    label: "Bukhansan hiking keepsake",
   },
-  museum: {
+  "seoul-museum": {
     position: [4.65, 0.06, -3.55],
     footprint: [2.6, 2.3],
-    label: "Little art museum",
+    label: "Seoul art museum",
   },
 };
 export const COLLECTIBLE_ASSET_IDS: readonly CollectibleAssetId[] = [
-  "chicago",
-  "new-york",
-  "mountain",
-  "museum",
+  "mangwon",
+  "gyeongbokgung",
+  "bukhansan",
+  "seoul-museum",
 ];
 export const SEEDED_ASSET_IDS: readonly WorldAssetId[] = [
-  "detroit",
-  "lighthouse",
-  "cherry",
-  "cafe",
+  "gwangjang",
+  "namsan",
+  "seokchon",
+  "seongsu",
 ];
 
 export function assetForSelection(
   selection: string | null,
 ): WorldAssetId | undefined {
   const id =
-    selection === "plot" ? "chicago" : selection?.replace(/^plot:/, "");
+    selection === "plot" ? "mangwon" : selection?.replace(/^plot:/, "");
   return id && Object.hasOwn(WORLD_LAYOUT, id)
     ? (id as WorldAssetId)
     : undefined;
@@ -95,11 +97,11 @@ export function worldProgress(props: {
       ? props.collectedIds.filter((id): id is WorldAssetId =>
           Object.hasOwn(WORLD_LAYOUT, id),
         )
-      : [...SEEDED_ASSET_IDS, ...(props.collected ? ["chicago" as const] : [])],
+      : [...SEEDED_ASSET_IDS, ...(props.collected ? ["mangwon" as const] : [])],
   );
   const pending =
     props.collectingId === undefined && props.collecting
-      ? "chicago"
+      ? "mangwon"
       : props.collectingId;
   const collectingId =
     props.collecting &&
