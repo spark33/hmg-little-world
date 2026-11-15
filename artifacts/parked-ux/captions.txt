@@ -1,0 +1,16 @@
+ROAMY — updated parked-car UX screenshots
+
+1200 × 675 pixels, 16:9. Captured from the current local browser build.
+These are application UI captures, not official emulator or vehicle runtime evidence.
+
+01-world.png — Your little world
+02-collection.png — Collection
+03-explore.png — Discover new chapters
+04-adventure.png — An outing to remember
+05-destinations.png — Choose a place
+06-confirmation.png — Keep a memory
+07-settings.png — Parked comfort settings
+08-night-settings.png — Night settings
+
+Suggested application-document sequence: 01 World → 03 Explore → 05 Choose a place → 06 Keep a memory → 02 Collection.
+Collection and Explore cards are a single tap target with a chevron; there are no nested CTA buttons.

@@ -1,5 +1,14 @@
 # ROAMY — a little Seoul to keep
 
+## Updated parked-car interface (2026-11-15)
+
+The current interface uses full-window tasks, larger text and controls, a paged collection, illustrated discovery cards, three visible destination choices and grouped settings. Global branding is “Your little world”; Seoul names belong to the current place collection. Cards are single tap targets with chevrons.
+
+Current journey: **Discover → choose a keepsake → Choose a place → Let’s go → Review memory → Keep memory**. **Not now** records nothing. Confirmed saves precede the reveal. Driving/unknown safety, focus loss, backgrounding and screen-off suspend entertainment. Browsing/note drafts can be continued deliberately; pending arrivals/routes never reopen automatically. The vehicle validation gate remains locked.
+
+Current screenshots for application documents are in [artifacts/parked-ux](artifacts/parked-ux/). See [design-qa.md](design-qa.md) for browser evidence and native runtime limits. Earlier verification records below describe their respective builds.
+
+
 **Drive the real world. Build your own.**
 
 ROAMY is a local-first, stationary entertainment application with an original miniature Seoul. Four illustrative memories introduce Gwangjang Market, Namsan, Seokchon Lake and Seongsu. Four complete demo adventures add Mangwon Market, a Gyeongbokgung-inspired pavilion, Bukhansan and a Seoul museum.

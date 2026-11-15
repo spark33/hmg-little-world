@@ -302,10 +302,10 @@ export default function BackupPanel({
               <p className="backup-summary">
                 This world contains{" "}
                 {Object.keys(pending.world.collected).length} memories:{" "}
-                {confirmedCount} confirmed demo keepsake
+                {confirmedCount} saved keepsake
                 {confirmedCount === 1 ? "" : "s"} and{" "}
                 {Object.keys(pending.world.collected).length - confirmedCount}{" "}
-                illustrative memories.
+                inspirations.
               </p>
               <p>
                 Your current save is copied before replacement. Only the most
@@ -338,7 +338,8 @@ export default function BackupPanel({
       <p>
         Resetting the world keeps a recovery copy until you clear it here.
         Uninstalling the app or clearing its data removes local saves and
-        recovery copies; browser previews use their own browser storage.
+        recovery copies. When using ROAMY in a browser, your world stays in that
+        browser.
       </p>
     </section>
   );

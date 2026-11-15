@@ -9,6 +9,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.PowerManager
 import android.view.Gravity
 import android.view.View
 import android.webkit.RenderProcessGoneDetail
@@ -42,13 +43,21 @@ class MainActivity : Activity() {
     private var destroyed = false
     private var bridgeRegistered = false
     private var contentFailure = false
+    private var resumed = false
     private val origin = "https://appassets.androidplatform.net"
     private val entryPage = "$origin/assets/web/index.html"
     private val screenOffReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == Intent.ACTION_SCREEN_OFF) {
+                presentation.displayChanged(false)
+                if (::vehicle.isInitialized) cleanupSafely({ vehicle.onBackground() })
+                publishSafety()
+                try { web?.onPause() } catch (_: Exception) { failContent() }
                 audioFocus?.releaseAudioFocus()
                 publishAudioFocus(false)
+            } else if (intent?.action == Intent.ACTION_SCREEN_ON) {
+                presentation.displayChanged(isDisplayInteractive())
+                refreshAfterInterruption()
             }
         }
     }
@@ -61,8 +70,8 @@ class MainActivity : Activity() {
             textSize = 24f
             gravity = Gravity.CENTER
             setPadding(32, 32, 32, 32)
-            setTextColor(Color.rgb(60, 83, 63))
-            setBackgroundColor(Color.rgb(237, 240, 223))
+            setTextColor(Color.rgb(243, 239, 223))
+            setBackgroundColor(Color.rgb(24, 43, 38))
             isClickable = true
             importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
         }
@@ -80,7 +89,7 @@ class MainActivity : Activity() {
             !destroyed && !contentFailure && presentation.allowed(vehicle.safety.value, BuildConfig.DEVELOPMENT_PREVIEW)
         }, ::publishAudioFocus)
         try {
-            val filter = IntentFilter(Intent.ACTION_SCREEN_OFF)
+            val filter = IntentFilter(Intent.ACTION_SCREEN_OFF).apply { addAction(Intent.ACTION_SCREEN_ON) }
             if (Build.VERSION.SDK_INT >= 33) registerReceiver(screenOffReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
             else registerReceiver(screenOffReceiver, filter)
             screenReceiverRegistered = true
@@ -182,7 +191,7 @@ class MainActivity : Activity() {
             .put("preview", allowed && BuildConfig.DEVELOPMENT_PREVIEW)
         try {
             view.evaluateJavascript(
-                "window.dispatchEvent(new CustomEvent('vehicle-safety',{detail:$payload}));", null
+                "window.__roamySafety=$payload;window.dispatchEvent(new CustomEvent('vehicle-safety',{detail:window.__roamySafety}));", null
             )
         } catch (_: Exception) {
             failContent()
@@ -225,7 +234,29 @@ class MainActivity : Activity() {
         try { view.destroy() } catch (_: Exception) { /* Already destroyed. */ }
     }
 
+    private fun isDisplayInteractive(): Boolean = try {
+        getSystemService(PowerManager::class.java)?.isInteractive == true
+    } catch (_: Exception) { false }
+
+    private fun refreshAfterInterruption() {
+        if (!resumed || !hasWindowFocus() || destroyed || contentFailure || !::vehicle.isInitialized) return
+        try { vehicle.onForeground(); web?.onResume() }
+        catch (_: Exception) { failContent(); return }
+        catch (_: LinkageError) { failContent(); return }
+        publishSafety()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        presentation.focusChanged(hasFocus)
+        if (!hasFocus) {
+            if (::vehicle.isInitialized) cleanupSafely({ vehicle.onBackground() })
+            publishSafety()
+        } else refreshAfterInterruption()
+    }
+
     override fun onPause() {
+        resumed = false
         presentation.background()
         publishSafety()
         try { web?.onPause() } catch (_: Exception) { failContent() }
@@ -238,7 +269,10 @@ class MainActivity : Activity() {
     override fun onResume() {
         super.onResume()
         if (destroyed || contentFailure || !::vehicle.isInitialized) return
+        resumed = true
         presentation.foreground()
+        presentation.focusChanged(hasWindowFocus())
+        presentation.displayChanged(isDisplayInteractive())
         try {
             vehicle.onForeground()
             web?.onResume()

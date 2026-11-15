@@ -1,3 +1,4 @@
+import { chooseNextChapter } from "./helpers";
 import { test, expect } from "@playwright/test";
 
 for (const interruption of ["safety", "close", "background"] as const) {
@@ -11,8 +12,9 @@ for (const interruption of ["safety", "close", "background"] as const) {
       };
     });
     await page.goto("/");
-    await page.getByRole("button", { name: "Find a little adventure" }).click();
-    await page.getByRole("button", { name: "Find a Mangwon picnic" }).click();
+    await page.getByRole("button", { name: "Discover" }).click();
+    await chooseNextChapter(page);
+    await page.getByRole("button", { name: "Choose a place" }).click();
     await page.getByRole("button", { name: "Let’s go", exact: true }).click();
     await expect(page.getByText("Checking navigation…")).toBeVisible();
     if (interruption === "close") {
@@ -58,8 +60,9 @@ for (const interruption of ["safety", "close", "background"] as const) {
       page.getByText("Navigation requested", { exact: true }),
     ).toHaveCount(0);
     // Cancellation releases the pending state so the flow can be used again.
-    await page.getByRole("button", { name: "Find a little adventure" }).click();
-    await page.getByRole("button", { name: "Find a Mangwon picnic" }).click();
+    await page.getByRole("button", { name: "Discover" }).click();
+    await chooseNextChapter(page);
+    await page.getByRole("button", { name: "Choose a place" }).click();
     await expect(
       page.getByRole("button", { name: "Let’s go", exact: true }),
     ).toBeEnabled();
@@ -82,12 +85,14 @@ for (const raw of ["{", '{"version":3,"collected":{"future":{"value":42}}}']) {
       await page.evaluate(() => localStorage.getItem("little-world:v1")),
     ).toBe(raw);
     await page.getByRole("button", { name: "Review save" }).click();
-    await page.getByRole("button", { name: "Reset demo world" }).click();
+    await page.getByRole("button", { name: "Memories", exact: true }).click();
+    await page.getByRole("button", { name: "Reset my world" }).click();
     await page.getByRole("button", { name: "Keep my world" }).click();
     expect(
       await page.evaluate(() => localStorage.getItem("little-world:v1")),
     ).toBe(raw);
-    await page.getByRole("button", { name: "Reset demo world" }).click();
+    await page.getByRole("button", { name: "Memories", exact: true }).click();
+    await page.getByRole("button", { name: "Reset my world" }).click();
     await page
       .getByRole("button", { name: "Confirm reset", exact: true })
       .click();

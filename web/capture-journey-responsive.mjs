@@ -10,11 +10,11 @@ const errors=[];page.on('pageerror',e=>errors.push(e.message));
 await page.goto(process.env.TEST_BASE_URL || 'http://localhost:5174');
 await expect(page.locator('canvas')).toBeVisible();
 if(mode==='short'){
- await page.getByRole('button',{name:/My collection/}).click();
+ await page.getByRole('button',{name:/Collection/}).click();
  await page.getByRole('button',{name:/Gwangjang Market flavors/}).click();
- await page.getByRole('button',{name:'Edit memory note',exact:true}).click();
+ await page.getByRole('button',{name:'Edit note',exact:true}).click();
  await page.getByRole('textbox',{name:'Memory note',exact:true}).fill('서울 — a short-screen market memory.');
- await page.getByRole('button',{name:'Save memory',exact:true}).click();
+ await page.getByRole('button',{name:'Save note',exact:true}).click();
  await expect(page.locator('.memory-quote')).toBeFocused();
  await expect(page.locator('.memory-quote')).toHaveText('“서울 — a short-screen market memory.”');
 }

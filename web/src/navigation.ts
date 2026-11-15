@@ -58,7 +58,7 @@ export function describeNavigation(
         ...base,
         title: "Navigation service disconnected",
         detail:
-          "Refresh the status or retry the connection when available. Sample journeys remain demonstrations.",
+          "Refresh the status or retry the connection when available.",
       };
     case "denied":
       return {
@@ -105,8 +105,8 @@ export function describeNavigation(
             : "Live navigation unavailable",
         detail:
           reply?.reason === "verified-destinations-unconfigured"
-            ? "No approved destination provider is configured. Sample venues never start real routes."
-            : "Sample venues and distances are illustrative. No real route will start from a demo destination.",
+            ? "Navigation is not connected to a destination provider."
+            : "Route guidance is unavailable for these outing ideas.",
       };
   }
 }

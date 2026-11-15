@@ -1,0 +1,1457 @@
+/* Parked-car task surfaces. Scale by the app window, never by the full dashboard. */
+.app {
+  --car-paper: #faf8ef;
+  --car-ink: #294b39;
+  --car-secondary: #4f6350;
+  --car-line: #c5cdb8;
+  --car-selected: #e8edd9;
+  --car-gap: 24px;
+}
+.app.night {
+  --car-paper: #182b26;
+  --car-ink: #f3efdf;
+  --car-secondary: #d2dcc8;
+  --car-line: #667968;
+  --car-selected: #304b3c;
+}
+.app button,
+.app select,
+.app summary {
+  min-height: 76px;
+  font-size: 24px;
+}
+.app .icon-button,
+.app .world-controls button {
+  width: 76px;
+  height: 76px;
+  min-width: 76px;
+  min-height: 76px;
+}
+.app button svg {
+  width: 28px;
+  height: 28px;
+}
+.app .topbar {
+  height: 112px;
+  min-height: 0;
+  padding: 18px 24px;
+  gap: 24px;
+}
+.app .brand {
+  font-size: 26px;
+  min-height: 76px;
+}
+.app .brand-icon {
+  width: 48px;
+  height: 48px;
+}
+.app .nav-button {
+  font-size: 24px;
+  padding: 14px 24px;
+}
+.app nav {
+  gap: 24px;
+}
+.app .count {
+  display: none;
+}
+.app .settings-label {
+  display: none;
+}
+.app .world {
+  inset: 138px 124px 120px 24px;
+}
+.app .greeting {
+  top: 112px;
+  left: 32px;
+}
+.app .greeting h1 {
+  font-size: 30px;
+}
+.app .world-controls {
+  right: 24px;
+  gap: 24px;
+}
+.app .bottom-bar {
+  min-height: 104px;
+  padding: 12px 24px 24px;
+  gap: 24px;
+}
+.app .world-name {
+  font-size: 24px;
+}
+.app .world-name small {
+  font-size: 20px;
+}
+.app .world-avatar {
+  display: none;
+}
+.app .explore-button {
+  font-size: 24px;
+  min-height: 76px;
+  border-radius: 24px;
+  padding: 16px 24px;
+}
+.app .save-warning {
+  position: absolute;
+  bottom: 20px;
+  left: 24px;
+  right: 24px;
+  z-index: 15;
+  padding: 16px 24px;
+  font-size: 24px;
+  gap: 24px;
+  background: var(--car-paper);
+  color: var(--car-ink);
+  border: 2px solid #9e703a;
+}
+.app:has(> .save-warning) .bottom-bar {
+  bottom: 100px;
+}
+.app .return-banner {
+  position: absolute;
+  z-index: 8;
+  left: 24px;
+  right: 24px;
+  bottom: 120px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+  background: var(--car-paper);
+  border: 1px solid var(--car-line);
+  border-radius: 24px;
+  color: var(--car-ink);
+}
+.return-banner p {
+  font-size: 24px;
+  flex: 1;
+}
+.app .return-banner button {
+  margin: 0;
+  flex-shrink: 0;
+  width: auto;
+}
+.app.task-mode {
+  background: var(--car-paper);
+  color: var(--car-ink);
+}
+.app.task-mode .topbar {
+  background: var(--car-paper);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  z-index: 5;
+  border: 0;
+}
+.app.task-mode .topbar .brand {
+  justify-self: center;
+  letter-spacing: 5px;
+}
+.app.task-mode .topbar nav {
+  justify-self: end;
+}
+.app.task-mode .collection-nav {
+  display: none;
+}
+.app .world-back {
+  display: flex;
+  align-items: center;
+  justify-self: start;
+  gap: 12px;
+  white-space: nowrap;
+  color: var(--car-ink);
+  background: var(--car-selected);
+  border: 1px solid var(--car-line);
+  border-radius: 44px;
+  padding: 8px 24px 8px 12px;
+}
+.world-back img {
+  width: 84px;
+  height: 56px;
+  object-fit: contain;
+}
+.app.task-mode .panel {
+  position: absolute;
+  inset: 124px 24px 24px;
+  width: auto;
+  max-width: none;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--car-ink);
+  animation: none;
+  transform: none;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  scroll-padding-top: 0;
+}
+.app.task-mode:has(> .save-warning) .panel {
+  bottom: 140px;
+}
+.app.task-mode .panel .panel-top {
+  position: relative;
+  top: auto;
+  min-height: 76px;
+  padding: 0;
+  margin: 0 0 16px;
+  flex-shrink: 0;
+  background: var(--car-paper);
+  border: 0;
+  display: flex;
+  justify-content: space-between;
+}
+.app.task-mode .panel .panel-top button {
+  background: var(--car-selected);
+  color: var(--car-ink);
+  margin: 0;
+}
+.app.task-mode .panel[data-panel="album"] .panel-top,
+.app.task-mode .panel[data-panel="browse"] .panel-top,
+.app.task-mode .panel[data-panel="settings"] .panel-top {
+  display: none;
+}
+.app .panel .task-content {
+  min-height: 0;
+  flex: 1;
+  overflow: auto;
+  padding: 0 4px 12px;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+.app .panel p {
+  font-size: 24px;
+  line-height: 1.45;
+  color: var(--car-secondary);
+}
+.app .panel h2 {
+  font-family: Georgia, serif;
+  font-size: 42px;
+  line-height: 1.13;
+  font-weight: 400;
+  letter-spacing: -1px;
+  color: var(--car-ink);
+  margin: 0;
+}
+.app .panel h3 {
+  font-size: 28px;
+  color: var(--car-ink);
+}
+.app .panel .eyebrow {
+  font-size: 20px;
+  color: var(--car-secondary);
+  margin: 0 0 16px;
+}
+.app .panel .primary,
+.app .panel .secondary {
+  width: auto;
+  min-height: 76px;
+  padding: 16px 24px;
+  margin: 16px 0 0;
+  font-size: 24px;
+  border-radius: 22px;
+  line-height: 1.3;
+  gap: 16px;
+}
+.app .panel .primary {
+  background: #355a40;
+  color: #fffbed;
+}
+.app .panel .secondary {
+  background: var(--car-paper);
+  color: var(--car-ink);
+  border: 1px solid var(--car-line);
+}
+.app .task-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  flex-shrink: 0;
+}
+.app .task-heading p {
+  max-width: 46ch;
+  margin: 0;
+}
+.app .collection-screen {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 0;
+}
+.app .collection-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  flex-shrink: 0;
+  align-self: center;
+  border: 1px solid var(--car-line);
+  border-radius: 48px;
+  overflow: hidden;
+}
+.app .collection-tabs button {
+  padding: 16px 32px;
+  background: transparent;
+  color: var(--car-ink);
+  min-width: 220px;
+  font-weight: 600;
+}
+.app .collection-tabs button[aria-selected="true"] {
+  background: #355a40;
+  color: #fffbed;
+  border-radius: 48px;
+}
+.collection-tabs span {
+  margin-left: 10px;
+}
+.app .car-shelf {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--shelf-columns, 4), minmax(0, 1fr));
+  gap: 24px;
+}
+.app .shelf-item {
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: flex-start;
+  gap: 12px;
+  background: transparent;
+  color: var(--car-ink);
+  padding: 16px 12px;
+  border: 2px solid transparent;
+  border-radius: 28px;
+}
+.app .shelf-item:hover,
+.app .shelf-item:focus-visible {
+  background: var(--car-selected);
+}
+.app .shelf-item:focus-visible {
+  border-color: var(--car-ink);
+  outline-offset: -6px;
+}
+.app .keepsake-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.app .shelf-item > .keepsake-art {
+  flex: 1;
+  min-height: 64px;
+  height: clamp(90px, 27vh, 310px);
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 20px;
+}
+.app .original-keepsake {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.app .original-keepsake .keepsake-icon {
+  width: 80%;
+  height: 90%;
+}
+.app .shelf-item strong {
+  font-family: Georgia, serif;
+  font-size: 30px;
+  line-height: 1.16;
+  font-weight: 400;
+  min-height: 2.32em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.app .shelf-date {
+  font-size: 24px;
+  color: var(--car-secondary);
+}
+.app .shelf-action {
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 64px;
+  padding: 12px 24px;
+  border-radius: 36px;
+  color: var(--car-ink);
+  margin-top: auto;
+}
+.app .shelf-item:hover .shelf-action,
+.app .shelf-item:focus-visible .shelf-action {
+  color: #fffbed;
+  background: #355a40;
+}
+.app .shelf-empty {
+  grid-column: 1/-1;
+  text-align: center;
+  align-self: center;
+  max-width: 700px;
+  margin: auto;
+}
+.app .shelf-empty p {
+  margin-top: 16px;
+}
+.app .shelf-pagination {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 24px;
+}
+.app .shelf-pagination .secondary {
+  margin: 0;
+  min-width: 160px;
+}
+.app .empty-discover {
+  align-self: center;
+  margin-top: 0 !important;
+}
+.app .category-picker {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 24px;
+  color: var(--car-secondary);
+}
+.app .category-picker select {
+  min-width: 240px;
+  padding: 12px;
+  background: var(--car-paper);
+  border: 1px solid var(--car-line);
+  border-radius: 16px;
+  color: var(--car-ink);
+}
+.app .browse-summary {
+  flex-shrink: 0;
+}
+.app .panel[data-panel="destinations"] .task-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow: hidden;
+}
+.app .panel[data-panel="destinations"] .eyebrow {
+  display: none;
+}
+.app .destinations {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0;
+  flex: 1;
+  min-height: 0;
+}
+.app .destination {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 76px;
+  min-width: 0;
+  text-align: left;
+  gap: 16px;
+  border: 2px solid var(--car-line);
+  background: transparent;
+  color: var(--car-ink);
+  border-radius: 24px;
+  padding: 24px;
+}
+.app .destination.chosen {
+  background: var(--car-selected);
+  border-color: #4f6d42;
+}
+.app .destination-number {
+  display: none;
+}
+.app .destination-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.app .destination-body small {
+  font-size: 24px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--car-secondary);
+}
+.app .destination-body strong {
+  font-family: Georgia, serif;
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--car-ink);
+}
+.app .destination-body > span {
+  font-size: 24px;
+  color: var(--car-secondary);
+}
+.app .distance {
+  position: static;
+  font-size: 24px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  color: var(--car-ink);
+  min-height: 32px;
+  margin: 0;
+}
+.app .destination-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-shrink: 0;
+}
+.app .destination-footer p {
+  max-width: 40ch;
+}
+.app .destination-footer .primary {
+  min-width: 240px;
+  margin: 0;
+}
+.app .settings-tabs {
+  display: flex;
+  gap: 24px;
+  margin: 24px 0;
+  flex-shrink: 0;
+}
+.app .settings-tabs button {
+  flex: 1;
+  background: transparent;
+  color: var(--car-ink);
+  border: 1px solid var(--car-line);
+  border-radius: 24px;
+  padding: 12px 16px;
+}
+.app .settings-tabs button[aria-current="page"] {
+  background: #355a40;
+  color: #fffbed;
+}
+.app .preferences {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0;
+}
+.app .preferences .preference-button {
+  margin: 0;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 24px;
+  padding: 28px;
+}
+.app .preferences .preference-button svg {
+  width: 36px;
+  height: 36px;
+}
+.app .settings-page {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.app .settings-page .settings-tile {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.app .settings-page .settings-row {
+  padding: 24px 0;
+  font-size: 24px;
+  gap: 24px;
+  color: var(--car-ink);
+}
+.app .settings-page .navigation-status {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.app .settings-page .navigation-status p {
+  font-size: 24px;
+}
+.app .backup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.app .backup-actions button {
+  flex: 1;
+  margin: 0 !important;
+}
+.app .panel textarea,
+.app .panel input {
+  font-size: 24px;
+  padding: 20px;
+  border: 1px solid var(--car-line);
+  background: var(--car-paper);
+  color: var(--car-ink);
+  border-radius: 16px;
+}
+.app .panel .fine-print {
+  font-size: 22px;
+  line-height: 1.4;
+  color: var(--car-secondary);
+}
+.app .panel[data-panel="memory"] .task-content {
+  display: grid;
+  grid-template-columns: minmax(220px, 32%) 1fr;
+  gap: 20px 40px;
+  align-content: start;
+}
+.app .panel[data-panel="memory"] .task-content > * {
+  grid-column: 2;
+}
+.app .panel[data-panel="memory"] .memory-illustration {
+  grid-column: 1;
+  grid-row: 1 / span 5;
+  height: auto;
+  min-height: 260px;
+  background: transparent;
+  margin: 0;
+}
+.app .memory-illustration > span {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.app .memory-illustration .postmark {
+  display: none;
+}
+.app .panel .memory-quote {
+  font-size: 28px;
+  padding: 0;
+  color: var(--car-ink);
+}
+.app .panel dl {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 16px 24px;
+  margin: 0;
+  padding: 0;
+}
+.app .panel dt {
+  font-size: 20px;
+  color: var(--car-secondary);
+}
+.app .panel dd {
+  font-size: 24px;
+  color: var(--car-ink);
+  margin: 0;
+}
+.app .panel dd small {
+  font-size: 22px;
+}
+.app .curated-next {
+  padding: 16px 0;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--car-line);
+  border-radius: 0;
+  margin: 0;
+}
+.app .curated-next .eyebrow {
+  font-size: 20px;
+}
+.app .panel[data-panel="discover"] .task-content {
+  display: grid;
+  grid-template-columns: 40% 1fr;
+  gap: 20px 40px;
+  align-content: start;
+}
+.app .panel[data-panel="discover"] .task-content > * {
+  grid-column: 2;
+}
+.app .panel[data-panel="discover"] .shop-preview {
+  grid-column: 1;
+  grid-row: 1 / span 6;
+  height: 360px;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+.app .shop-preview .keepsake-art {
+  width: 100%;
+  height: 100%;
+}
+.app .shop-preview .preview-caption {
+  display: none;
+}
+.app .panel .next-note {
+  font-size: 24px;
+  margin: 0;
+  padding: 16px;
+  color: var(--car-ink);
+  background: var(--car-selected);
+}
+.app .panel[data-panel="journey"] .task-content,
+.app .panel[data-panel="arrival"] .task-content {
+  max-width: 1040px;
+  margin: 0 auto;
+  width: 100%;
+}
+.app .arrival-art,
+.app .journey-art {
+  float: left;
+  width: 30%;
+  margin: 0 40px 24px 0;
+  height: 240px;
+}
+.app .arrival-art .keepsake-icon {
+  width: 100%;
+  height: 100%;
+}
+.app .toast,
+.app .collection-caption {
+  max-width: min(900px, calc(100% - 48px));
+  font-size: 28px;
+  padding: 24px;
+  color: var(--car-ink);
+}
+.app .toast small {
+  font-size: 24px;
+}
+.app .toast .icon-button {
+  width: 76px;
+  height: 76px;
+}
+.safe-screen {
+  background: #182b26;
+  color: #f3efdf;
+}
+.safe-screen h1 {
+  font-size: 42px;
+}
+.safe-screen p {
+  font-size: 28px;
+  max-width: 760px;
+}
+.safe-screen .eyebrow,
+.safe-screen small,
+.safe-screen .mode-tag {
+  font-size: 24px;
+  color: #d2dcc8;
+}
+@media (max-height: 600px) {
+  .app .topbar {
+    height: 96px;
+    padding: 10px 24px;
+  }
+  .app .world {
+    inset: 104px 124px 110px 24px;
+  }
+  .app .greeting {
+    display: none;
+  }
+  .app.task-mode .panel {
+    top: 104px;
+  }
+  .app .collection-screen {
+    gap: 12px;
+  }
+  .app .collection-screen > .task-heading,
+  .app .browse-summary {
+    display: none;
+  }
+  .app .shelf-item {
+    gap: 8px;
+    padding: 8px;
+  }
+  .app .shelf-item strong {
+    font-size: 26px;
+    min-height: 2.2em;
+  }
+  .app .shelf-item > .keepsake-art {
+    height: 70px;
+    min-height: 40px;
+    max-height: 90px;
+  }
+  .app .shelf-action {
+    display: none;
+  }
+  .app .shelf-date {
+    font-size: 24px;
+  }
+  .app .collection-tabs button {
+    min-height: 64px;
+    padding: 8px 24px;
+  }
+  .app .shelf-pagination .secondary {
+    min-height: 64px;
+    padding: 8px 16px;
+  }
+  .app .panel .panel-top {
+    min-height: 64px;
+    margin-bottom: 12px;
+  }
+  .app .panel .panel-top button {
+    min-height: 64px;
+    height: 64px;
+  }
+  .app .panel h2 {
+    font-size: 32px;
+  }
+  .app .settings-tabs {
+    margin: 12px 0;
+    gap: 24px;
+  }
+  .app .settings-tabs button {
+    min-height: 64px;
+  }
+  .app .preferences .preference-button {
+    min-height: 140px;
+    gap: 16px;
+    padding: 20px;
+  }
+  .app .destination {
+    padding: 16px;
+    gap: 12px;
+  }
+  .app .destination-body {
+    gap: 10px;
+  }
+  .app .destination-body small {
+    display: none;
+  }
+  .app .destination-body strong {
+    font-size: 28px;
+  }
+  .app .destination-footer p {
+    font-size: 24px;
+    max-width: 35ch;
+  }
+  .app .panel[data-panel="destinations"] .task-content {
+    gap: 12px;
+  }
+  .app .panel[data-panel="destinations"] .task-heading p {
+    display: none;
+  }
+}
+@media (max-width: 1000px) {
+  .app .world-name small {
+    display: none;
+  }
+  .app .world-back img {
+    display: none;
+  }
+  .app.task-mode .topbar .brand-icon {
+    display: none;
+  }
+  .app .task-heading {
+    display: block;
+  }
+  .app .task-heading p {
+    margin-top: 8px;
+  }
+  .app .task-heading h2 {
+    font-size: 36px;
+  }
+  .app .panel[data-panel="destinations"] .task-heading p {
+    display: none;
+  }
+  .app .destination-body strong {
+    font-size: 28px;
+  }
+  .app .destinations {
+    gap: 24px;
+  }
+  .app .destination {
+    padding: 16px;
+  }
+}
+@media (max-width: 699px) {
+  .app .topbar {
+    height: 104px;
+    padding: 14px 24px;
+    gap: 24px;
+  }
+  .app .brand {
+    font-size: 24px;
+    letter-spacing: 2px;
+  }
+  .app .brand-icon {
+    display: none;
+  }
+  .app .topbar nav {
+    gap: 24px;
+  }
+  .app .nav-button {
+    font-size: 24px;
+    padding: 12px;
+  }
+  .app .nav-button > svg {
+    display: none;
+  }
+  .app.task-mode .topbar {
+    grid-template-columns: 1fr auto;
+  }
+  .app.task-mode .topbar .brand {
+    display: none;
+  }
+  .app .world-back {
+    font-size: 24px;
+    padding: 12px 16px;
+  }
+  .app.task-mode .panel {
+    inset: 120px 24px 24px;
+  }
+  .app .world {
+    inset: 120px 24px 240px;
+  }
+  .app .world-controls {
+    top: auto;
+    bottom: 136px;
+    left: 24px;
+    right: 24px;
+    transform: none;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .app .bottom-bar {
+    padding: 0 24px 24px;
+  }
+  .app .world-name {
+    display: none;
+  }
+  .app .explore-button {
+    width: 100%;
+    white-space: normal;
+    justify-content: center;
+  }
+  .app .greeting {
+    top: 112px;
+    left: 24px;
+    right: 24px;
+  }
+  .app .greeting h1 {
+    font-size: 28px;
+  }
+  .app .collection-screen > .task-heading {
+    display: block;
+  }
+  .app .task-heading h2 {
+    font-size: 36px;
+  }
+  .app .task-heading p {
+    display: none;
+  }
+  .app .collection-tabs {
+    width: 100%;
+    border-radius: 24px;
+  }
+  .app .collection-tabs button {
+    min-width: 0;
+    flex: 1;
+    padding: 12px;
+    font-size: 24px;
+  }
+  .app .collection-tabs button[aria-selected="true"] {
+    border-radius: 24px;
+  }
+  .app .collection-tabs button span {
+    display: none;
+  }
+  .app .shelf-item > .keepsake-art {
+    height: clamp(100px, 24vh, 260px);
+    max-height: 260px;
+  }
+  .app .shelf-item strong {
+    font-size: 30px;
+  }
+  .app .shelf-action {
+    display: flex;
+  }
+  .app .settings-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .app .preferences {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .app .preferences .preference-button {
+    min-height: 100px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .app .destinations {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .app .destination {
+    flex: 1;
+    justify-content: center;
+    min-height: 120px;
+    padding: 16px 24px;
+    position: relative;
+  }
+  .app .destination-body {
+    gap: 6px;
+  }
+  .app .destination-body small {
+    display: none;
+  }
+  .app .destination .distance {
+    position: absolute;
+    right: 16px;
+    top: 12px;
+    font-size: 0;
+  }
+  .app .destination .distance span {
+    display: none;
+  }
+  .app .destination-body strong {
+    font-size: 28px;
+    padding-right: 24px;
+  }
+  .app .destination-footer {
+    display: block;
+  }
+  .app .destination-footer p {
+    display: none;
+  }
+  .app .destination-footer .primary {
+    width: 100%;
+  }
+  .app .panel[data-panel="memory"] .task-content,
+  .app .panel[data-panel="discover"] .task-content {
+    display: block;
+  }
+  .app .panel[data-panel="memory"] .memory-illustration {
+    height: 180px;
+    min-height: 180px;
+  }
+  .app .panel[data-panel="discover"] .shop-preview {
+    height: 200px;
+  }
+  .app .panel[data-panel="memory"] .task-content > * {
+    margin-bottom: 20px;
+  }
+  .app .panel dl {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .app .panel dd {
+    margin-bottom: 12px;
+  }
+  .app .arrival-art,
+  .app .journey-art {
+    float: none;
+    width: 100%;
+    height: 180px;
+    margin: 0 0 24px;
+  }
+  .app .return-banner {
+    flex-direction: column;
+    bottom: 120px;
+    align-items: stretch;
+  }
+  .app .toast,
+  .app .collection-caption {
+    font-size: 24px;
+  }
+  .app .toast small {
+    display: none;
+  }
+}
+@media (max-width: 699px) and (max-height: 600px) {
+  .app .collection-screen > .task-heading {
+    display: none;
+  }
+  .app .shelf-action,
+  .app .shelf-date {
+    display: none;
+  }
+  .app .shelf-item > .keepsake-art {
+    height: 48px;
+    min-height: 36px;
+  }
+  .app .shelf-item strong {
+    font-size: 26px;
+    min-height: 0;
+  }
+  .app .shelf-pagination .secondary {
+    min-width: 0;
+  }
+  .app .collection-tabs button {
+    font-size: 24px;
+  }
+  .app .settings-tabs {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .app .preferences .preference-button {
+    min-height: 76px;
+  }
+  .app .panel[data-panel="destinations"] .task-content {
+    overflow: auto;
+  }
+  .app .destinations {
+    gap: 12px;
+    flex: none;
+  }
+  .app .destination {
+    min-height: 120px;
+  }
+  .app .destination-footer {
+    position: sticky;
+    bottom: 0;
+    background: var(--car-paper);
+    padding-top: 12px;
+  }
+}
+/* Avoid inherited sidebar sticky actions covering a full-screen task. */
+.app .panel .primary {
+  position: static;
+  bottom: auto;
+  box-shadow: none;
+}
+@media (min-width: 700px) and (max-height: 600px) {
+  .app .shelf-item {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    grid-template-rows: 1fr auto;
+    align-items: center;
+    justify-items: start;
+    text-align: left;
+    gap: 12px 24px;
+  }
+  .app .shelf-item > .keepsake-art {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    width: 130px;
+    height: 140px;
+    max-height: 160px;
+  }
+  .app .shelf-item strong {
+    grid-column: 2;
+    min-height: 0;
+    justify-content: flex-start;
+  }
+  .app .shelf-date {
+    grid-column: 2;
+  }
+}
+.app .back-compact {
+  display: none;
+}
+@media (max-width: 699px) {
+  .app .back-full {
+    display: none;
+  }
+  .app .back-compact {
+    display: inline;
+  }
+  .app.task-mode .topbar nav .icon-button:last-child {
+    display: none;
+  }
+}
+.app .explore-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-shrink: 0;
+}
+.app .explore-toolbar .collection-tabs {
+  align-self: auto;
+}
+.app .collection-tabs button[aria-pressed="true"] {
+  background: #355a40;
+  color: #fffbed;
+  border-radius: 48px;
+}
+.app .explore-screen .task-heading p {
+  margin-top: 12px;
+}
+.app .discovery-shelf .shelf-item {
+  background: var(--car-paper);
+  border-color: var(--car-line);
+}
+.app .discovery-shelf .shelf-item:hover,
+.app .discovery-shelf .shelf-item:focus-visible {
+  background: var(--car-selected);
+  border-color: #355a40;
+}
+.app .discovery-shelf .shelf-action {
+  background: #355a40;
+  color: #fffbed;
+}
+.app .explore-complete {
+  margin: auto;
+  text-align: center;
+  max-width: 700px;
+}
+.app .explore-complete p {
+  margin: 24px 0;
+}
+@media (max-width: 1000px) {
+  .app .explore-toolbar .collection-tabs button {
+    min-width: 0;
+    padding: 12px 20px;
+  }
+  .app .explore-toolbar .category-picker > span {
+    display: none;
+  }
+}
+@media (max-width: 699px) {
+  .app .explore-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  .app .explore-toolbar .collection-tabs {
+    width: 100%;
+  }
+  .app .explore-toolbar .category-picker select {
+    width: 100%;
+    min-height: 64px;
+  }
+  .app .explore-toolbar .category-picker {
+    display: flex;
+  }
+  .app .explore-screen .task-heading p {
+    display: none;
+  }
+  .app .explore-screen .shelf-date {
+    font-size: 22px;
+  }
+}
+@media (max-width: 699px) {
+  .app .shelf-pagination .pagination-label {
+    display: none;
+  }
+  .app .shelf-pagination .secondary {
+    min-width: 76px;
+    width: 76px;
+    padding: 16px;
+  }
+}
+@media (max-width: 420px) {
+  .app:not(.task-mode) .topbar {
+    gap: 12px;
+  }
+  .app:not(.task-mode) .brand {
+    font-size: 20px;
+    letter-spacing: 1px;
+  }
+  .app:not(.task-mode) .topbar nav {
+    gap: 16px;
+  }
+  .app:not(.task-mode) .nav-button {
+    padding: 8px;
+  }
+}
+.app .destination .distance {
+  flex-direction: row;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+.app .adventure-preview {
+  display: grid;
+  grid-template-columns: minmax(220px, 40%) 1fr;
+  align-items: center;
+  gap: 48px;
+  height: 100%;
+  min-height: 0;
+}
+.app .panel[data-panel="discover"] .task-content {
+  display: block;
+}
+.app .adventure-art {
+  height: min(420px, 60vh);
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.app .adventure-art > .keepsake-art {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.app .adventure-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+.app .adventure-copy .eyebrow,
+.app .adventure-copy .primary,
+.app .adventure-copy .secondary {
+  margin: 0;
+}
+.app .adventure-copy p {
+  margin: 0;
+  max-width: 44ch;
+}
+.app .confirmation-actions {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.app .journey-symbol {
+  color: var(--car-ink);
+}
+@media (max-height: 600px) and (min-width: 700px) {
+  .app .adventure-preview {
+    gap: 32px;
+  }
+  .app .adventure-art {
+    height: 280px;
+  }
+  .app .adventure-copy {
+    gap: 12px;
+  }
+  .app .adventure-copy h2 {
+    font-size: 36px;
+  }
+  .app .adventure-copy .eyebrow {
+    font-size: 24px;
+  }
+  .app .panel[data-panel="settings"] .task-heading p {
+    display: none;
+  }
+}
+@media (max-width: 699px) {
+  .app .adventure-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    height: auto;
+  }
+  .app .adventure-art {
+    height: 220px;
+    width: 100%;
+    flex-shrink: 0;
+  }
+  .app .adventure-copy {
+    gap: 24px;
+  }
+  .app .confirmation-actions {
+    width: 100%;
+  }
+  .app .confirmation-actions button {
+    flex: 1;
+    white-space: nowrap;
+  }
+}
+@media (max-width: 699px) and (max-height: 600px) {
+  .app .adventure-art {
+    display: none;
+  }
+  .app .adventure-copy {
+    gap: 16px;
+  }
+}
+.app .shelf-action {
+  white-space: nowrap;
+}
+/* One card, one tap target. The arrow is an affordance, never a nested button. */
+.app .shelf-item {
+  position: relative;
+  border-color: var(--car-line);
+  background: var(--car-paper);
+}
+.app .shelf-affordance {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-end;
+  color: var(--car-ink);
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+  margin-top: auto;
+}
+.app .shelf-item:hover,
+.app .shelf-item:focus-visible {
+  border-color: #355a40;
+}
+@media (min-width: 700px) and (max-height: 600px) {
+  .app .shelf-affordance {
+    position: absolute;
+    right: 16px;
+    bottom: 12px;
+    margin: 0;
+  }
+}
+.app .panel .curated-next {
+  padding: 0;
+  border: 0;
+}
+.app .recommendation-card {
+  display: grid;
+  grid-template-columns: 1fr 32px;
+  gap: 12px 24px;
+  min-height: 76px;
+  padding: 24px;
+  border: 1px solid var(--car-line);
+  background: var(--car-selected);
+  border-radius: 24px;
+  color: var(--car-ink);
+  text-decoration: none;
+}
+.app .recommendation-card > .eyebrow,
+.app .recommendation-card > h3,
+.app .recommendation-card > p {
+  grid-column: 1;
+  margin: 0;
+}
+.app .recommendation-card > svg {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  align-self: center;
+}
+.app .recommendation-card:hover {
+  border-color: #355a40;
+}
+.app .memory-facts {
+  padding: 0;
+  color: var(--car-ink);
+}
+.app .memory-facts > summary {
+  cursor: pointer;
+  min-height: 76px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--car-line);
+  gap: 16px;
+}
+
+.app .memory-facts dl {
+  padding-top: 24px;
+}
+
+.app .memory-facts summary .facts-open-icon {
+  margin-left: auto;
+  display: flex;
+}
+.app .memory-facts summary .facts-close-icon {
+  margin-left: auto;
+  display: none;
+}
+.app .memory-facts[open] summary .facts-open-icon {
+  display: none;
+}
+.app .memory-facts[open] summary .facts-close-icon {
+  display: flex;
+}

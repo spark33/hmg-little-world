@@ -7,7 +7,7 @@ const page=await browser.newPage({viewport:{width:1440,height:900}});
 const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
 await page.goto(base);await page.waitForTimeout(2200);
 await page.screenshot({path:`${evidence}/world-initial.png`});
-await page.getByRole('button',{name:'Demo settings'}).click();
+await page.getByRole('button',{name:'Settings'}).click();
 await page.getByRole('button',{name:'Switch to evening'}).click();
 await page.getByRole('button',{name:'Close panel'}).click();await page.waitForTimeout(1800);
 await page.screenshot({path:`${evidence}/world-evening.png`});

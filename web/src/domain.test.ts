@@ -275,12 +275,14 @@ describe("complete keepsake progression", () => {
       state = collect(state, id, "2026-11-15");
     }
   });
-  it("offers only clearly illustrative destinations for playable keepsakes", () => {
+  it("offers only the bounded destination choices for playable keepsakes", () => {
     for (const id of collectibleIds) {
       const options = destinationsFor(id);
       expect(options).toHaveLength(3);
       expect(
-        options.every((option) => /sample|illustrative/i.test(option.location)),
+        options.every((option) =>
+          ["nearby", "weekend", "chicago"].includes(option.id),
+        ),
       ).toBe(true);
     }
     expect(destinationsFor("not-a-keepsake")).toEqual([]);

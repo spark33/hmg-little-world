@@ -1283,7 +1283,12 @@ function CameraRig({
         reducedMotion ? 1 : 1 - Math.exp(-delta * 2),
       );
       camera.updateProjectionMatrix();
-      if (!collecting && camera.position.distanceTo(cameraPosition) < 0.03)
+      if (
+        !collecting &&
+        camera.position.distanceTo(cameraPosition) < 0.03 &&
+        Math.abs(camera.zoom - desiredZoom) < 0.03 &&
+        controls.current.target.distanceTo(targetPosition) < 0.03
+      )
         transition.current = false;
       controls.current.update();
     }

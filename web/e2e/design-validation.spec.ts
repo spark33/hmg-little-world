@@ -1,3 +1,4 @@
+import { chooseNextChapter, openBackup } from "./helpers";
 import { test, expect, type Locator, type Page } from "@playwright/test";
 
 function contrast(first: string, second: string) {
@@ -59,7 +60,7 @@ test("memory illustrations fit inside their visible frame and facts retain reada
   page,
 }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: /My collection/ }).click();
+  await page.getByRole("button", { name: /Collection/ }).click();
   await page.getByRole("button", { name: /Gwangjang Market flavors/ }).click();
   const frame = page.locator(".memory-illustration");
   const geometry = await frame.evaluate((element) => {
@@ -87,7 +88,7 @@ test("memory illustrations fit inside their visible frame and facts retain reada
   expect(geometry.image.right).toBeLessThanOrEqual(geometry.frame.right + 1);
   expect(geometry.image.bottom).toBeLessThanOrEqual(geometry.frame.bottom + 1);
   for (const selector of [
-    ".panel .back-button",
+    ".topbar .back-button",
     ".panel .memory-quote",
     ".panel dt",
   ])
@@ -101,12 +102,12 @@ test("evening mode retains normal-text contrast on wide and narrow surfaces", as
   page,
 }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Demo settings" }).click();
+  await page.getByRole("button", { name: "Settings" }).click();
   await page.getByRole("button", { name: "Switch to evening" }).click();
   await page.getByRole("button", { name: "Close panel" }).click();
   for (const width of [1440, 640]) {
     await page.setViewportSize({ width, height: 900 });
-    for (const selector of [".preview-tag", ".greeting h1"])
+    for (const selector of [".nav-button", ".greeting h1"])
       expect(
         await textContrast(page.locator(selector)),
         `${width}: ${selector}`,
@@ -121,12 +122,10 @@ test("evening mode retains normal-text contrast on wide and narrow surfaces", as
           selector,
         ).toBeGreaterThanOrEqual(4.5);
   }
-  await page.getByRole("button", { name: "Demo settings" }).click();
+  await page.getByRole("button", { name: "Settings" }).click();
   for (const selector of [
-    ".panel .back-button",
-    ".panel .fine-print",
-    ".navigation-status [role=status] p",
-    ".panel .backup-privacy",
+    ".topbar .back-button",
+    ".preferences .preference-button",
   ])
     expect(
       await textContrast(page.locator(selector)),
@@ -135,15 +134,14 @@ test("evening mode retains normal-text contrast on wide and narrow surfaces", as
 });
 
 async function openSampleArrival(page: Page) {
+  await page.getByRole("button", { name: "Discover", exact: true }).click();
+  await chooseNextChapter(page);
   await page
-    .getByRole("button", { name: "Find a little adventure", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Find a Mangwon picnic", exact: true })
+    .getByRole("button", { name: "Choose a place", exact: true })
     .click();
   await page.getByRole("button", { name: "Let’s go", exact: true }).click();
   await page
-    .getByRole("button", { name: "Simulate journey", exact: true })
+    .getByRole("button", { name: "Review memory", exact: true })
     .click();
 }
 
@@ -153,9 +151,7 @@ test("day and evening discovery labels remain readable and destination selection
   await page.goto("/");
   for (const evening of [false, true]) {
     if (evening) {
-      await page
-        .getByRole("button", { name: "Demo settings", exact: true })
-        .click();
+      await page.getByRole("button", { name: "Settings", exact: true }).click();
       await page
         .getByRole("button", { name: "Switch to evening", exact: true })
         .click();
@@ -163,16 +159,15 @@ test("day and evening discovery labels remain readable and destination selection
         .getByRole("button", { name: "Close panel", exact: true })
         .click();
     }
-    await page
-      .getByRole("button", { name: "Find a little adventure", exact: true })
-      .click();
-    for (const selector of [".preview-caption", ".keepsake-title > span"])
+    await page.getByRole("button", { name: "Discover", exact: true }).click();
+    await chooseNextChapter(page);
+    for (const selector of [".adventure-copy p"])
       expect(
         await textContrast(page.locator(selector)),
         selector,
       ).toBeGreaterThanOrEqual(4.5);
     await page
-      .getByRole("button", { name: "Find a Mangwon picnic", exact: true })
+      .getByRole("button", { name: "Choose a place", exact: true })
       .click();
     const options = page.locator(".destination");
     await expect(options.first()).toHaveAttribute("aria-pressed", "true");
@@ -181,12 +176,9 @@ test("day and evening discovery labels remain readable and destination selection
     await expect(options.nth(1)).toHaveAttribute("aria-pressed", "true");
     for (const choice of [options.first(), options.nth(1)])
       for (const selector of [
-        ".destination-number",
         ".destination-body small",
         ".destination-body strong",
         ".destination-body > span",
-        ".destination-body em",
-        ".distance small",
       ])
         expect(
           await textContrast(choice.locator(selector)),
@@ -194,12 +186,12 @@ test("day and evening discovery labels remain readable and destination selection
         ).toBeGreaterThanOrEqual(4.5);
     await page.getByRole("button", { name: "Let’s go", exact: true }).click();
     await page
-      .getByRole("button", { name: "Simulate journey", exact: true })
+      .getByRole("button", { name: "Review memory", exact: true })
       .click();
     await expect(
-      page.getByRole("button", { name: "Add to my world", exact: true }),
+      page.getByRole("button", { name: "Keep memory", exact: true }),
     ).toBeEnabled();
-    await page.getByRole("button", { name: "Not yet", exact: true }).click();
+    await page.getByRole("button", { name: "Not now", exact: true }).click();
   }
 });
 
@@ -209,9 +201,7 @@ test("the real reveal caption and progress indicators have readable contrast", a
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
   await openSampleArrival(page);
-  await page
-    .getByRole("button", { name: "Add to my world", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Keep memory", exact: true }).click();
   await expect(page.locator(".collection-caption")).toBeVisible();
   expect(
     await textContrast(page.locator(".collection-caption")),
@@ -232,42 +222,29 @@ test("the real reveal caption and progress indicators have readable contrast", a
   expect(
     await textContrast(page.locator(".toast small")),
   ).toBeGreaterThanOrEqual(4.5);
-  await page.getByRole("button", { name: /My collection/ }).click();
-  await page
-    .getByRole("button", { name: "Browse all keepsakes", exact: true })
-    .click();
+  await page.getByRole("button", { name: /Collection/ }).click();
   expect(
-    await textContrast(page.locator(".collection-progress-summary p")),
+    await textContrast(
+      page.locator(".collection-tabs button[aria-selected=true]"),
+    ),
   ).toBeGreaterThanOrEqual(4.5);
-  const progress = await page
-    .getByRole("progressbar", { name: "Confirmed demo keepsakes" })
-    .evaluate((el) => ({
-      fill: getComputedStyle(el).accentColor,
-      background: getComputedStyle(el).backgroundColor,
-    }));
-  expect(contrast(progress.fill, progress.background)).toBeGreaterThanOrEqual(
-    3,
-  );
 });
 
 const newKeepsakes = [
-  ["Mangwon Market picnic", "Find a Mangwon picnic"],
-  ["Gyeongbokgung palace walk", "Find a palace walk"],
-  ["Bukhansan trail morning", "Find a Bukhansan trail"],
-  ["Seoul museum afternoon", "Find a Seoul art adventure"],
+  ["Mangwon Market picnic", "Choose a place"],
+  ["Gyeongbokgung palace walk", "Choose a place"],
+  ["Bukhansan trail morning", "Choose a place"],
+  ["Seoul museum afternoon", "Choose a place"],
 ] as const;
 async function confirmNext(page: Page, action: string) {
-  await page
-    .getByRole("button", { name: "Find a little adventure", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Discover", exact: true }).click();
+  await chooseNextChapter(page);
   await page.getByRole("button", { name: action, exact: true }).click();
   await page.getByRole("button", { name: "Let’s go", exact: true }).click();
   await page
-    .getByRole("button", { name: "Simulate journey", exact: true })
+    .getByRole("button", { name: "Review memory", exact: true })
     .click();
-  await page
-    .getByRole("button", { name: "Add to my world", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Keep memory", exact: true }).click();
   await expect(
     page.getByText("Your little world just got bigger!", { exact: false }),
   ).toBeVisible();
@@ -291,21 +268,22 @@ test("all eight UI-collected keepsakes expose the right details and an uncropped
     ...newKeepsakes.map(([title]) => title),
   ];
   for (const [index, title] of titles.entries()) {
-    await page.getByRole("button", { name: /My collection/ }).click();
+    await page.getByRole("button", { name: /Collection/ }).click();
+    await page
+      .getByRole("tab", { name: index < 4 ? "Inspiration" : /^My memories/ })
+      .click();
     await page.getByRole("button", { name: new RegExp(title) }).click();
     await expect(
       page.getByRole("heading", { name: title, exact: true }),
     ).toBeVisible();
     await expect(
-      page.getByText(
-        index < 4 ? /ILLUSTRATIVE MEMORY/ : /CONFIRMED DEMO KEEPSAKE/,
-      ),
+      page.getByText(index < 4 ? /OUTING INSPIRATION/ : /SAVED KEEPSAKE/),
     ).toBeVisible();
     const geometry = await page
       .locator(".memory-illustration")
       .evaluate((el) => {
         const frame = el.getBoundingClientRect(),
-          icon = el.querySelector(".keepsake-icon")!.getBoundingClientRect();
+          icon = el.querySelector(".keepsake-art")!.getBoundingClientRect();
         return {
           fits:
             icon.left >= frame.left - 1 &&
@@ -318,7 +296,9 @@ test("all eight UI-collected keepsakes expose the right details and an uncropped
         };
       });
     expect(geometry.fits, title).toBe(true);
-    expect(geometry.shapes, title).toBeGreaterThan(0);
+    expect(
+      await page.locator(".memory-illustration .keepsake-art").count(),
+    ).toBe(1);
     await page
       .getByRole("button", { name: "Close panel", exact: true })
       .click();
@@ -326,7 +306,7 @@ test("all eight UI-collected keepsakes expose the right details and an uncropped
   await page.reload();
   await expect(
     page.getByText(
-      "4 confirmed demos · 4 illustrations. Your demo collection is complete.",
+      "4 memories · 4 inspirations. This collection is complete.",
       {
         exact: true,
       },
@@ -338,16 +318,14 @@ test("confirmed memory editing enforces the typed 500-character limit without ch
   page,
 }) => {
   await page.goto("/");
-  await confirmNext(page, "Find a Mangwon picnic");
+  await confirmNext(page, "Choose a place");
   const previous = await page.evaluate(
     () =>
       JSON.parse(localStorage.getItem("little-world:v1")!).collected.mangwon,
   );
-  await page.getByRole("button", { name: /My collection/ }).click();
+  await page.getByRole("button", { name: /Collection/ }).click();
   await page.getByRole("button", { name: /Mangwon Market picnic/ }).click();
-  await page
-    .getByRole("button", { name: "Edit memory note", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Edit note", exact: true }).click();
   const note = page.getByRole("textbox", { name: "Memory note", exact: true });
   await note.fill("서울의 오후 🌿\n" + "m".repeat(480));
   await note.pressSequentially(
@@ -356,7 +334,7 @@ test("confirmed memory editing enforces the typed 500-character limit without ch
   const expected = await note.inputValue();
   expect(expected.length).toBe(500);
   expect(expected).toContain("서울의 오후 🌿");
-  await page.getByRole("button", { name: "Save memory", exact: true }).click();
+  await page.getByRole("button", { name: "Save note", exact: true }).click();
   await page.reload();
   const actual = await page.evaluate(
     () =>
@@ -376,9 +354,8 @@ test("manual clipboard fallback selects the complete backup and invalid input le
   const original = await page.evaluate(() =>
     localStorage.getItem("little-world:v1"),
   );
-  await page
-    .getByRole("button", { name: "Demo settings", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Settings", exact: true }).click();
+  await openBackup(page);
   await page
     .getByRole("button", { name: "Prepare world backup", exact: true })
     .click();
@@ -421,9 +398,8 @@ test("a browser driving event dismisses an unconfirmed backup replacement withou
   const original = await page.evaluate(() =>
     localStorage.getItem("little-world:v1"),
   );
-  await page
-    .getByRole("button", { name: "Demo settings", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Settings", exact: true }).click();
+  await openBackup(page);
   await page
     .getByRole("button", { name: "Prepare world backup", exact: true })
     .click();
@@ -460,9 +436,7 @@ test("a browser driving event dismisses an unconfirmed backup replacement withou
     ),
   );
   await expect(page.getByRole("complementary")).toHaveCount(0);
-  await page
-    .getByRole("button", { name: "Demo settings", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Settings", exact: true }).click();
   await expect(
     page.getByRole("group", { name: "Confirm world replacement" }),
   ).toHaveCount(0);
@@ -475,9 +449,7 @@ test("bundled licenses are keyboard-readable locally on short and narrow display
   await page.goto("/");
   const requests: string[] = [];
   page.on("request", (request) => requests.push(request.url()));
-  await page
-    .getByRole("button", { name: "Demo settings", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Settings", exact: true }).click();
   const summary = page.locator(".third-party-notices summary");
   await summary.focus();
   await expect(summary).toBeFocused();

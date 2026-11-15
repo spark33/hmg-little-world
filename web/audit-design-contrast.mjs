@@ -152,26 +152,26 @@ async function inspect(stage) {
 }
 await page.goto(base);
 await inspect("day-start");
-await page.getByRole("button", { name: /My collection/ }).click();
+await page.getByRole("button", { name: /Collection/ }).click();
 await inspect("day-album");
 await page.getByRole("button", { name: /Gwangjang Market flavors/ }).click();
 await inspect("day-memory");
 await page.getByRole("button", { name: "Discover Mangwon Market picnic" }).click();
 await inspect("day-discovery");
-await page.getByRole("button", { name: "Find a Mangwon picnic" }).click();
+await page.getByRole("button", { name: "Choose a place" }).click();
 await inspect("day-destinations");
 await page.getByRole("button", { name: "Let’s go", exact: true }).click();
 await inspect("day-journey");
-await page.getByRole("button", { name: "Simulate journey" }).click();
+await page.getByRole("button", { name: "Review memory" }).click();
 await inspect("day-arrival");
-await page.getByRole("button", { name: "Not yet", exact: true }).click();
-await page.getByRole("button", { name: /My collection/ }).click();
+await page.getByRole("button", { name: "Not now", exact: true }).click();
+await page.getByRole("button", { name: /Collection/ }).click();
 await page
-  .getByRole("button", { name: "Browse all keepsakes", exact: true })
+  .getByRole("button", { name: "Explore", exact: true })
   .click();
 await inspect("day-browse");
 await page.getByRole("button", { name: "Close panel" }).click();
-await page.getByRole("button", { name: "Demo settings" }).click();
+await page.getByRole("button", { name: "Settings" }).click();
 await page
   .getByRole("button", { name: "Prepare world backup", exact: true })
   .click();
@@ -189,22 +189,22 @@ await page
 await inspect("night-settings-backup");
 await page.getByRole("button", { name: "Close panel" }).click();
 await inspect("night-start");
-await page.getByRole("button", { name: /My collection/ }).click();
+await page.getByRole("button", { name: /Collection/ }).click();
 await inspect("night-album");
 await page.getByRole("button", { name: /Gwangjang Market flavors/ }).click();
 await inspect("night-memory");
 await page.getByRole("button", { name: "Discover Mangwon Market picnic" }).click();
 await inspect("night-discovery");
-await page.getByRole("button", { name: "Find a Mangwon picnic" }).click();
+await page.getByRole("button", { name: "Choose a place" }).click();
 await inspect("night-destinations");
 await page.getByRole("button", { name: "Let’s go", exact: true }).click();
 await inspect("night-journey");
-await page.getByRole("button", { name: "Simulate journey" }).click();
+await page.getByRole("button", { name: "Review memory" }).click();
 await inspect("night-arrival");
-await page.getByRole("button", { name: "Not yet", exact: true }).click();
-await page.getByRole("button", { name: /My collection/ }).click();
+await page.getByRole("button", { name: "Not now", exact: true }).click();
+await page.getByRole("button", { name: /Collection/ }).click();
 await page
-  .getByRole("button", { name: "Browse all keepsakes", exact: true })
+  .getByRole("button", { name: "Explore", exact: true })
   .click();
 await inspect("night-browse");
 await page.evaluate(() =>
@@ -224,12 +224,12 @@ const animated = await browser.newContext({
 const live = await animated.newPage();
 await live.goto(base);
 await live
-  .getByRole("button", { name: "Find a little adventure", exact: true })
+  .getByRole("button", { name: "Discover", exact: true })
   .click();
-await live.getByRole("button", { name: "Find a Mangwon picnic" }).click();
+await live.getByRole("button", { name: "Choose a place" }).click();
 await live.getByRole("button", { name: "Let’s go", exact: true }).click();
-await live.getByRole("button", { name: "Simulate journey" }).click();
-await live.getByRole("button", { name: "Add to my world" }).click();
+await live.getByRole("button", { name: "Review memory" }).click();
+await live.getByRole("button", { name: "Keep memory" }).click();
 await expect(live.locator(".collection-caption")).toBeVisible();
 reports.push({
   stage: "actual-timed-reveal",

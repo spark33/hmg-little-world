@@ -1,10 +1,10 @@
+import { openBackup } from "./helpers";
 import { test, expect, type Page } from "@playwright/test";
 
 const storageKey = "little-world:v1";
 async function settings(page: Page) {
-  await page
-    .getByRole("button", { name: "Demo settings", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Settings", exact: true }).click();
+  await openBackup(page);
   await expect(
     page.getByRole("region", { name: "World backup and recovery" }),
   ).toBeVisible();
@@ -55,7 +55,7 @@ test("world backup import is previewed and cancelable before a durable replaceme
     .click();
   await expect(
     page.getByRole("group", { name: "Confirm world replacement" }),
-  ).toContainText("1 confirmed demo keepsake");
+  ).toContainText("1 memory keepsake");
   expect(await currentSave(page)).toBe(original);
   await page
     .getByRole("button", { name: "Keep current data", exact: true })

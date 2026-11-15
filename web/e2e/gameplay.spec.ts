@@ -1,3 +1,4 @@
+import { chooseNextChapter } from "./helpers";
 import { test, expect } from "@playwright/test";
 
 test("all four new keepsakes are playable, persistent, and reach a complete collection", async ({
@@ -7,52 +8,43 @@ test("all four new keepsakes are playable, persistent, and reach a complete coll
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   const adventures = [
-    ["Mangwon Market picnic", "Find a Mangwon picnic"],
-    ["Gyeongbokgung palace walk", "Find a palace walk"],
-    ["Bukhansan trail morning", "Find a Bukhansan trail"],
-    ["Seoul museum afternoon", "Find a Seoul art adventure"],
+    ["Mangwon Market picnic", "Choose a place"],
+    ["Gyeongbokgung palace walk", "Choose a place"],
+    ["Bukhansan trail morning", "Choose a place"],
+    ["Seoul museum afternoon", "Choose a place"],
   ];
   for (const [index, [title, action]] of adventures.entries()) {
-    await page
-      .getByRole("button", { name: "Find a little adventure", exact: true })
-      .click();
+    await page.getByRole("button", { name: "Discover", exact: true }).click();
+    await chooseNextChapter(page);
     await expect(
       page.getByRole("heading", { name: title, exact: true }).first(),
     ).toBeVisible();
     await page.getByRole("button", { name: action, exact: true }).click();
     await expect(
-      page.getByText(
-        "Illustrative venues. No live availability or route data.",
-      ),
+      page.getByText("Outing ideas. Check place details before heading out."),
     ).toBeVisible();
     await page.getByRole("button", { name: "Let’s go", exact: true }).click();
     await expect(
-      page.getByText(
-        "Live navigation is unavailable. This is a sample destination.",
-      ),
+      page.getByText("Navigation is unavailable for this destination."),
     ).toBeVisible();
-    await page.getByRole("button", { name: "Simulate journey" }).click();
-    await page.getByRole("button", { name: "Add to my world" }).click();
+    await page.getByRole("button", { name: "Review memory" }).click();
+    await page.getByRole("button", { name: "Keep memory" }).click();
     await expect(
       page.getByText("Your little world just got bigger!", { exact: false }),
     ).toBeVisible();
     await page.reload();
     await expect(
       page.getByText(
-        `${index + 1} confirmed demo${index === 0 ? "" : "s"} · 4 illustrations. ${index === 3 ? "Your demo collection is complete." : "More chapters await."}`,
+        `${index + 1} ${index === 0 ? "memory" : "memories"} · 4 inspirations. ${index === 3 ? "This collection is complete." : "More chapters await."}`,
         { exact: true },
       ),
     ).toBeVisible();
   }
-  await page
-    .getByRole("button", { name: "Explore all keepsakes", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Explore", exact: true }).click();
   await expect(
-    page.getByText("Your demo collection is complete.", { exact: true }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("progressbar", { name: "Confirmed demo keepsakes" }),
-  ).toHaveAttribute("value", "4");
+    page.getByRole("button", { name: "Revisit", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(".car-shelf .shelf-item")).toHaveCount(4);
   const records = await page.evaluate(
     () => JSON.parse(localStorage.getItem("little-world:v1")!).collected,
   );
@@ -67,20 +59,16 @@ test("category browsing and memory recommendations open their own adventure", as
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  await page.getByRole("button", { name: /My collection/ }).click();
+  await page.getByRole("button", { name: /Collection/ }).click();
   await page.getByRole("button", { name: /Seokchon Lake blossoms/ }).click();
-  await page
-    .getByRole("button", { name: "Discover Bukhansan trail morning" })
-    .click();
+  await page.getByRole("link", { name: /^Explore / }).click();
   await expect(
-    page.getByRole("button", { name: "Find a Bukhansan trail" }),
+    page.getByRole("button", { name: "Choose a place" }),
   ).toBeVisible();
+  await page.getByRole("button", { name: "Explore", exact: true }).click();
   await page
-    .getByRole("button", { name: "Browse all keepsakes", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Cultural experiences", exact: true })
-    .click();
+    .getByRole("combobox", { name: "Keepsake categories" })
+    .selectOption("Cultural experiences");
   await expect(
     page.getByRole("button", { name: /Seoul museum afternoon/ }),
   ).toBeVisible();
@@ -89,14 +77,12 @@ test("category browsing and memory recommendations open their own adventure", as
   ).toHaveCount(0);
   await page.getByRole("button", { name: /Seoul museum afternoon/ }).click();
   await expect(
-    page.getByRole("button", { name: "Find a Seoul art adventure" }),
+    page.getByRole("button", { name: "Choose a place" }),
   ).toBeVisible();
-  await page
-    .getByRole("button", { name: "Find a Seoul art adventure" })
-    .click();
+  await page.getByRole("button", { name: "Choose a place" }).click();
   await page.getByRole("button", { name: "Let’s go", exact: true }).click();
-  await page.getByRole("button", { name: "Simulate journey" }).click();
-  await page.getByRole("button", { name: "Not yet", exact: true }).click();
+  await page.getByRole("button", { name: "Review memory" }).click();
+  await page.getByRole("button", { name: "Not now", exact: true }).click();
   expect(
     await page.evaluate(
       () =>
@@ -111,28 +97,28 @@ test("memory notes can be canceled, edited, and reloaded without changing their 
   page,
 }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: /My collection/ }).click();
+  await page.getByRole("button", { name: /Collection/ }).click();
   await page.getByRole("button", { name: /Gwangjang Market flavors/ }).click();
   await expect(
-    page.getByText("Regional foods · ILLUSTRATIVE MEMORY"),
+    page.getByText("Regional foods · OUTING INSPIRATION"),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Edit memory note" }).click();
+  await page.getByRole("button", { name: "Edit note" }).click();
   await page
     .getByRole("textbox", { name: "Memory note" })
     .fill("Canceled note");
-  await page.getByRole("button", { name: "Cancel editing" }).click();
+  await page.getByRole("button", { name: "Cancel" }).click();
   await expect(
     page.getByText("A market afternoon full of little discoveries.", {
       exact: false,
     }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Edit memory note" }).click();
+  await page.getByRole("button", { name: "Edit note" }).click();
   await page
     .getByRole("textbox", { name: "Memory note" })
     .fill("Our favorite market afternoon together.");
-  await page.getByRole("button", { name: "Save memory", exact: true }).click();
+  await page.getByRole("button", { name: "Save note", exact: true }).click();
   await page.reload();
-  await page.getByRole("button", { name: /My collection/ }).click();
+  await page.getByRole("button", { name: /Collection/ }).click();
   await page.getByRole("button", { name: /Gwangjang Market flavors/ }).click();
   await expect(
     page.getByText("Our favorite market afternoon together.", { exact: false }),
@@ -170,14 +156,17 @@ test("an earlier Chicago confirmation stays in the archive and never becomes a S
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   await expect(
-    page.getByText("0 confirmed demos · 4 illustrations. More chapters await."),
+    page.getByText("0 memories · 4 inspirations. More chapters await."),
   ).toBeVisible();
   expect(
     await page.evaluate(() => localStorage.getItem("little-world:v1")),
   ).toBe(original);
-  await page.getByRole("button", { name: /My collection/ }).click();
-  const archive = page.getByRole("region", { name: "Earlier demo memories" });
-  await expect(archive).toContainText("2 archived memories");
+  await page.getByRole("button", { name: /Collection/ }).click();
+  await page
+    .getByRole("tab", { name: "Earlier memories", exact: true })
+    .click();
+  const archive = page.getByRole("region", { name: "Earlier memories" });
+  await expect(archive.getByRole("button")).toHaveCount(2);
   await archive
     .getByRole("button", { name: /Chicago deep-dish pizza/ })
     .click();
@@ -188,22 +177,21 @@ test("an earlier Chicago confirmation stays in the archive and never becomes a S
     page.getByText("Our original Chicago confirmation", { exact: false }),
   ).toBeVisible();
   await expect(
-    page.getByText("Archived from an earlier demo world.", { exact: false }),
+    page.getByText("From your earlier collection.", { exact: false }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Close panel" }).click();
-  await page
-    .getByRole("button", { name: "Find a little adventure", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Discover", exact: true }).click();
+  await chooseNextChapter(page);
   await expect(
-    page.getByRole("button", { name: "Find a Mangwon picnic" }),
+    page.getByRole("button", { name: "Choose a place" }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Find a Mangwon picnic" }).click();
+  await page.getByRole("button", { name: "Choose a place" }).click();
   await page.getByRole("button", { name: "Let’s go", exact: true }).click();
-  await page.getByRole("button", { name: "Simulate journey" }).click();
-  await page.getByRole("button", { name: "Add to my world" }).click();
+  await page.getByRole("button", { name: "Review memory" }).click();
+  await page.getByRole("button", { name: "Keep memory" }).click();
   await page.reload();
   await expect(
-    page.getByText("1 confirmed demo · 4 illustrations. More chapters await."),
+    page.getByText("1 memory · 4 inspirations. More chapters await."),
   ).toBeVisible();
   const records = await page.evaluate(
     () => JSON.parse(localStorage.getItem("little-world:v1")!).collected,
@@ -227,19 +215,16 @@ test("Seoul confirmations use the device's calendar date across the UTC boundary
   const page = await context.newPage();
   await page.clock.setFixedTime(new Date("2026-11-15T15:30:00Z"));
   await page.goto("/");
+  await page.getByRole("button", { name: "Discover", exact: true }).click();
+  await chooseNextChapter(page);
   await page
-    .getByRole("button", { name: "Find a little adventure", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Find a Mangwon picnic", exact: true })
+    .getByRole("button", { name: "Choose a place", exact: true })
     .click();
   await page.getByRole("button", { name: "Let’s go", exact: true }).click();
   await page
-    .getByRole("button", { name: "Simulate journey", exact: true })
+    .getByRole("button", { name: "Review memory", exact: true })
     .click();
-  await page
-    .getByRole("button", { name: "Add to my world", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Keep memory", exact: true }).click();
   expect(
     await page.evaluate(
       () =>
@@ -269,24 +254,20 @@ test("a collected Seoul adventure can be replayed without duplicating or rewriti
   );
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  await page.getByRole("button", { name: /My collection/ }).click();
+  await page.getByRole("button", { name: /Collection/ }).click();
   await page.getByRole("button", { name: /Mangwon Market picnic/ }).click();
+  await page.getByRole("button", { name: "Revisit", exact: true }).click();
   await page
-    .getByRole("button", { name: "Revisit demo adventure", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Find a Mangwon picnic", exact: true })
+    .getByRole("button", { name: "Choose a place", exact: true })
     .click();
   await page.getByRole("button", { name: "Let’s go", exact: true }).click();
   await page
-    .getByRole("button", { name: "Simulate journey", exact: true })
+    .getByRole("button", { name: "Review memory", exact: true })
     .click();
   await expect(
-    page.getByRole("button", { name: "Add to my world", exact: true }),
+    page.getByRole("button", { name: "Keep memory", exact: true }),
   ).toHaveCount(0);
-  await page
-    .getByRole("button", { name: "Return to this memory", exact: true })
-    .click();
+  await page.getByRole("button", { name: "View memory", exact: true }).click();
   await expect(
     page.getByText("Our first market picnic", { exact: false }),
   ).toBeVisible();
@@ -339,29 +320,25 @@ test("a successful explicit reset resolves an unreadable startup before the next
   await page.evaluate(() =>
     window.dispatchEvent(new Event("restore-world-reads")),
   );
+  await page.getByRole("button", { name: "Settings", exact: true }).click();
+  await page.getByRole("button", { name: "Memories", exact: true }).click();
   await page
-    .getByRole("button", { name: "Demo settings", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Reset demo world", exact: true })
+    .getByRole("button", { name: "Reset my world", exact: true })
     .click();
   await page
     .getByRole("button", { name: "Confirm reset", exact: true })
     .click();
   await expect(page.getByRole("alert")).toHaveCount(0);
+  await page.getByRole("button", { name: "Discover", exact: true }).click();
+  await chooseNextChapter(page);
   await page
-    .getByRole("button", { name: "Find a little adventure", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Find a Mangwon picnic", exact: true })
+    .getByRole("button", { name: "Choose a place", exact: true })
     .click();
   await page.getByRole("button", { name: "Let’s go", exact: true }).click();
   await page
-    .getByRole("button", { name: "Simulate journey", exact: true })
+    .getByRole("button", { name: "Review memory", exact: true })
     .click();
-  await page
-    .getByRole("button", { name: "Add to my world", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Keep memory", exact: true }).click();
   await expect(page.getByRole("alert")).toHaveCount(0);
   expect(
     await page.evaluate(
@@ -372,7 +349,7 @@ test("a successful explicit reset resolves an unreadable startup before the next
   ).toBe("confirmed-demo");
   await page.reload();
   await expect(
-    page.getByText("1 confirmed demo · 4 illustrations. More chapters await.", {
+    page.getByText("1 memory · 4 inspirations. More chapters await.", {
       exact: true,
     }),
   ).toBeVisible();

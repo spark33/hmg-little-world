@@ -1,3 +1,4 @@
+import { chooseNextChapter } from "./helpers";
 import { test, expect } from "@playwright/test";
 const evidence = process.env.EVIDENCE_DIR || "../artifacts";
 test("complete Gwangjang → Mangwon flow, explicit consent, seven-second reveal, reload and reset", async ({
@@ -7,51 +8,46 @@ test("complete Gwangjang → Mangwon flow, explicit consent, seven-second reveal
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/");
   await expect(page.locator("canvas")).toBeVisible();
-  await page.getByRole("button", { name: /My collection/ }).click();
+  await page.getByRole("button", { name: /Collection/ }).click();
   await page.getByRole("button", { name: /Gwangjang Market flavors/ }).click();
   await expect(
     page.getByText("A market afternoon full of little discoveries.", {
       exact: false,
     }),
   ).toBeVisible();
-  await expect(
-    page.getByText("Illustrative Gwangjang Market memory"),
-  ).toBeVisible();
-  await page
-    .getByRole("button", { name: "Discover Mangwon Market picnic" })
-    .click();
+  await expect(page.getByText("Gwangjang Market inspiration")).toBeVisible();
+  await page.getByRole("link", { name: /^Explore / }).click();
   await page.screenshot({ path: `${evidence}/recommendation.png` });
-  await page.getByRole("button", { name: "Find a Mangwon picnic" }).click();
+  await page.getByRole("button", { name: "Choose a place" }).click();
   await expect(
-    page.getByText("Illustrative venues. No live availability or route data."),
+    page.getByText("Outing ideas. Check place details before heading out."),
   ).toBeVisible();
-  await page.getByRole("button", { name: /A Seoul day out/ }).click();
+  await page.getByRole("button", { name: /Mapo market afternoon/ }).click();
   await page.getByRole("button", { name: "Let’s go", exact: true }).click();
   await expect(
-    page.getByText(
-      "Live navigation is unavailable. This is a sample destination.",
-    ),
+    page.getByText("Navigation is unavailable for this destination."),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Simulate journey" }).click();
+  await page.getByRole("button", { name: "Review memory" }).click();
   expect(
     await page.evaluate(
       () =>
         JSON.parse(localStorage.getItem("little-world:v1")!).collected.mangwon,
     ),
   ).toBeUndefined();
-  await page.getByRole("button", { name: "Not yet", exact: true }).click();
+  await page.getByRole("button", { name: "Not now", exact: true }).click();
   expect(
     await page.evaluate(
       () =>
         JSON.parse(localStorage.getItem("little-world:v1")!).collected.mangwon,
     ),
   ).toBeUndefined();
-  await page.getByRole("button", { name: "Find a little adventure" }).click();
-  await page.getByRole("button", { name: "Find a Mangwon picnic" }).click();
+  await page.getByRole("button", { name: "Discover" }).click();
+  await chooseNextChapter(page);
+  await page.getByRole("button", { name: "Choose a place" }).click();
   await page.getByRole("button", { name: "Let’s go", exact: true }).click();
-  await page.getByRole("button", { name: "Simulate journey" }).click();
+  await page.getByRole("button", { name: "Review memory" }).click();
   const start = Date.now();
-  await page.getByRole("button", { name: "Add to my world" }).click();
+  await page.getByRole("button", { name: "Keep memory" }).click();
   await expect(
     page.getByText("A little memory is finding its home…"),
   ).toBeVisible();
@@ -64,16 +60,17 @@ test("complete Gwangjang → Mangwon flow, explicit consent, seven-second reveal
   await page.screenshot({ path: `${evidence}/world-collected.png` });
   await page.reload();
   await expect(
-    page.getByText("1 confirmed demo · 4 illustrations. More chapters await."),
+    page.getByText("1 memory · 4 inspirations. More chapters await."),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Demo settings" }).click();
-  await page.getByRole("button", { name: "Reset demo world" }).click();
+  await page.getByRole("button", { name: "Settings" }).click();
+  await page.getByRole("button", { name: "Memories", exact: true }).click();
+  await page.getByRole("button", { name: "Reset my world" }).click();
   await page
     .getByRole("button", { name: "Confirm reset", exact: true })
     .click();
   await page.reload();
   await expect(
-    page.getByText("0 confirmed demos · 4 illustrations. More chapters await."),
+    page.getByText("0 memories · 4 inspirations. More chapters await."),
   ).toBeVisible();
   expect(errors).toEqual([]);
 });
@@ -88,7 +85,7 @@ test("driving and unknown vehicle state remove all interactive content", async (
       }),
     ),
   );
-  await expect(page.getByText("Your little world can wait.")).toBeVisible();
+  await expect(page.getByText("Your world will be here.")).toBeVisible();
   await expect(page.locator("canvas")).toHaveCount(0);
   await expect(page.getByRole("button")).toHaveCount(0);
   await page.evaluate(() =>
@@ -102,11 +99,12 @@ test("driving and unknown vehicle state remove all interactive content", async (
 });
 test("safety interruption cancels collection animation", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Find a little adventure" }).click();
-  await page.getByRole("button", { name: "Find a Mangwon picnic" }).click();
+  await page.getByRole("button", { name: "Discover" }).click();
+  await chooseNextChapter(page);
+  await page.getByRole("button", { name: "Choose a place" }).click();
   await page.getByRole("button", { name: "Let’s go", exact: true }).click();
-  await page.getByRole("button", { name: "Simulate journey" }).click();
-  await page.getByRole("button", { name: "Add to my world" }).click();
+  await page.getByRole("button", { name: "Review memory" }).click();
+  await page.getByRole("button", { name: "Keep memory" }).click();
   await page.evaluate(() =>
     window.dispatchEvent(
       new CustomEvent("vehicle-safety", {
@@ -120,7 +118,7 @@ test("safety interruption cancels collection animation", async ({ page }) => {
   ).toHaveCount(0);
   await page.reload();
   await expect(
-    page.getByText("1 confirmed demo · 4 illustrations. More chapters await."),
+    page.getByText("1 memory · 4 inspirations. More chapters await."),
   ).toBeVisible();
   await expect(
     page.getByText("A little memory is finding its home…"),
@@ -148,7 +146,7 @@ test("automotive display sizes keep large touch targets and the primary action c
       "Show whole world",
       "Zoom in",
       "Zoom out",
-      "Find a little adventure",
+      "Discover",
     ]) {
       const box = await page.getByRole("button", { name: label }).boundingBox();
       expect(box).not.toBeNull();
@@ -163,9 +161,9 @@ test("automotive display sizes keep large touch targets and the primary action c
         .evaluate((el) => (el as HTMLCanvasElement).width / el.clientWidth),
     ).toBeLessThanOrEqual(1.26);
     await page.screenshot({ path: `${evidence}/vehicle-world-${width}.png` });
-    await page.getByRole("button", { name: "Find a little adventure" }).tap();
+    await page.getByRole("button", { name: "Discover" }).tap();
     await expect(
-      page.getByRole("button", { name: "Find a Mangwon picnic" }),
+      page.getByRole("button", { name: "Choose a place" }),
     ).toBeVisible();
     await expect
       .poll(async () => {
@@ -188,12 +186,10 @@ test("a building can be selected directly on the 3D canvas", async ({
   await page.goto("/");
   await page.waitForTimeout(2500);
   await page.mouse.click(538, 403);
-  await expect(
-    page.getByText("Illustrative Gwangjang Market memory"),
-  ).toBeVisible();
+  await expect(page.getByText("Gwangjang Market inspiration")).toBeVisible();
   await page
-    .locator(".back-button")
-    .filter({ hasText: "Your little world" })
+    .locator(".world-back")
+    .filter({ hasText: "Back to world" })
     .click();
   await expect(page.getByRole("complementary")).toHaveCount(0);
 });

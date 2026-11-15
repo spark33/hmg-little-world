@@ -43,6 +43,7 @@ export type Reply = {
 };
 declare global {
   interface Window {
+    __roamySafety?: unknown;
     NativeBridge?: {
       postMessage: (s: string) => void;
       onmessage: ((event: MessageEvent) => void) | null;

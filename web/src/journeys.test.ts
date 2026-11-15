@@ -25,7 +25,7 @@ describe("collection journeys", () => {
   });
   it("describes a curated pairing without inferring a real visit from an illustration", () => {
     expect(curatedReason("gwangjang")).toContain("market-food chapter");
-    expect(curatedReason("gwangjang")).toContain("Curated demo inspiration");
+    expect(curatedReason("gwangjang")).toContain("Curated outing inspiration");
     expect(curatedReason("gwangjang")).not.toContain("you explored");
   });
 });

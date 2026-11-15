@@ -1,35 +1,28 @@
 import { test, expect } from "@playwright/test";
 
-test("changing a scrolled collection panel reveals the next heading", async ({
+test("returning from a memory preserves its paged collection context", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 960, height: 480 });
   await page.goto("/");
-  await page.getByRole("button", { name: /My collection/ }).click();
+  await page.getByRole("button", { name: /^Collection ·/ }).click();
   await page
-    .getByRole("button", { name: "Browse all keepsakes", exact: true })
+    .getByRole("button", { name: "Next keepsakes", exact: true })
     .click();
-  const panel = page.getByRole("complementary");
-  await expect(panel).toBeFocused();
-  const geometry = await panel.locator("h2").evaluate((heading) => {
-    const bounds = heading.getBoundingClientRect();
-    const container = heading.closest("aside")!.getBoundingClientRect();
-    const hit = document.elementFromPoint(
-      bounds.x + bounds.width / 2,
-      bounds.y + bounds.height / 2,
-    );
-    return {
-      top: bounds.top,
-      bottom: bounds.bottom,
-      containerTop: container.top,
-      containerBottom: container.bottom,
-      reachable: !!hit && heading.contains(hit),
-    };
-  });
-  expect(geometry.top).toBeGreaterThanOrEqual(geometry.containerTop);
-  expect(geometry.bottom).toBeLessThanOrEqual(geometry.containerBottom);
-  expect(geometry.reachable).toBe(true);
-  await expect(panel).toHaveJSProperty("scrollTop", 0);
+  await page.getByRole("button", { name: /Seokchon Lake blossoms/ }).click();
+  await page
+    .getByRole("button", { name: "Back to collection", exact: true })
+    .click();
+  await expect(
+    page.getByRole("region", { name: "Outing inspiration" }),
+  ).toContainText("Seokchon Lake blossoms");
+  await expect(
+    page.getByRole("navigation", { name: "Collection pages" }),
+  ).toContainText("2 of 2");
+  const box = await page
+    .locator(".task-content")
+    .evaluate((e) => ({ height: e.clientHeight, scroll: e.scrollHeight }));
+  expect(box.scroll).toBeLessThanOrEqual(box.height + 1);
 });
 
 test("unavailable bundled licenses can be retried without leaving settings", async ({
@@ -49,7 +42,8 @@ test("unavailable bundled licenses can be retried without leaving settings", asy
     );
   });
   await page.goto("/");
-  await page.getByRole("button", { name: "Demo settings" }).click();
+  await page.getByRole("button", { name: "Settings" }).click();
+  await page.getByRole("button", { name: "About", exact: true }).click();
   await page.getByText("Open-source licenses", { exact: true }).click();
   await expect(page.getByRole("alert")).toContainText(
     "Bundled notices could not be read",
@@ -61,6 +55,6 @@ test("unavailable bundled licenses can be retried without leaving settings", asy
   await expect(page.getByRole("alert")).toHaveCount(0);
   expect(requests).toBe(2);
   await expect(
-    page.getByRole("button", { name: "Reset demo world", exact: true }),
+    page.getByRole("button", { name: "About", exact: true }),
   ).toBeAttached();
 });

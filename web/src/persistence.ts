@@ -135,7 +135,7 @@ function parseValue(value: unknown, config: PersistenceConfig): ParsedWorld {
       (provenance !== "confirmed-demo" ||
         !isDemoDestinationId(record.demoDestinationId))
     )
-      return invalid("A memory has an invalid demo destination choice.");
+      return invalid("A memory has an invalid destination choice.");
     collected[id] = {
       visitDate: record.visitDate,
       ...(record.memory === undefined ? {} : { memory: record.memory }),

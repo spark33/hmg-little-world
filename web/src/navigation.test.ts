@@ -37,7 +37,7 @@ describe("honest navigation presentation", () => {
       describeNavigation(
         reply({ reason: "verified-destinations-unconfigured" }),
       ).detail,
-    ).toContain("No approved destination provider");
+    ).toContain("not connected to a destination provider");
     expect(
       describeNavigation(reply({ reason: "trusted-parked-signal-required" }))
         .title,

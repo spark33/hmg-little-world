@@ -1,3 +1,4 @@
+import { chooseNextChapter } from "./helpers";
 import { test, expect } from "@playwright/test";
 
 test("ROAMY preferences persist, panels take focus, Escape returns to the opener", async ({
@@ -5,7 +6,7 @@ test("ROAMY preferences persist, panels take focus, Escape returns to the opener
 }) => {
   await page.goto("/");
   await expect(page).toHaveTitle(/ROAMY/);
-  const opener = page.getByRole("button", { name: "Demo settings" });
+  const opener = page.getByRole("button", { name: "Settings" });
   await opener.click();
   await expect(page.getByRole("complementary")).toBeFocused();
   await page.getByRole("button", { name: "Switch to evening" }).click();
@@ -32,11 +33,12 @@ test("system reduced motion skips reveal and saves a confirmed memory immediatel
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   await expect(page.locator("main.app")).toHaveClass(/reduced-motion/);
-  await page.getByRole("button", { name: "Find a little adventure" }).click();
-  await page.getByRole("button", { name: "Find a Mangwon picnic" }).click();
+  await page.getByRole("button", { name: "Discover" }).click();
+  await chooseNextChapter(page);
+  await page.getByRole("button", { name: "Choose a place" }).click();
   await page.getByRole("button", { name: "Let’s go", exact: true }).click();
-  await page.getByRole("button", { name: "Simulate journey" }).click();
-  await page.getByRole("button", { name: "Add to my world" }).click();
+  await page.getByRole("button", { name: "Review memory" }).click();
+  await page.getByRole("button", { name: "Keep memory" }).click();
   await expect(
     page.getByText("Your little world just got bigger!"),
   ).toBeVisible();
@@ -51,21 +53,18 @@ test("system reduced motion skips reveal and saves a confirmed memory immediatel
   ).toBeTruthy();
   await page.reload();
   await expect(
-    page.getByText("1 confirmed demo · 4 illustrations. More chapters await."),
+    page.getByText("1 memory · 4 inspirations. More chapters await."),
   ).toBeVisible();
 });
 
-test("narrow screens retain preview disclosure and the collection accessible name", async ({
+test("narrow windows retain the collection and discovery actions", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 640, height: 480 });
   await page.goto("/");
   await expect(
-    page.getByText("Browser development preview", { exact: true }),
-  ).toBeVisible();
-  await expect(
     page.getByRole("button", {
-      name: "My collection · 0 confirmed demos · 4 illustrations",
+      name: "Collection · 0 memories · 4 inspirations",
     }),
   ).toBeVisible();
 });

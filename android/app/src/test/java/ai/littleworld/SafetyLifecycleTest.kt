@@ -68,6 +68,7 @@ class SafetyLifecycleTest {
     @Test fun rendererMustBeReadyBeforeAnyContentIsShown() {
         val policy = NativePresentationPolicy()
         policy.foreground()
+        policy.focusChanged(true)
         assertFalse(policy.allowed(SafetyState.PARKED, false))
         policy.pageReady()
         assertTrue(policy.allowed(SafetyState.PARKED, false))
@@ -83,29 +84,35 @@ class SafetyLifecycleTest {
     @Test fun nativeBackgroundGateCannotBeOverriddenByAStaleWebPage() {
         val policy = NativePresentationPolicy()
         policy.foreground()
+        policy.focusChanged(true)
         policy.pageReady()
         assertTrue(policy.allowed(SafetyState.UNKNOWN, true))
         policy.background()
         policy.pageReady()
         assertFalse(policy.allowed(SafetyState.PARKED, false))
         policy.foreground()
+        policy.focusChanged(true)
         assertFalse(policy.allowed(SafetyState.UNKNOWN, false))
     }
 
     @Test fun rendererFailureIsStickyAndDestroyIsTerminal() {
         val policy = NativePresentationPolicy()
         policy.foreground()
+        policy.focusChanged(true)
         policy.pageReady()
         policy.contentFailed()
         policy.pageReady()
         policy.foreground()
+        policy.focusChanged(true)
         assertFalse(policy.allowed(SafetyState.PARKED, false))
         val destroyed = NativePresentationPolicy()
         destroyed.pageReady()
         destroyed.foreground()
+        destroyed.focusChanged(true)
         destroyed.destroy()
         destroyed.pageReady()
         destroyed.foreground()
+        destroyed.focusChanged(true)
         assertFalse(destroyed.allowed(SafetyState.UNKNOWN, true))
     }
 
@@ -118,4 +125,25 @@ class SafetyLifecycleTest {
         )
         assertEquals(listOf("observer", "listener", "webview"), released)
     }
+    @Test fun overlaysAndScreenOffCoverTheWorldIndependentlyOfVehicleState() {
+        val policy = NativePresentationPolicy()
+        policy.pageReady()
+        policy.foreground()
+        assertFalse(policy.allowed(SafetyState.PARKED, false))
+        policy.focusChanged(true)
+        assertTrue(policy.allowed(SafetyState.PARKED, false))
+        policy.focusChanged(false)
+        assertFalse(policy.allowed(SafetyState.PARKED, false))
+        policy.focusChanged(true)
+        policy.displayChanged(false)
+        assertFalse(policy.allowed(SafetyState.PARKED, false))
+        policy.displayChanged(true)
+        assertTrue(policy.allowed(SafetyState.PARKED, false))
+        assertFalse(policy.allowed(SafetyState.UNKNOWN, false))
+        policy.destroy()
+        policy.focusChanged(true)
+        policy.displayChanged(true)
+        assertFalse(policy.allowed(SafetyState.PARKED, false))
+    }
+
 }

@@ -23,14 +23,14 @@ export function collectionGroups(world: WorldState) {
 export function curatedReason(sourceId: string): string {
   switch (sourceId) {
     case "gwangjang":
-      return "Explore a second market-food chapter with a Mangwon picnic. Curated demo inspiration.";
+      return "A market-food chapter with room for a picnic. Curated outing inspiration.";
     case "namsan":
-      return "A curated pairing of Seoul landmarks: from the tower illustration to a palace walk.";
+      return "From skyline views to palace courtyards. A curated next chapter.";
     case "seokchon":
-      return "A curated pairing of outdoor chapters: from lakeside blossoms to a mountain morning.";
+      return "From lakeside blossoms to a mountain morning.";
     case "seongsu":
-      return "A curated pairing of creative Seoul: from a café illustration to an art museum afternoon.";
+      return "From a café morning to an afternoon of art.";
     default:
-      return "A curated next chapter from the Seoul demo collection, offered as inspiration for another outing.";
+      return "Another chapter for your collection. An idea for your next outing.";
   }
 }

@@ -145,7 +145,7 @@ async function begin(name, width, height, reducedMotion) {
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto(base);
   await expect(page.locator("canvas")).toBeVisible();
-  await expect(page.getByRole("button", { name: /My collection/ })).toContainText("4");
+  await expect(page.getByRole("button", { name: /Collection/ })).toContainText("4");
   await page.waitForTimeout(2000);
   const assets = await page.evaluate(() =>
     performance
@@ -178,8 +178,8 @@ async function browse() {
     await page.getByRole("button", { name: "Close panel", exact: true }).count()
   )
     await click("Close panel");
-  await click(/My collection/);
-  await click("Browse all keepsakes");
+  await click(/Collection/);
+  await click("Explore");
   await expect(
     page.getByRole("group", { name: "Keepsake categories" }),
   ).toBeVisible();
@@ -189,18 +189,18 @@ async function collect(title, find, expectedCount) {
   await click(new RegExp(title));
   await click(find);
   await expect(
-    page.getByText("Illustrative venues. No live availability or route data."),
+    page.getByText("Check place details and availability before heading out."),
   ).toBeVisible();
   await click("Let’s go");
   await expect(
     page.getByText(
-      "Live navigation is unavailable. This is a sample destination.",
+      "Navigation is unavailable for this destination.",
     ),
   ).toBeVisible();
   await page.waitForTimeout(650);
-  await click("Simulate journey");
+  await click("Review memory");
   await page.waitForTimeout(650);
-  await click("Add to my world");
+  await click("Keep memory");
   const since = Date.now();
   await expect(
     page.getByText("A little memory is finding its home…"),
@@ -236,7 +236,7 @@ async function command(input) {
   switch (action) {
     case "collection-fix-start":
       await begin("short-collection-fix", 960, 480, "reduce");
-      await click(/My collection/);
+      await click(/Collection/);
       await command({ action: "ui-step", name: "initial-collection", description: "Initial short collection exposes its first illustration without scrolling.", operations: [{ type: "assert-first-card" }] });
       break;
     case "refinement-start":
@@ -288,7 +288,7 @@ async function command(input) {
       );
       break;
     case "album":
-      await click(/My collection/);
+      await click(/Collection/);
       await screenshot(
         "collection",
         "Accessible collection presents the four seeded Seoul illustrations.",
@@ -309,7 +309,7 @@ async function command(input) {
       );
       break;
     case "destinations":
-      await click("Find a Mangwon picnic");
+      await click("Choose a place");
       await screenshot(
         "sample-destinations",
         "The three destinations and distances are explicitly illustrative.",
@@ -319,7 +319,7 @@ async function command(input) {
       await click("Let’s go");
       await expect(
         page.getByText(
-          "Live navigation is unavailable. This is a sample destination.",
+          "Navigation is unavailable for this destination.",
         ),
       ).toBeVisible();
       await screenshot(
@@ -328,14 +328,14 @@ async function command(input) {
       );
       break;
     case "arrival":
-      await click("Simulate journey");
+      await click("Review memory");
       await screenshot(
         "explicit-confirmation",
         "A simulated arrival asks whether to add the keepsake; confirmation has not yet saved it.",
       );
       break;
     case "reveal":
-      await click("Add to my world");
+      await click("Keep memory");
       await expect(
         page.getByText("A little memory is finding its home…"),
       ).toBeVisible();
@@ -362,30 +362,30 @@ async function command(input) {
       );
       break;
     case "palace":
-      await collect("Gyeongbokgung palace walk", "Find a palace walk", 6);
+      await collect("Gyeongbokgung palace walk", "Choose a place", 6);
       await screenshot(
         "palace-collected",
         "A real UI-confirmed palace demonstration adds its own asset after the full reveal.",
       );
       break;
     case "mountain":
-      await collect("Bukhansan trail morning", "Find a Bukhansan trail", 7);
+      await collect("Bukhansan trail morning", "Choose a place", 7);
       await screenshot(
         "bukhansan-collected",
         "The Bukhansan demonstration adds a distinct mountain keepsake.",
       );
       break;
     case "museum":
-      await collect("Seoul museum afternoon", "Find a Seoul art adventure", 8);
+      await collect("Seoul museum afternoon", "Choose a place", 8);
       await screenshot(
         "museum-collected",
-        "The fourth newly confirmed demonstration completes the eight-keepsake world.",
+        "The fourth newly collected chapter completes the eight-keepsake world.",
       );
       break;
     case "completion":
       await browse();
       await expect(
-        page.getByText("Your demo collection is complete.", { exact: true }),
+        page.getByText("This collection is complete.", { exact: true }),
       ).toBeVisible();
       await screenshot(
         "complete-collection",
@@ -400,14 +400,14 @@ async function command(input) {
       );
       break;
     case "short-edit":
-      await click(/My collection/);
+      await click(/Collection/);
       await click(/Gwangjang Market flavors/);
-      await click("Edit memory note");
+      await click("Edit note");
       await page
         .getByRole("textbox", { name: "Memory note", exact: true })
         .fill("A quiet Seoul market afternoon.");
       await page
-        .getByRole("button", { name: "Save memory", exact: true })
+        .getByRole("button", { name: "Save note", exact: true })
         .focus();
       await expect(page.locator(".panel > .primary")).toHaveCount(0);
       await screenshot(
@@ -416,7 +416,7 @@ async function command(input) {
       );
       break;
     case "short-saved":
-      await click("Save memory");
+      await click("Save note");
       await expect(
         page.getByText("A quiet Seoul market afternoon.", { exact: false }),
       ).toBeVisible();
@@ -427,7 +427,7 @@ async function command(input) {
       break;
     case "short-export":
       await click("Close panel");
-      await click("Demo settings");
+      await click("Settings");
       await click("Prepare world backup");
       backupText = await page
         .getByRole("textbox", { name: "Exported world backup" })
@@ -441,7 +441,7 @@ async function command(input) {
       );
       break;
     case "short-reset-review":
-      await click("Reset demo world");
+      await click("Reset my world");
       await page
         .getByRole("button", { name: "Confirm reset", exact: true })
         .focus();
@@ -452,7 +452,7 @@ async function command(input) {
       break;
     case "short-recovery-review":
       await click("Confirm reset");
-      await click("Demo settings");
+      await click("Settings");
       await click("Review recovery copy");
       await expect(
         page.getByRole("group", { name: "Confirm world replacement" }),
@@ -464,7 +464,7 @@ async function command(input) {
       break;
     case "short-restored":
       await click("Confirm replace world");
-      await click(/My collection/);
+      await click(/Collection/);
       await click(/Gwangjang Market flavors/);
       await expect(
         page.getByText("A quiet Seoul market afternoon.", { exact: false }),
@@ -476,7 +476,7 @@ async function command(input) {
       break;
     case "short-night":
       await click("Close panel");
-      await click("Demo settings");
+      await click("Settings");
       await click("Switch to evening");
       await click("Close panel");
       await screenshot(
@@ -485,7 +485,7 @@ async function command(input) {
       );
       break;
     case "short-licenses":
-      await click("Demo settings");
+      await click("Settings");
       await observe("before opening bundled open-source licenses");
       await page.getByText("Open-source licenses", { exact: true }).click();
       await expect(
@@ -499,7 +499,7 @@ async function command(input) {
       break;
     case "narrow-start":
       await begin("narrow", 360, 480, "reduce");
-      await click("Demo settings");
+      await click("Settings");
       await click("Switch to evening");
       await click("Close panel");
       await screenshot(
@@ -508,7 +508,7 @@ async function command(input) {
       );
       break;
     case "narrow-backup-error":
-      await click("Demo settings");
+      await click("Settings");
       await page
         .getByRole("textbox", { name: "Paste a world backup", exact: true })
         .fill("This is not a world backup.");
