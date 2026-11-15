@@ -1,14 +1,17 @@
 import {
   isVisitDate,
+  isDemoDestinationId,
   readWorld as readStoredWorld,
   saveWorld as saveStoredWorld,
   type MemoryRecord,
+  type DemoDestinationId,
   type PersistenceConfig,
   type StorageLike,
   type WorldState,
 } from "./persistence";
 export { STORAGE_KEY, isVisitDate } from "./persistence";
 export type {
+  DemoDestinationId,
   MemoryRecord,
   SaveStatus,
   StorageLike,
@@ -270,11 +273,13 @@ export function collect(
   id: string,
   date: string,
   memory?: string,
+  demoDestinationId?: DemoDestinationId,
 ): WorldState {
   if (
     state.collected[id] ||
     !catalog.some((x) => x.id === id && x.status === "available") ||
-    !isVisitDate(date)
+    !isVisitDate(date) ||
+    (demoDestinationId !== undefined && !isDemoDestinationId(demoDestinationId))
   )
     return state;
   return {
@@ -285,6 +290,7 @@ export function collect(
         visitDate: date,
         memory: memory?.slice(0, 500),
         provenance: "confirmed-demo",
+        ...(demoDestinationId === undefined ? {} : { demoDestinationId }),
       },
     },
   };
@@ -312,7 +318,7 @@ export type Safety = {
 export const canInteract = (s: Safety) =>
   s.state === "parked" || (s.state === "unknown" && s.preview);
 export interface Destination {
-  id: "nearby" | "weekend" | "chicago";
+  id: DemoDestinationId;
   kind: string;
   name: string;
   location: string;

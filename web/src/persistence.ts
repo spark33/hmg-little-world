@@ -4,11 +4,23 @@ export const RECOVERY_KEY = "little-world:recovery:v1";
 export const PRESERVED_KEY = "little-world:preserved:v1";
 export const MAX_BACKUP_BYTES = 64 * 1024;
 export const MAX_MEMORY_LENGTH = 500;
+/** IDs describe only the three illustrative destination choices, never a verified POI. */
+export const DEMO_DESTINATION_IDS = ["nearby", "weekend", "chicago"] as const;
+export type DemoDestinationId = (typeof DEMO_DESTINATION_IDS)[number];
+export function isDemoDestinationId(
+  value: unknown,
+): value is DemoDestinationId {
+  return (
+    typeof value === "string" && DEMO_DESTINATION_IDS.some((id) => id === value)
+  );
+}
 
 export interface MemoryRecord {
   visitDate: string;
   memory?: string;
   provenance: "illustration" | "confirmed-demo";
+  /** Optional for older saves; paired with the keepsake ID to label a demo choice. */
+  demoDestinationId?: DemoDestinationId;
 }
 export interface WorldState {
   version: 2;
@@ -98,7 +110,7 @@ function parseValue(value: unknown, config: PersistenceConfig): ParsedWorld {
         record,
         legacy
           ? ["visitDate", "memory"]
-          : ["visitDate", "memory", "provenance"],
+          : ["visitDate", "memory", "provenance", "demoDestinationId"],
       ) ||
       !isVisitDate(record.visitDate)
     )
@@ -118,10 +130,19 @@ function parseValue(value: unknown, config: PersistenceConfig): ParsedWorld {
         : "confirmed-demo";
     if (!legacy && record.provenance !== provenance)
       return invalid("A memory has invalid provenance.");
+    if (
+      record.demoDestinationId !== undefined &&
+      (provenance !== "confirmed-demo" ||
+        !isDemoDestinationId(record.demoDestinationId))
+    )
+      return invalid("A memory has an invalid demo destination choice.");
     collected[id] = {
       visitDate: record.visitDate,
       ...(record.memory === undefined ? {} : { memory: record.memory }),
       provenance,
+      ...(record.demoDestinationId === undefined
+        ? {}
+        : { demoDestinationId: record.demoDestinationId }),
     };
   }
   return {

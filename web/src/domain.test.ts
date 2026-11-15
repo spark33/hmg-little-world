@@ -15,6 +15,7 @@ import {
   recommend,
   saveWorld,
   STORAGE_KEY,
+  type DemoDestinationId,
 } from "./domain";
 import { parseReply, parseSafety } from "./bridge";
 const storage = () => {
@@ -27,6 +28,66 @@ const storage = () => {
   };
 };
 describe("persistent world", () => {
+  it("remembers the chosen illustrative destination with a confirmed keepsake", () => {
+    const s = storage();
+    const w = collect(
+      initialState(),
+      "mangwon",
+      "2026-11-15",
+      "Our demo picnic",
+      "weekend",
+    );
+    expect(w.collected.mangwon).toMatchObject({
+      provenance: "confirmed-demo",
+      demoDestinationId: "weekend",
+    });
+    expect(saveWorld(s, w)).toBe(true);
+    expect(loadWorld(s).collected.mangwon.demoDestinationId).toBe("weekend");
+    expect(
+      updateMemory(w, "mangwon", "An edited note").collected.mangwon
+        .demoDestinationId,
+    ).toBe("weekend");
+  });
+  it("never rewrites the first choice when replaying a collected adventure", () => {
+    const w = collect(
+      initialState(),
+      "mangwon",
+      "2026-11-15",
+      "First note",
+      "nearby",
+    );
+    expect(collect(w, "mangwon", "2026-11-16", "Second note", "weekend")).toBe(
+      w,
+    );
+    expect(w.collected.mangwon.demoDestinationId).toBe("nearby");
+  });
+  it("accepts older collection callers without a choice and rejects untrusted choices", () => {
+    const original = initialState();
+    const older = collect(original, "mangwon", "2026-11-15");
+    expect(older.collected.mangwon).not.toHaveProperty("demoDestinationId");
+    expect(collect(older, "mangwon", "2026-11-16", "Replay", "nearby")).toBe(
+      older,
+    );
+    for (const choice of [
+      null,
+      1,
+      {},
+      ["nearby"],
+      "",
+      "actual-poi",
+      "https://example.com/place",
+    ]) {
+      expect(
+        collect(
+          original,
+          "mangwon",
+          "2026-11-15",
+          undefined,
+          choice as DemoDestinationId,
+        ),
+      ).toBe(original);
+    }
+  });
   it("checks real calendar dates including leap years", () => {
     expect(isVisitDate("2024-02-29")).toBe(true);
     for (const date of [

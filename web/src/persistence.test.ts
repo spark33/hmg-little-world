@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   clearRecoveryData,
+  DEMO_DESTINATION_IDS,
   exportBackup,
   isVisitDate,
   MAX_BACKUP_BYTES,
@@ -66,6 +67,82 @@ function memoryStorage() {
 }
 
 describe("versioned world persistence", () => {
+  it("preserves every bounded demo choice through save, export/import and recovery", () => {
+    for (const choice of DEMO_DESTINATION_IDS) {
+      const storage = memoryStorage();
+      const world = fullState();
+      world.collected.chicago.demoDestinationId = choice;
+      expect(saveWorld(storage, world, config)).toBe(true);
+      expect(
+        readWorld(storage, config).state.collected.chicago.demoDestinationId,
+      ).toBe(choice);
+      expect(parseBackup(exportBackup(world, config), config)).toMatchObject({
+        status: "ready",
+        state: world,
+      });
+      const edited = {
+        ...world,
+        collected: {
+          ...world.collected,
+          chicago: { ...world.collected.chicago, memory: "Edited later" },
+        },
+      };
+      expect(saveWorld(storage, edited, config)).toBe(true);
+      expect(readRecovery(storage, config)?.collected.chicago).toEqual(
+        world.collected.chicago,
+      );
+      expect(
+        readRecovery(storage, config)?.collected.chicago.demoDestinationId,
+      ).toBe(choice);
+    }
+  });
+  it("keeps old v2 saves and migrated v1 records valid without inventing a choice", () => {
+    for (const text of [
+      JSON.stringify(fullState()),
+      '{"version":1,"collected":{"chicago":{"visitDate":"2026-11-15","memory":"Original legacy note"}}}',
+    ]) {
+      const parsed = parseWorld(text, config);
+      expect(parsed.status).toBe("ready");
+      if (parsed.status !== "ready") throw Error("Old save rejected");
+      expect(parsed.state.collected.chicago).not.toHaveProperty(
+        "demoDestinationId",
+      );
+    }
+  });
+  it("rejects invalid demo destinations and choices attached to illustrations without rewriting storage", () => {
+    for (const choice of [
+      null,
+      0,
+      false,
+      {},
+      ["nearby"],
+      "",
+      "verified-poi",
+      "https://example.com/place",
+    ]) {
+      const world = fullState();
+      const raw = JSON.stringify({
+        ...world,
+        collected: {
+          ...world.collected,
+          chicago: { ...world.collected.chicago, demoDestinationId: choice },
+        },
+      });
+      expect(parseWorld(raw, config).status).toBe("corrupt");
+      expect(parseBackup(raw, config).status).toBe("corrupt");
+      const storage = memoryStorage();
+      storage.values.set(STORAGE_KEY, raw);
+      expect(saveWorld(storage, world, config)).toBe(false);
+      expect(storage.getItem(STORAGE_KEY)).toBe(raw);
+      expect(storage.writes).toEqual([]);
+    }
+    const illustration = initialState();
+    illustration.collected.detroit.demoDestinationId = "nearby";
+    expect(parseWorld(JSON.stringify(illustration), config).status).toBe(
+      "corrupt",
+    );
+    expect(saveWorld(memoryStorage(), illustration, config)).toBe(false);
+  });
   it("migrates a complete v1 world without writing and preserves edited seed text", () => {
     const storage = memoryStorage();
     const collected = Object.fromEntries(
