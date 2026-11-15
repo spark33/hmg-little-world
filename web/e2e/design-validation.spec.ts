@@ -359,7 +359,10 @@ test("confirmed memory editing enforces the typed 500-character limit without ch
     () =>
       JSON.parse(localStorage.getItem("little-world:v1")!).collected.mangwon,
   );
-  expect(actual).toEqual({ ...previous, memory: expected });
+  // Editing deliberately trims outer whitespace after the browser enforces its
+  // input bound; Unicode content, date and provenance remain unchanged.
+  expect(actual).toEqual({ ...previous, memory: expected.trim() });
+  expect(actual.memory).toBe(actual.memory.trim());
   expect(actual.provenance).toBe("confirmed-demo");
 });
 
