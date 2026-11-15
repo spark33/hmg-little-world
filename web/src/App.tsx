@@ -21,12 +21,26 @@ import {
   X,
 } from "lucide-react";
 import World, { ShopPreview } from "./World";
+import { KeepsakeIcon } from "./KeepsakeIcon";
+import { NavigationPanel } from "./NavigationPanel";
+import BackupPanel from "./BackupPanel";
 import {
   canInteract,
   catalog,
+  allExperiences,
+  legacyCatalog,
+  persistenceConfig,
   collect,
+  categories,
+  collectibleIds,
+  destinationsFor,
+  experienceDetails,
+  nextExperience,
+  updateMemory,
+  type CategoryFilter,
   destinations,
   initialState,
+  localVisitDate,
   readWorld,
   recommend,
   saveWorld,
@@ -46,6 +60,7 @@ const storage = {
   getItem: (key: string) => window.localStorage.getItem(key),
   setItem: (key: string, value: string) =>
     window.localStorage.setItem(key, value),
+  removeItem: (key: string) => window.localStorage.removeItem(key),
 };
 type Panel =
   | "memory"
@@ -55,6 +70,7 @@ type Panel =
   | "arrival"
   | "album"
   | "settings"
+  | "browse"
   | null;
 class RenderBoundary extends Component<
   { children: ReactNode },
@@ -83,6 +99,10 @@ class RenderBoundary extends Component<
 export default function App() {
   const [loaded] = useState(() => readWorld(storage));
   const [world, setWorld] = useState(loaded.state);
+  const [unresolvedRead, setUnresolvedRead] = useState(
+    loaded.status === "unavailable",
+  );
+  const [saveConflict, setSaveConflict] = useState<typeof world | null>(null);
   const [protectedSave, setProtectedSave] = useState(
     loaded.status === "corrupt" || loaded.status === "unsupported",
   );
@@ -97,6 +117,12 @@ export default function App() {
   const { night, muted, reducedMotion } = preferences;
   const [preferencesSaved, setPreferencesSaved] = useState(true);
   const [zoom, setZoom] = useState(0);
+  const [adventureId, setAdventureId] = useState("mangwon");
+  const [category, setCategory] = useState<CategoryFilter>("All keepsakes");
+  const [editingMemory, setEditingMemory] = useState(false);
+  const [memoryDraft, setMemoryDraft] = useState("");
+  const [collectingId, setCollectingId] = useState<string | null>(null);
+  const [lastCollectedId, setLastCollectedId] = useState<string | null>(null);
   const [destination, setDestination] = useState<Destination>(destinations[0]);
   const [navigationStatus, setNavigationStatus] = useState(""),
     [pending, setPending] = useState(false);
@@ -114,12 +140,27 @@ export default function App() {
   const permitted = canInteract(safety) && active;
   const timers = useRef<number[]>([]);
   const navigationRequest = useRef<AbortController | null>(null);
+  const soundMuted = useRef(muted);
   const panelElement = useRef<HTMLElement | null>(null);
   const panelOpener = useRef<HTMLElement | null>(null);
   const wasPanelOpen = useRef(false);
-  const chicago = Boolean(world.collected.chicago);
-  const experience = catalog.find((x) => x.id === selected) ?? catalog[0];
-  const count = Object.keys(world.collected).length;
+  const mangwon = Boolean(world.collected.mangwon);
+  const experience =
+    allExperiences.find((x) => x.id === selected) ?? catalog[0];
+  const adventure = catalog.find((x) => x.id === adventureId) ?? catalog[4];
+  const details = experienceDetails[adventure.asset];
+  const revisiting = Boolean(world.collected[adventure.id]);
+  const choices = destinationsFor(adventure.id);
+  const confirmedCount = collectibleIds.filter(
+    (id) => world.collected[id],
+  ).length;
+  const complete = confirmedCount === collectibleIds.length;
+  const recommendation = recommend(experience.id, world);
+  const currentCollectedIds = catalog
+    .filter((item) => world.collected[item.id])
+    .map((item) => item.id);
+  const archived = legacyCatalog.filter((item) => world.collected[item.id]);
+  const count = currentCollectedIds.length;
   useEffect(() => {
     if (loaded.status === "empty") setSaved(saveWorld(storage, loaded.state));
   }, [loaded]);
@@ -149,6 +190,9 @@ export default function App() {
     if (!permitted) {
       timers.current.forEach(clearTimeout);
       setCollecting(false);
+      setCollectingId(null);
+      setEditingMemory(false);
+      setSaveConflict(null);
       setPanel(null);
       setToast("");
       setPending(false);
@@ -165,6 +209,7 @@ export default function App() {
   }, [panel, permitted]);
   useEffect(() => {
     if (panel && permitted) {
+      setToast("");
       if (!wasPanelOpen.current)
         panelOpener.current = document.activeElement as HTMLElement;
       panelElement.current?.focus({ preventScroll: true });
@@ -175,6 +220,7 @@ export default function App() {
       wasPanelOpen.current = false;
     }
     if (panel !== "settings") setConfirmReset(false);
+    if (panel !== "memory") setEditingMemory(false);
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape" && panel) {
         navigationRequest.current?.abort();
@@ -197,26 +243,61 @@ export default function App() {
       setSelected(null);
       return;
     }
+    if (id === "plot" || id.startsWith("plot:")) {
+      openExperience(id === "plot" ? "mangwon" : id.slice(5));
+      return;
+    }
+    if (!allExperiences.some((x) => x.id === id)) return;
+    if (!world.collected[id]) {
+      openExperience(id);
+      return;
+    }
     setSelected(id);
-    setPanel(id === "plot" ? "discover" : "memory");
+    setEditingMemory(false);
+    setPanel("memory");
     if (!muted) unlockSound();
   }
-  function openDiscover() {
-    setSelected("plot");
+  function openExperience(id: string, revisit = false) {
+    if (!permitted || collecting) return;
+    const target = catalog.find((x) => x.id === id && x.status === "available");
+    if (!target || (world.collected[id] && !revisit)) {
+      setPanel("browse");
+      return;
+    }
+    setAdventureId(id);
+    setSelected(`plot:${id}`);
+    setDestination(destinationsFor(id)[0]);
+    setNavigationStatus("");
     setPanel("discover");
   }
-  function add() {
-    if (!permitted || chicago || collecting || panel !== "arrival") return;
-    if (!muted) unlockSound();
-    const next = collect(
-      world,
-      "chicago",
-      new Date().toISOString().slice(0, 10),
-      "A new chapter in our great pizza debate.",
-    );
-    // Save in the confirmation handler, before any reveal or lifecycle interruption.
-    setSaved(!protectedSave && saveWorld(storage, next));
+  function openDiscover() {
+    const next = nextExperience(world);
+    if (next) openExperience(next.id);
+    else setPanel("browse");
+  }
+  function commitWorld(next: typeof world) {
+    setSaved(!protectedSave && !unresolvedRead && saveWorld(storage, next));
     setWorld(next);
+  }
+  function editMemory() {
+    if (!permitted || !world.collected[experience.id]) return;
+    commitWorld(updateMemory(world, experience.id, memoryDraft));
+    setEditingMemory(false);
+    setToast("Your memory note is updated.");
+  }
+  function add() {
+    if (
+      !permitted ||
+      world.collected[adventure.id] ||
+      collecting ||
+      panel !== "arrival"
+    )
+      return;
+    if (!muted) unlockSound();
+    const next = collect(world, adventure.id, localVisitDate(), details.memory);
+    // Save in the confirmation handler, before any reveal or lifecycle interruption.
+    commitWorld(next);
+    setLastCollectedId(adventure.id);
     setPanel(null);
     setSelected(null);
     if (reducedMotion) {
@@ -225,31 +306,94 @@ export default function App() {
     }
     setStart(performance.now());
     setCollecting(true);
+    setCollectingId(adventure.id);
     timers.current.push(
       window.setTimeout(() => {
-        if (!muted) flourish();
+        if (!soundMuted.current) flourish();
       }, 3600),
       window.setTimeout(() => {
         setCollecting(false);
+        setCollectingId(null);
         setToast("Your little world just got bigger!");
       }, 7000),
     );
   }
+  function retrySave() {
+    // A failed initial read must not turn a later successful write into data loss.
+    const current = readWorld(storage);
+    if (current.status === "unavailable") {
+      setSaved(false);
+      return;
+    }
+    if (current.status === "corrupt" || current.status === "unsupported") {
+      setProtectedSave(true);
+      setUnresolvedRead(false);
+      setSaved(false);
+      setPanel("settings");
+      return;
+    }
+    if (unresolvedRead && current.status === "ready") {
+      setSaveConflict(current.state);
+      setPanel("settings");
+      return;
+    }
+    setUnresolvedRead(false);
+    setSaved(saveWorld(storage, world));
+  }
+  function replaceSavedWithSession() {
+    if (!permitted || !saveConflict) return;
+    const success = saveWorld(storage, world);
+    setSaved(success);
+    if (success) {
+      setUnresolvedRead(false);
+      setSaveConflict(null);
+    }
+  }
+  function restoreWorld(next: typeof world) {
+    navigationRequest.current?.abort();
+    navigationRequest.current = null;
+    timers.current.forEach(clearTimeout);
+    setWorld(next);
+    setSaved(true);
+    setUnresolvedRead(false);
+    setSaveConflict(null);
+    setProtectedSave(false);
+    setPending(false);
+    setSelected(null);
+    setCollecting(false);
+    setCollectingId(null);
+    setLastCollectedId(null);
+    setConfirmReset(false);
+    setResetToken((token) => token + 1);
+    setPanel(null);
+    setToast("Your world has been restored.");
+  }
   function updatePreferences(patch: Partial<Preferences>) {
     const next = { ...preferences, ...patch };
     setPreferencesSaved(savePreferences(storage, next));
+    soundMuted.current = next.muted;
     setPreferences(next);
+    if (next.reducedMotion && collecting) {
+      timers.current.forEach(clearTimeout);
+      setCollecting(false);
+      setCollectingId(null);
+      setToast("Your little world just got bigger!");
+    }
   }
   function reset() {
     timers.current.forEach(clearTimeout);
     const next = initialState();
-    setSaved(saveWorld(storage, next));
+    setSaved(saveWorld(storage, next, { replaceProtected: true }));
     setProtectedSave(false);
     setConfirmReset(false);
     setWorld(next);
     setPanel(null);
     setSelected(null);
     setCollecting(false);
+    setCollectingId(null);
+    setLastCollectedId(null);
+    setAdventureId("mangwon");
+    setCategory("All keepsakes");
     setToast("A fresh little beginning.");
     setResetToken((x) => x + 1);
     setDestination(destinations[0]);
@@ -299,15 +443,20 @@ export default function App() {
       <div className="world" aria-label="Interactive miniature world">
         <RenderBoundary>
           <World
-            collected={chicago}
+            collected={mangwon}
             collecting={collecting}
             start={start}
             night={night}
-            selected={selected}
+            selected={
+              selected && !legacyCatalog.some((item) => item.id === selected)
+                ? selected
+                : null
+            }
             onSelect={select}
             resetToken={resetToken}
             zoom={zoom}
             reducedMotion={reducedMotion}
+            {...{ collectedIds: currentCollectedIds, collectingId }}
           />
         </RenderBoundary>
       </div>
@@ -354,7 +503,7 @@ export default function App() {
         </nav>
       </header>
       <section className="greeting">
-        <h1>What shall we add to our little world today?</h1>
+        <h1>What shall we add to our Seoul world today?</h1>
       </section>
       <div className="world-controls">
         <button
@@ -389,8 +538,12 @@ export default function App() {
             <Leaf size={20} />
           </span>
           <span>
-            Our little corner of the world
-            <small>{count} memories made. So many more to come.</small>
+            Our little corner of Seoul
+            <small>
+              {complete
+                ? `${count} memories made. Your demo collection is complete.`
+                : `${count} memories made. So many more to come.`}
+            </small>
           </span>
           <span className="saved">
             <Check size={13} />
@@ -404,7 +557,8 @@ export default function App() {
           onClick={openDiscover}
           disabled={collecting}
         >
-          <Compass size={20} /> Find a little adventure{" "}
+          <Compass size={20} />{" "}
+          {complete ? "Explore all keepsakes" : "Find a little adventure"}{" "}
           <ArrowUpRight size={18} />
         </button>
       </footer>
@@ -413,12 +567,14 @@ export default function App() {
           <span>
             {protectedSave
               ? "Existing save needs attention. It has been preserved; changes are session only."
-              : "Changes are session only. Saving on this device is unavailable."}
+              : unresolvedRead
+                ? "Saved world could not be read. It is preserved; changes are session only."
+                : "Changes are session only. Saving on this device is unavailable."}
           </span>
           <button
             onClick={() => {
               if (protectedSave) setPanel("settings");
-              else setSaved(saveWorld(storage, world));
+              else retrySave();
             }}
           >
             {protectedSave ? "Review save" : "Retry save"}
@@ -461,16 +617,8 @@ export default function App() {
           {panel === "memory" && (
             <>
               <div className="memory-illustration">
-                <span>
-                  {experience.asset === "detroit"
-                    ? "🍕"
-                    : experience.asset === "lighthouse"
-                      ? "⚓"
-                      : experience.asset === "cherry"
-                        ? "❀"
-                        : experience.asset === "chicago"
-                          ? "🍕"
-                          : "☕"}
+                <span aria-hidden="true">
+                  <KeepsakeIcon asset={experience.asset} />
                 </span>
                 <div className="postmark">
                   A MOMENT
@@ -479,7 +627,12 @@ export default function App() {
                   <Heart size={13} />
                 </div>
               </div>
-              <div className="eyebrow">{experience.category} · DEMO MEMORY</div>
+              <div className="eyebrow">
+                {experience.category} ·{" "}
+                {world.collected[experience.id]?.provenance === "illustration"
+                  ? "ILLUSTRATIVE MEMORY"
+                  : "CONFIRMED DEMO KEEPSAKE"}
+              </div>
               <h2>{experience.displayName}</h2>
               <p className="memory-quote">
                 “{world.collected[experience.id]?.memory ?? experience.memory}”
@@ -496,32 +649,92 @@ export default function App() {
                 <dd>
                   {world.collected[experience.id]?.visitDate ??
                     experience.visitDate}{" "}
-                  · sample memory
+                  ·{" "}
+                  {world.collected[experience.id]?.provenance === "illustration"
+                    ? "illustrative date"
+                    : "demo confirmation date"}
                 </dd>
               </dl>
-              {recommend(experience.id, world) && (
-                <div className="next-note">
-                  <Sparkles size={18} />
-                  <p>
-                    {experience.id === "detroit"
-                      ? "You’ve tried Detroit-style pizza. Ready to settle the great pizza debate?"
-                      : `Your world is dreaming of ${recommend(experience.id, world)!.displayName.toLowerCase()}.`}
+              {editingMemory ? (
+                <div className="memory-editor">
+                  <label htmlFor="memory-note">Memory note</label>
+                  <textarea
+                    id="memory-note"
+                    maxLength={500}
+                    value={memoryDraft}
+                    onChange={(event) => setMemoryDraft(event.target.value)}
+                    rows={4}
+                  />
+                  <p className="fine-print">
+                    {memoryDraft.length}/500 characters maximum
                   </p>
+                  <button className="primary" onClick={editMemory}>
+                    Save memory
+                    <Check size={18} />
+                  </button>
+                  <button
+                    className="secondary"
+                    onClick={() => setEditingMemory(false)}
+                  >
+                    Cancel editing
+                  </button>
                 </div>
-              )}
-              {experience.id === "detroit" && !chicago ? (
-                <button className="primary" onClick={openDiscover}>
-                  Meet your next keepsake
-                  <ArrowRight size={18} />
-                </button>
               ) : (
-                <button className="primary" onClick={() => setPanel("album")}>
-                  Explore your collection
+                <button
+                  className="secondary"
+                  onClick={() => {
+                    setMemoryDraft(
+                      world.collected[experience.id]?.memory ??
+                        experience.memory ??
+                        "",
+                    );
+                    setEditingMemory(true);
+                  }}
+                >
+                  Edit memory note
+                </button>
+              )}
+              {recommendation && !editingMemory && (
+                <>
+                  <div className="next-note">
+                    <Sparkles size={18} />
+                    <p>
+                      {experience.id === "gwangjang"
+                        ? "You’ve explored Gwangjang flavors. Shall we imagine a Mangwon Market picnic next?"
+                        : `Your world is dreaming of ${recommendation.displayName.toLowerCase()}.`}
+                    </p>
+                  </div>
+                  <button
+                    className="primary"
+                    onClick={() => openExperience(recommendation.id)}
+                  >
+                    {experience.id === "gwangjang"
+                      ? "Meet your next keepsake"
+                      : `Discover ${recommendation.displayName}`}
+                    <ArrowRight size={18} />
+                  </button>
+                </>
+              )}
+              {!recommendation && !editingMemory && (
+                <button className="primary" onClick={() => setPanel("browse")}>
+                  Explore all keepsakes
                   <ArrowRight size={18} />
                 </button>
               )}
+              {!editingMemory &&
+                experience.status === "available" &&
+                !legacyCatalog.some((item) => item.id === experience.id) && (
+                  <button
+                    className="secondary"
+                    onClick={() => openExperience(experience.id, true)}
+                  >
+                    Revisit demo adventure
+                  </button>
+                )}
               <p className="fine-print">
-                Illustrative demo data. A memory, never a score.
+                {legacyCatalog.some((item) => item.id === experience.id)
+                  ? "Archived from an earlier demo world. Original location and date are preserved; this is not a Seoul visit."
+                  : "Illustrative Seoul demo data. A memory, never a score."}
               </p>
             </>
           )}
@@ -529,69 +742,153 @@ export default function App() {
             <>
               <div className="eyebrow">A SPACE FOR SOMETHING WONDERFUL</div>
               <h2>
-                {chicago ? "Where to next?" : "A bigger slice of adventure."}
+                {adventure.id === "mangwon"
+                  ? "A little taste of Seoul."
+                  : adventure.displayName}
               </h2>
-              {!chicago ? (
-                <>
-                  <div className="shop-preview">
-                    <RenderBoundary>
-                      <ShopPreview />
-                    </RenderBoundary>
-                    <span className="preview-caption">YOUR NEXT KEEPSAKE</span>
-                  </div>
-                  <div className="keepsake-title">
-                    <h3>Chicago deep-dish pizza</h3>
-                    <span>Regional foods</span>
-                  </div>
-                  <p>
-                    A golden crust. A wonderfully deep filling. A new little
-                    gathering place for your world.
-                  </p>
-                  <div className="next-note">
-                    <Heart size={18} />
-                    <p>
-                      You’ve tried Detroit-style pizza. Ready to settle the
-                      great pizza debate?
-                    </p>
-                  </div>
-                  <button
-                    className="primary"
-                    onClick={() => setPanel("destinations")}
-                  >
-                    Find deep-dish pizza
-                    <ArrowRight size={18} />
-                  </button>
-                </>
-              ) : (
-                <>
-                  <div className="future-stamp">
-                    NY<span>A slice of possibility</span>
-                  </div>
-                  <h3>New York-style pizza</h3>
-                  <p>
-                    The next chapter in your pizza story. This catalog preview
-                    is waiting for a future adventure.
-                  </p>
-                  <button className="primary" onClick={() => setPanel("album")}>
-                    See your keepsakes
-                    <ArrowRight size={18} />
-                  </button>
-                </>
-              )}
+              <div className="shop-preview">
+                <RenderBoundary>
+                  <ShopPreview {...{ asset: adventure.asset }} />
+                </RenderBoundary>
+                <span className="preview-caption">
+                  {revisiting ? "A MEMORY TO REVISIT" : "YOUR NEXT KEEPSAKE"}
+                </span>
+              </div>
+              <div className="keepsake-title">
+                <h3>{adventure.displayName}</h3>
+                <span>{adventure.category}</span>
+              </div>
+              <p>{details.description}</p>
+              <div className="next-note">
+                <Heart size={18} />
+                <p>
+                  {adventure.id === "mangwon"
+                    ? "You’ve explored Gwangjang flavors. Shall we imagine a Mangwon Market picnic next?"
+                    : "A new place in your world, only after you confirm the memory."}
+                </p>
+              </div>
+              <button
+                className="primary"
+                onClick={() => setPanel("destinations")}
+              >
+                {details.findLabel}
+                <ArrowRight size={18} />
+              </button>
+
+              <button className="secondary" onClick={() => setPanel("browse")}>
+                Browse all keepsakes
+              </button>
               <p className="fine-print">
-                No rush. Your next adventure will find its moment.
+                Illustrative demo experience. No real venue, visit or arrival is
+                verified.
+              </p>
+            </>
+          )}
+          {panel === "browse" && (
+            <>
+              <div className="eyebrow">A LITTLE WORLD OF POSSIBILITIES</div>
+              <h2>
+                {complete
+                  ? "Every little chapter, together."
+                  : "Find your next keepsake."}
+              </h2>
+              <div className="collection-progress-summary">
+                <p>
+                  {confirmedCount} of {collectibleIds.length} demo keepsakes
+                  confirmed · 4 illustrative memories
+                </p>
+                <progress
+                  value={confirmedCount}
+                  max={collectibleIds.length}
+                  aria-label="Confirmed demo keepsakes"
+                />
+              </div>
+              {complete && (
+                <div className="completion-card" role="status">
+                  <Sparkles size={24} />
+                  <h3>Your demo collection is complete.</h3>
+                  <p>
+                    All four new keepsakes have a home. Revisit their stories,
+                    edit your notes, or explore a different view of your island.
+                  </p>
+                </div>
+              )}
+              <div
+                className="catalog-filters"
+                role="group"
+                aria-label="Keepsake categories"
+              >
+                {categories.map((item) => (
+                  <button
+                    key={item}
+                    aria-pressed={category === item}
+                    onClick={() => setCategory(item)}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+              <div className="keepsake-grid">
+                {catalog
+                  .filter(
+                    (item) =>
+                      category === "All keepsakes" ||
+                      item.category === category,
+                  )
+                  .map((item) => {
+                    const record = world.collected[item.id];
+                    return (
+                      <button
+                        key={item.id}
+                        className="keepsake-card"
+                        onClick={() =>
+                          record ? select(item.id) : openExperience(item.id)
+                        }
+                      >
+                        <span
+                          className={`album-icon asset-${item.asset}`}
+                          aria-hidden="true"
+                        >
+                          <KeepsakeIcon asset={item.asset} />
+                        </span>
+                        <span>
+                          <strong>{item.displayName}</strong>
+                          <small>{item.category}</small>
+                          <span className="keepsake-state">
+                            {record
+                              ? record.provenance === "illustration"
+                                ? "Illustrative memory"
+                                : "Collected demo keepsake"
+                              : "Available demo keepsake"}
+                          </span>
+                        </span>
+                        <ArrowUpRight size={18} />
+                      </button>
+                    );
+                  })}
+              </div>
+              <p className="fine-print">
+                Four reserved plots grow through your confirmed demo
+                experiences. Time and driving do not unlock or add keepsakes.
               </p>
             </>
           )}
           {panel === "destinations" && (
             <>
-              <div className="eyebrow">FOLLOW YOUR APPETITE</div>
+              <div className="eyebrow">
+                {adventure.category === "Regional foods"
+                  ? "FOLLOW YOUR APPETITE"
+                  : "FOLLOW YOUR CURIOSITY"}
+              </div>
               <h2>
                 How far does
                 <br />
                 curiosity take you?
               </h2>
-              <p>Three little possibilities for your next big bite.</p>
+              <p>
+                Three illustrative possibilities for{" "}
+                {adventure.displayName.toLowerCase()}.
+              </p>
               <div className="demo-notice">
                 DEMO DESTINATIONS · SAMPLE DISTANCES
                 <br />
@@ -600,7 +897,7 @@ export default function App() {
                 </span>
               </div>
               <div className="destinations">
-                {destinations.map((d, i) => (
+                {choices.map((d, i) => (
                   <button
                     key={d.id}
                     className={`destination ${destination.id === d.id ? "chosen" : ""}`}
@@ -657,34 +954,62 @@ export default function App() {
           {panel === "arrival" && (
             <>
               <div className="arrival-art">
-                🍕
+                <KeepsakeIcon asset={adventure.asset} />
                 <span>
                   <Check size={22} />
                 </span>
               </div>
               <div className="eyebrow">SIMULATED ARRIVAL</div>
               <h2>
-                One delicious
-                <br />
-                new memory?
+                {revisiting ? (
+                  "A familiar little chapter."
+                ) : adventure.category === "Regional foods" ? (
+                  <>
+                    One delicious
+                    <br />
+                    new memory?
+                  </>
+                ) : (
+                  <>
+                    One wonderful
+                    <br />
+                    new memory?
+                  </>
+                )}
               </h2>
-              <p className="arrival-question">
-                Did you try Chicago deep-dish pizza?
-              </p>
+              <p className="arrival-question">{details.question}</p>
               <p>A keepsake belongs in your world only when you say it does.</p>
-              <button className="primary" onClick={add}>
-                Add to my world
-                <Plus size={19} />
-              </button>
-              <button
-                className="secondary"
-                onClick={() => {
-                  setPanel(null);
-                  setToast("No hurry. Your little plot will be waiting.");
-                }}
-              >
-                Not yet
-              </button>
+              {revisiting ? (
+                <>
+                  <p>
+                    This keepsake is already in your world. Replaying a demo
+                    never duplicates it or changes its original confirmation.
+                  </p>
+                  <button
+                    className="primary"
+                    onClick={() => select(adventure.id)}
+                  >
+                    Return to this memory
+                    <ArrowRight size={18} />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button className="primary" onClick={add}>
+                    Add to my world
+                    <Plus size={19} />
+                  </button>
+                  <button
+                    className="secondary"
+                    onClick={() => {
+                      setPanel(null);
+                      setToast("No hurry. Your little plot will be waiting.");
+                    }}
+                  >
+                    Not yet
+                  </button>
+                </>
+              )}
               <p className="fine-print">
                 This confirmation records an illustrative demo experience.
               </p>
@@ -698,23 +1023,66 @@ export default function App() {
                 <br />
                 little memories.
               </h2>
-              <p>Every keepsake has a story. Here are yours.</p>
+              <p>Every Seoul keepsake has a story. Here are yours.</p>
               <div className="album">
                 {catalog
                   .filter((x) => world.collected[x.id])
-                  .map((x, i) => (
+                  .map((x) => (
                     <button key={x.id} onClick={() => select(x.id)}>
                       <span className={`album-icon asset-${x.asset}`}>
-                        {["🍕", "⚓", "❀", "☕", "🍕"][i]}
+                        <KeepsakeIcon asset={x.asset} />
                       </span>
                       <span>
                         <strong>{x.displayName}</strong>
-                        <small>{world.collected[x.id].visitDate} · demo</small>
+                        <small>
+                          {world.collected[x.id].visitDate} ·{" "}
+                          {world.collected[x.id].provenance === "illustration"
+                            ? "illustration"
+                            : "confirmed demo"}
+                        </small>
                       </span>
                       <ArrowUpRight size={18} />
                     </button>
                   ))}
               </div>
+              {archived.length > 0 && (
+                <section
+                  className="legacy-collection"
+                  aria-label="Earlier demo memories"
+                >
+                  <h3>Earlier demo memories</h3>
+                  <p>
+                    {archived.length} archived memories keep their original
+                    names, dates, and places. They do not count as Seoul visits.
+                  </p>
+                  <div className="album">
+                    {archived.map((item) => (
+                      <button key={item.id} onClick={() => select(item.id)}>
+                        <span
+                          className={`album-icon asset-${item.asset}`}
+                          aria-hidden="true"
+                        >
+                          <KeepsakeIcon asset={item.asset} />
+                        </span>
+                        <span>
+                          <strong>{item.displayName}</strong>
+                          <small>
+                            {world.collected[item.id].visitDate} ·{" "}
+                            {world.collected[item.id].provenance ===
+                            "illustration"
+                              ? "earlier illustration"
+                              : "earlier confirmed demo"}
+                          </small>
+                        </span>
+                        <ArrowUpRight size={18} />
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              )}
+              <button className="secondary" onClick={() => setPanel("browse")}>
+                Browse all keepsakes
+              </button>
               <p className="fine-print">
                 Saved locally on this device. No account needed.
               </p>
@@ -772,10 +1140,7 @@ export default function App() {
                   session.
                 </p>
               )}
-              <div className="settings-row">
-                <span>Navigation</span>
-                <span>Demo adapter</span>
-              </div>
+              <NavigationPanel permitted={permitted} />
               <div className="settings-row">
                 <span>Cabin lighting</span>
                 <span>Unavailable</span>
@@ -788,6 +1153,44 @@ export default function App() {
                 <span>Local save</span>
                 <span>{saved ? "Available" : "Unavailable"}</span>
               </div>
+              {saveConflict && (
+                <div
+                  className="reset-confirmation"
+                  role="group"
+                  aria-label="Choose saved world"
+                >
+                  <h3>A saved world was found.</h3>
+                  <p>
+                    Your existing save has not been changed. Restore it, or
+                    deliberately replace it with this session. Replacement keeps
+                    a recovery copy.
+                  </p>
+                  <button
+                    className="secondary"
+                    onClick={() => restoreWorld(saveConflict)}
+                  >
+                    Restore saved world
+                  </button>
+                  <button
+                    className="secondary"
+                    onClick={replaceSavedWithSession}
+                  >
+                    Replace with this session
+                  </button>
+                  <button
+                    className="secondary"
+                    onClick={() => setSaveConflict(null)}
+                  >
+                    Keep session without saving
+                  </button>
+                </div>
+              )}
+              <BackupPanel
+                world={world}
+                storage={storage}
+                config={persistenceConfig}
+                onRestore={restoreWorld}
+              />
               {confirmReset ? (
                 <div
                   className="reset-confirmation"
@@ -796,7 +1199,8 @@ export default function App() {
                 >
                   <p>
                     This replaces the saved world on this device. Your added
-                    memories will be removed.
+                    memories will be removed. A recovery copy is kept until you
+                    clear it in Backup and recovery.
                   </p>
                   <button
                     className="secondary"
@@ -840,8 +1244,8 @@ export default function App() {
           <span>
             {toast}
             <small>
-              {chicago
-                ? "Chicago deep-dish pizza · a memory to keep"
+              {lastCollectedId
+                ? `${catalog.find((item) => item.id === lastCollectedId)?.displayName} · a memory to keep`
                 : "The world is yours to wander."}
             </small>
           </span>

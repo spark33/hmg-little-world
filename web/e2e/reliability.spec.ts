@@ -12,7 +12,7 @@ for (const interruption of ["safety", "close", "background"] as const) {
     });
     await page.goto("/");
     await page.getByRole("button", { name: "Find a little adventure" }).click();
-    await page.getByRole("button", { name: "Find deep-dish pizza" }).click();
+    await page.getByRole("button", { name: "Find a Mangwon picnic" }).click();
     await page.getByRole("button", { name: "Let’s go", exact: true }).click();
     await expect(page.getByText("Checking navigation…")).toBeVisible();
     if (interruption === "close") {
@@ -59,14 +59,14 @@ for (const interruption of ["safety", "close", "background"] as const) {
     ).toHaveCount(0);
     // Cancellation releases the pending state so the flow can be used again.
     await page.getByRole("button", { name: "Find a little adventure" }).click();
-    await page.getByRole("button", { name: "Find deep-dish pizza" }).click();
+    await page.getByRole("button", { name: "Find a Mangwon picnic" }).click();
     await expect(
       page.getByRole("button", { name: "Let’s go", exact: true }),
     ).toBeEnabled();
   });
 }
 
-for (const raw of ["{", '{"version":2,"collected":{"future":{"value":42}}}']) {
+for (const raw of ["{", '{"version":3,"collected":{"future":{"value":42}}}']) {
   test(`preserves an unreadable save (${raw === "{" ? "corrupt" : "future version"}) until explicit reset`, async ({
     page,
   }) => {
@@ -96,7 +96,7 @@ for (const raw of ["{", '{"version":2,"collected":{"future":{"value":42}}}']) {
       await page.evaluate(
         () => JSON.parse(localStorage.getItem("little-world:v1")!).version,
       ),
-    ).toBe(1);
+    ).toBe(2);
   });
 }
 

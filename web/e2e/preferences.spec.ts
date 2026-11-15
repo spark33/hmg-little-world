@@ -33,7 +33,7 @@ test("system reduced motion skips reveal and saves a confirmed memory immediatel
   await page.goto("/");
   await expect(page.locator("main.app")).toHaveClass(/reduced-motion/);
   await page.getByRole("button", { name: "Find a little adventure" }).click();
-  await page.getByRole("button", { name: "Find deep-dish pizza" }).click();
+  await page.getByRole("button", { name: "Find a Mangwon picnic" }).click();
   await page.getByRole("button", { name: "Let’s go", exact: true }).click();
   await page.getByRole("button", { name: "Simulate journey" }).click();
   await page.getByRole("button", { name: "Add to my world" }).click();
@@ -46,7 +46,7 @@ test("system reduced motion skips reveal and saves a confirmed memory immediatel
   expect(
     await page.evaluate(
       () =>
-        JSON.parse(localStorage.getItem("little-world:v1")!).collected.chicago,
+        JSON.parse(localStorage.getItem("little-world:v1")!).collected.mangwon,
     ),
   ).toBeTruthy();
   await page.reload();

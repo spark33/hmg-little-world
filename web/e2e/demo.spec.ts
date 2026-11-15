@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 const evidence = process.env.EVIDENCE_DIR || "../artifacts";
-test("complete Detroit → Chicago flow, explicit consent, seven-second reveal, reload and reset", async ({
+test("complete Gwangjang → Mangwon flow, explicit consent, seven-second reveal, reload and reset", async ({
   page,
 }) => {
   const errors: string[] = [];
@@ -8,20 +8,22 @@ test("complete Detroit → Chicago flow, explicit consent, seven-second reveal, 
   await page.goto("/");
   await expect(page.locator("canvas")).toBeVisible();
   await page.getByRole("button", { name: /My collection/ }).click();
-  await page.getByRole("button", { name: /Detroit-style pizza/ }).click();
+  await page.getByRole("button", { name: /Gwangjang Market flavors/ }).click();
   await expect(
-    page.getByText("Our first Detroit-style pizza!", { exact: false }),
+    page.getByText("A market afternoon full of little discoveries.", {
+      exact: false,
+    }),
   ).toBeVisible();
-  await expect(page.getByText("Demo Detroit pizza restaurant")).toBeVisible();
+  await expect(
+    page.getByText("Illustrative Gwangjang Market memory"),
+  ).toBeVisible();
   await page.getByRole("button", { name: "Meet your next keepsake" }).click();
   await page.screenshot({ path: `${evidence}/recommendation.png` });
-  await page.getByRole("button", { name: "Find deep-dish pizza" }).click();
+  await page.getByRole("button", { name: "Find a Mangwon picnic" }).click();
   await expect(
     page.getByText("Illustrative venues. No live availability or route data."),
   ).toBeVisible();
-  await page
-    .getByRole("button", { name: /Iconic Chicago destination/ })
-    .click();
+  await page.getByRole("button", { name: /A Seoul day out/ }).click();
   await page.getByRole("button", { name: "Let’s go", exact: true }).click();
   await expect(
     page.getByText(
@@ -32,18 +34,18 @@ test("complete Detroit → Chicago flow, explicit consent, seven-second reveal, 
   expect(
     await page.evaluate(
       () =>
-        JSON.parse(localStorage.getItem("little-world:v1")!).collected.chicago,
+        JSON.parse(localStorage.getItem("little-world:v1")!).collected.mangwon,
     ),
   ).toBeUndefined();
   await page.getByRole("button", { name: "Not yet", exact: true }).click();
   expect(
     await page.evaluate(
       () =>
-        JSON.parse(localStorage.getItem("little-world:v1")!).collected.chicago,
+        JSON.parse(localStorage.getItem("little-world:v1")!).collected.mangwon,
     ),
   ).toBeUndefined();
   await page.getByRole("button", { name: "Find a little adventure" }).click();
-  await page.getByRole("button", { name: "Find deep-dish pizza" }).click();
+  await page.getByRole("button", { name: "Find a Mangwon picnic" }).click();
   await page.getByRole("button", { name: "Let’s go", exact: true }).click();
   await page.getByRole("button", { name: "Simulate journey" }).click();
   const start = Date.now();
@@ -99,7 +101,7 @@ test("driving and unknown vehicle state remove all interactive content", async (
 test("safety interruption cancels collection animation", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Find a little adventure" }).click();
-  await page.getByRole("button", { name: "Find deep-dish pizza" }).click();
+  await page.getByRole("button", { name: "Find a Mangwon picnic" }).click();
   await page.getByRole("button", { name: "Let’s go", exact: true }).click();
   await page.getByRole("button", { name: "Simulate journey" }).click();
   await page.getByRole("button", { name: "Add to my world" }).click();
@@ -161,7 +163,7 @@ test("automotive display sizes keep large touch targets and the primary action c
     await page.screenshot({ path: `${evidence}/vehicle-world-${width}.png` });
     await page.getByRole("button", { name: "Find a little adventure" }).tap();
     await expect(
-      page.getByRole("button", { name: "Find deep-dish pizza" }),
+      page.getByRole("button", { name: "Find a Mangwon picnic" }),
     ).toBeVisible();
     await expect
       .poll(async () => {
@@ -184,5 +186,7 @@ test("a building can be selected directly on the 3D canvas", async ({
   await page.goto("/");
   await page.waitForTimeout(2500);
   await page.mouse.click(538, 403);
-  await expect(page.getByText("Demo Detroit pizza restaurant")).toBeVisible();
+  await expect(
+    page.getByText("Illustrative Gwangjang Market memory"),
+  ).toBeVisible();
 });
