@@ -3,7 +3,7 @@ package ai.littleworld
 import org.json.JSONObject
 
 object BridgeValidation {
-    private val actions = setOf("capabilities", "navigate", "navigation-status", "navigation-retry", "navigation-cancel")
+    private val actions = setOf("capabilities", "navigate", "navigation-status", "navigation-retry", "navigation-cancel", "audio-request", "audio-release")
 
     fun parse(raw: String, verifiedIds: Set<String> = ProductionDestinations.ids): JSONObject? = try {
         require(raw.length <= 2048)
@@ -22,7 +22,8 @@ object BridgeValidation {
 
 class PleosBridge(
     private val vehicle: VehicleIntegration,
-    private val destinations: DestinationRegistry = ProductionDestinations
+    private val destinations: DestinationRegistry = ProductionDestinations,
+    private val audioFocus: AudioFocusIntegration? = null
 ) {
     fun reply(raw: String): String {
         val request = BridgeValidation.parse(raw, destinations.ids)
@@ -31,6 +32,15 @@ class PleosBridge(
         val provider = vehicle as? NavigationSessionProvider
         return try {
             when (request.getString("type")) {
+                "audio-request" -> {
+                    val granted = canInteract(vehicle.safety.value, BuildConfig.DEVELOPMENT_PREVIEW) &&
+                        (audioFocus?.requestAudioFocus() ?: false)
+                    return output.put("available", granted).put("audioFocus", granted).toString()
+                }
+                "audio-release" -> {
+                    audioFocus?.releaseAudioFocus()
+                    return output.put("available", true).put("audioFocus", false).toString()
+                }
                 "capabilities" -> output
                     .put("navigation", vehicle.navigationAvailable() && vehicle.safety.value == SafetyState.PARKED && destinations.ids.isNotEmpty())
                     .put("lighting", vehicle.lightingCapability().let { it.supported && it.authorized && it.canRestore })
@@ -62,6 +72,8 @@ class PleosBridge(
             }
             appendSnapshot(output, provider?.navigationSnapshot())
         } catch (_: Exception) {
+            if (request.getString("type").startsWith("audio-")) return output.put("available", false)
+                .put("audioFocus", false).put("reason", "audio-focus-unavailable").toString()
             output.put("available", false).put("navigationStatus", "error")
                 .put("reason", "navigation-service-error").put("canRetry", true).toString()
         }

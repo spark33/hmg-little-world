@@ -192,3 +192,68 @@ describe("typed navigation capabilities", () => {
     expect(bridge.onmessage).toBeNull();
   });
 });
+
+describe("native audio focus bridge", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.useRealTimers();
+  });
+  it("validates actual focus grants and keeps audio replies correlated with navigation", async () => {
+    const {
+      requestAudioFocus,
+      releaseAudioFocus,
+      requestNavigationStatus,
+      parseReply,
+    } = await import("./bridge");
+    const messages: { id: string; type: string }[] = [];
+    const bridge: NonNullable<Window["NativeBridge"]> = {
+      onmessage: null,
+      postMessage: (raw) => messages.push(JSON.parse(raw)),
+    };
+    vi.stubGlobal("window", { NativeBridge: bridge, setTimeout });
+    const audio = requestAudioFocus();
+    const navigation = requestNavigationStatus();
+    bridge.onmessage?.({
+      data: JSON.stringify({
+        v: 1,
+        id: messages[1].id,
+        navigationStatus: "disconnected",
+      }),
+    } as MessageEvent);
+    bridge.onmessage?.({
+      data: JSON.stringify({ v: 1, id: messages[0].id, audioFocus: false }),
+    } as MessageEvent);
+    expect(await audio).toMatchObject({ audioFocus: false });
+    expect(await navigation).toMatchObject({
+      navigationStatus: "disconnected",
+    });
+    const release = releaseAudioFocus();
+    bridge.onmessage?.({
+      data: JSON.stringify({ v: 1, id: messages[2].id, audioFocus: false }),
+    } as MessageEvent);
+    await release;
+    expect(messages.map((message) => message.type)).toEqual([
+      "audio-request",
+      "navigation-status",
+      "audio-release",
+    ]);
+    expect(parseReply({ v: 1, id: "x", audioFocus: "true" })).toBeUndefined();
+    expect(bridge.onmessage).toBeNull();
+  });
+  it("never fabricates a focus grant when the bridge is missing or times out", async () => {
+    const { requestAudioFocus } = await import("./bridge");
+    vi.stubGlobal("window", {});
+    expect(await requestAudioFocus()).toMatchObject({ audioFocus: false });
+    vi.useFakeTimers();
+    vi.stubGlobal("window", {
+      NativeBridge: { onmessage: null, postMessage: () => {} },
+      setTimeout,
+    });
+    const result = requestAudioFocus();
+    vi.advanceTimersByTime(1800);
+    expect(await result).toMatchObject({
+      audioFocus: false,
+      navigationStatus: "timeout",
+    });
+  });
+});

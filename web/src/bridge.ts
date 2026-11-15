@@ -23,7 +23,9 @@ export type Request =
         | "capabilities"
         | "navigation-status"
         | "navigation-retry"
-        | "navigation-cancel";
+        | "navigation-cancel"
+        | "audio-request"
+        | "audio-release";
     }
   | { v: 1; id: string; type: "navigate"; destinationId: string };
 export type Reply = {
@@ -32,6 +34,7 @@ export type Reply = {
   available?: boolean;
   navigation?: boolean;
   lighting?: boolean;
+  audioFocus?: boolean;
   reason?: string;
   navigationStatus?: NavigationStatus;
   canRetry?: boolean;
@@ -58,7 +61,13 @@ export function parseReply(value: unknown): Reply | undefined {
     !/^[a-zA-Z0-9-]{1,64}$/.test(o.id)
   )
     return;
-  for (const key of ["available", "navigation", "lighting", "canRetry"])
+  for (const key of [
+    "available",
+    "navigation",
+    "lighting",
+    "canRetry",
+    "audioFocus",
+  ])
     if (o[key] !== undefined && typeof o[key] !== "boolean") return;
   if (
     o.reason !== undefined &&
@@ -119,6 +128,10 @@ export const retryNavigationConnection = (signal?: AbortSignal) =>
   request({ type: "navigation-retry" }, signal);
 export const cancelNavigation = (signal?: AbortSignal) =>
   request({ type: "navigation-cancel" }, signal);
+export const requestAudioFocus = (signal?: AbortSignal) =>
+  request({ type: "audio-request" }, signal);
+export const releaseAudioFocus = (signal?: AbortSignal) =>
+  request({ type: "audio-release" }, signal);
 
 type RequestBody =
   | { type: "navigate"; destinationId: string }
@@ -127,7 +140,9 @@ type RequestBody =
         | "capabilities"
         | "navigation-status"
         | "navigation-retry"
-        | "navigation-cancel";
+        | "navigation-cancel"
+        | "audio-request"
+        | "audio-release";
     };
 function request(body: RequestBody, signal?: AbortSignal): Promise<Reply> {
   const id = crypto.randomUUID();
@@ -140,6 +155,7 @@ function request(body: RequestBody, signal?: AbortSignal): Promise<Reply> {
     available: false,
     navigation: false,
     lighting: false,
+    audioFocus: false,
     navigationStatus,
     reason,
     canRetry: navigationStatus === "timeout" || navigationStatus === "error",
