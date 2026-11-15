@@ -179,18 +179,19 @@ test("day and evening discovery labels remain readable and destination selection
     await options.nth(1).click();
     await expect(options.first()).toHaveAttribute("aria-pressed", "false");
     await expect(options.nth(1)).toHaveAttribute("aria-pressed", "true");
-    for (const selector of [
-      ".destination-number",
-      ".destination-body small",
-      ".destination-body strong",
-      ".destination-body > span",
-      ".destination-body em",
-      ".distance small",
-    ])
-      expect(
-        await textContrast(page.locator(selector)),
-        `${evening}: ${selector}`,
-      ).toBeGreaterThanOrEqual(4.5);
+    for (const choice of [options.first(), options.nth(1)])
+      for (const selector of [
+        ".destination-number",
+        ".destination-body small",
+        ".destination-body strong",
+        ".destination-body > span",
+        ".destination-body em",
+        ".distance small",
+      ])
+        expect(
+          await textContrast(choice.locator(selector)),
+          `${evening}: ${selector}`,
+        ).toBeGreaterThanOrEqual(4.5);
     await page.getByRole("button", { name: "Let’s go", exact: true }).click();
     await page
       .getByRole("button", { name: "Simulate journey", exact: true })
